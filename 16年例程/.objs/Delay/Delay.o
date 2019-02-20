@@ -1,0 +1,82 @@
+XL
+H 3 areas 4 global symbols
+M Delay.c
+S push_xgsetF000 Ref0000
+S pop_xgsetF000 Ref0000
+A text size 48 flags 0
+dbfile "D:\ICCV8\16年例程 - 副本\Delay\Delay.c"
+dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+dbfile "D:\ICCV8\16年例程 - 副本\Delay\Delay.c"
+dbfunc e Delay_us 0 fV
+dbsym r i 14 I
+dbsym r m 10 I
+dbline FFFFFFFF 4
+dbline A 4
+dbline C 4
+dbline D A
+dbline E A
+dbline 10 C
+dbline C C
+dbline C 10
+dbline FFFFFFFE 16
+dbline 0 16
+dbfunc e Delay_ms 1C fV
+dbsym r i 14 I
+dbsym r j 16 I
+dbsym r n 10 I
+dbline FFFFFFFF 20
+dbline 1B 20
+dbline 1D 20
+dbline 1E 26
+dbline 1F 26
+dbline 20 2A
+dbline 21 2A
+dbline 22 2C
+dbline 1F 2C
+dbline 1F 30
+dbline 23 3A
+dbline 1D 3A
+dbline 1D 3E
+dbline FFFFFFFE 44
+dbline 0 44
+S _Delay_ms#Fvi Def001C
+S _Delay_us#Fvi Def0000
+A data size 15 flags 20
+dbfile "D:\ICCV8\16年例程 - 副本\Delay\Delay.c"
+dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+dbsym s NoteData 0 A[21:21]c
+A idata size 15 flags 0
+T 00 00 00 FC
+R 00 00 02 00
+T 02 00 E1 D4
+R 00 00 02 00
+T 04 00 BC A8
+R 00 00 02 00
+T 06 00 96 8D
+R 00 00 02 00
+T 08 00 7E 70
+R 00 00 02 00
+T 0A 00 69 5E
+R 00 00 02 00
+T 0C 00 53 4A
+R 00 00 02 00
+T 0E 00 46 3E
+R 00 00 02 00
+T 10 00 37 34
+R 00 00 02 00
+T 12 00 2E 29
+R 00 00 02 00
+T 14 00 25
+R 00 00 02 00
+T 00 00 4A 93 5A 93 44 27 55 27 03 C0 00 00 4F 5F
+R 00 00 00 00
+T 0E 00 5F 4F 40 17 51 07 D4 F3 59 91 49 91 08 95
+R 00 00 00 00
+T 1C 00 0E 94 00 00 44 27 55 27 0C C0 66 27 77 27
+R 00 00 00 00 12 04 00 00
+T 2A 00 00 00 6F 5F 7F 4F 8D E7 90 E0 68 17 79 07
+R 00 00 00 00
+T 38 00 C4 F3 4F 5F 5F 4F 40 17 51 07 8C F3
+R 00 00 00 00
+T 44 00 0C 94 00 00
+R 00 00 00 00 12 04 01 00

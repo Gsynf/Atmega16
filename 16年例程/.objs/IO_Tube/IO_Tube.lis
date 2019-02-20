@@ -1,0 +1,303 @@
+                        .module IO_Tube.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile D:\ICCV8\16年例程\IO_Tube\IO_Tube.c
+                        .area data(ram, con, rel)
+ 0000                   .dbfile D:\ICCV8\16年例程\IO_Tube\IO_Tube.c
+ 0000           _NoteData#A_h:
+ 0000                   .blkb 2
+                        .area idata(rom)
+ 0000 00FC              .byte 0,252
+                        .area data(ram, con, rel)
+ 0002                   .dbfile D:\ICCV8\16年例程\IO_Tube\IO_Tube.c
+ 0002                   .blkb 2
+                        .area idata(rom)
+ 0002 E1D4              .byte 225,212
+                        .area data(ram, con, rel)
+ 0004                   .dbfile D:\ICCV8\16年例程\IO_Tube\IO_Tube.c
+ 0004                   .blkb 2
+                        .area idata(rom)
+ 0004 BCA8              .byte 188,168
+                        .area data(ram, con, rel)
+ 0006                   .dbfile D:\ICCV8\16年例程\IO_Tube\IO_Tube.c
+ 0006                   .blkb 2
+                        .area idata(rom)
+ 0006 968D              .byte 150,141
+                        .area data(ram, con, rel)
+ 0008                   .dbfile D:\ICCV8\16年例程\IO_Tube\IO_Tube.c
+ 0008                   .blkb 2
+                        .area idata(rom)
+ 0008 7E70              .byte 126,'p
+                        .area data(ram, con, rel)
+ 000A                   .dbfile D:\ICCV8\16年例程\IO_Tube\IO_Tube.c
+ 000A                   .blkb 2
+                        .area idata(rom)
+ 000A 695E              .byte 'i,94
+                        .area data(ram, con, rel)
+ 000C                   .dbfile D:\ICCV8\16年例程\IO_Tube\IO_Tube.c
+ 000C                   .blkb 2
+                        .area idata(rom)
+ 000C 534A              .byte 'S,'J
+                        .area data(ram, con, rel)
+ 000E                   .dbfile D:\ICCV8\16年例程\IO_Tube\IO_Tube.c
+ 000E                   .blkb 2
+                        .area idata(rom)
+ 000E 463E              .byte 'F,62
+                        .area data(ram, con, rel)
+ 0010                   .dbfile D:\ICCV8\16年例程\IO_Tube\IO_Tube.c
+ 0010                   .blkb 2
+                        .area idata(rom)
+ 0010 3734              .byte 55,52
+                        .area data(ram, con, rel)
+ 0012                   .dbfile D:\ICCV8\16年例程\IO_Tube\IO_Tube.c
+ 0012                   .blkb 2
+                        .area idata(rom)
+ 0012 2E29              .byte 46,41
+                        .area data(ram, con, rel)
+ 0014                   .dbfile D:\ICCV8\16年例程\IO_Tube\IO_Tube.c
+ 0014                   .blkb 1
+                        .area idata(rom)
+ 0014 25                .byte 37
+                        .area data(ram, con, rel)
+ 0015                   .dbfile D:\ICCV8\16年例程\IO_Tube\IO_Tube.c
+ 0015                   .dbfile D:\ICCV8\16年例程\Timer\Timer.h
+ 0015                   .dbsym s NoteData _NoteData#A_h A[21:21]c
+ 0015           _tube#A10_i::
+ 0015                   .blkb 2
+                        .area idata(rom)
+ 0015 3F00              .word 63
+                        .area data(ram, con, rel)
+ 0017                   .dbfile D:\ICCV8\16年例程\Timer\Timer.h
+ 0017                   .blkb 2
+                        .area idata(rom)
+ 0017 0600              .word 6
+                        .area data(ram, con, rel)
+ 0019                   .dbfile D:\ICCV8\16年例程\Timer\Timer.h
+ 0019                   .blkb 2
+                        .area idata(rom)
+ 0019 5B00              .word 91
+                        .area data(ram, con, rel)
+ 001B                   .dbfile D:\ICCV8\16年例程\Timer\Timer.h
+ 001B                   .blkb 2
+                        .area idata(rom)
+ 001B 4F00              .word 79
+                        .area data(ram, con, rel)
+ 001D                   .dbfile D:\ICCV8\16年例程\Timer\Timer.h
+ 001D                   .blkb 2
+                        .area idata(rom)
+ 001D 6600              .word 102
+                        .area data(ram, con, rel)
+ 001F                   .dbfile D:\ICCV8\16年例程\Timer\Timer.h
+ 001F                   .blkb 2
+                        .area idata(rom)
+ 001F 6D00              .word 109
+                        .area data(ram, con, rel)
+ 0021                   .dbfile D:\ICCV8\16年例程\Timer\Timer.h
+ 0021                   .blkb 2
+                        .area idata(rom)
+ 0021 7D00              .word 125
+                        .area data(ram, con, rel)
+ 0023                   .dbfile D:\ICCV8\16年例程\Timer\Timer.h
+ 0023                   .blkb 2
+                        .area idata(rom)
+ 0023 0700              .word 7
+                        .area data(ram, con, rel)
+ 0025                   .dbfile D:\ICCV8\16年例程\Timer\Timer.h
+ 0025                   .blkb 2
+                        .area idata(rom)
+ 0025 7F00              .word 127
+                        .area data(ram, con, rel)
+ 0027                   .dbfile D:\ICCV8\16年例程\Timer\Timer.h
+ 0027                   .blkb 2
+                        .area idata(rom)
+ 0027 6F00              .word 111
+                        .area data(ram, con, rel)
+ 0029                   .dbfile D:\ICCV8\16年例程\Timer\Timer.h
+ 0029                   .dbfile D:\ICCV8\16年例程\IO_Tube\IO_Tube.c
+ 0029                   .dbsym e tube _tube#A10_i A[20:10]I
+                        .area text(rom, con, rel)
+ 0000                   .dbfile D:\ICCV8\16年例程\IO_Tube\IO_Tube.c
+ 0000                   .dbfunc e Tube_Init _Tube_Init#Fvv fV
+                        .even
+ 0000           _Tube_Init#Fvv::
+ 0000                   .dbline -1
+ 0000                   .dbline 12
+ 0000           ; #include "IO_Tube.h"
+ 0000           ; int tube[10] = { 0x3f, 0x06, 0x5b, 0x4f, 0x66, 0x6d, 0x7d, 0x07, 0x7f, 0x6f};  ///数码管数字0~9
+ 0000           ; 
+ 0000           ; /************************************************************
+ 0000           ; Function Name: Tube_Init
+ 0000           ; Inputs: none
+ 0000           ; Outputs: 0
+ 0000           ; Description:    数码管初始化，P3的a~p接PD0~7，阳极控制段选；P4的0~7接PB的0~7，阴极控制位选
+ 0000           ; Writer: WZY,MaxMarth
+ 0000           ; *************************************************************/
+ 0000           ; void Tube_Init(void)
+ 0000           ; {
+ 0000                   .dbline 13
+ 0000           ;     DDRB  = 0xFF;
+ 0000 8FEF              ldi R24,255
+ 0002 87BB              out 0x17,R24
+ 0004                   .dbline 14
+ 0004           ;     DDRD  = 0xFF;  //寄存器设置为输出
+ 0004 81BB              out 0x11,R24
+ 0006                   .dbline 15
+ 0006           ;     PORTB = 0xFF;  //数码管共阴，输出高电平，不导通
+ 0006 88BB              out 0x18,R24
+ 0008                   .dbline -2
+ 0008           L1:
+ 0008                   .dbline 0 ; func end
+ 0008 0895              ret
+ 000A                   .dbend
+ 000A                   .dbfunc e Tube_On _Tube_On#Fvi fV
+ 000A           ;              t -> R10,R11
+                        .even
+ 000A           _Tube_On#Fvi::
+ 000A AA92              st -y,R10
+ 000C BA92              st -y,R11
+ 000E 5801              movw R10,R16
+ 0010                   .dbline -1
+ 0010                   .dbline 25
+ 0010           ; }
+ 0010           ; /************************************************************
+ 0010           ; Function Name: Tube_On
+ 0010           ; Inputs: int t
+ 0010           ; Outputs: none
+ 0010           ; Description:    8位数码管显示同一个数字0~9之间的给定int值t
+ 0010           ; Writer: WZY,MaxMarth
+ 0010           ; *************************************************************/
+ 0010           ; void Tube_On(int t)
+ 0010           ; {
+ 0010                   .dbline 26
+ 0010           ;     Tube_Init();
+ 0010 F7DF              xcall _Tube_Init#Fvv
+ 0012                   .dbline 27
+ 0012           ;     PORTB = 0x00;   ///阴极电平拉低
+ 0012 2224              clr R2
+ 0014 28BA              out 0x18,R2
+ 0016                   .dbline 28
+ 0016           ;     PORTD = tube[t];    ///阳极高电平时导通
+ 0016 80E0              ldi R24,<_tube#A10_i
+ 0018 90E0              ldi R25,>_tube#A10_i
+ 001A 1501              movw R2,R10
+ 001C 220C              lsl R2
+ 001E 331C              rol R3
+ 0020 280E              add R2,R24
+ 0022 391E              adc R3,R25
+ 0024 F101              movw R30,R2
+ 0026 2080              ldd R2,z+0
+ 0028 22BA              out 0x12,R2
+ 002A                   .dbline 29
+ 002A           ;     Delay_ms(1000);
+ 002A 08EE              ldi R16,1000
+ 002C 13E0              ldi R17,3
+ 002E 0E940000          xcall _Delay_ms#Fvi
+ 0032                   .dbline -2
+ 0032           L2:
+ 0032                   .dbline 0 ; func end
+ 0032 B990              ld R11,y+
+ 0034 A990              ld R10,y+
+ 0036 0895              ret
+ 0038                   .dbsym r t 10 I
+ 0038                   .dbend
+ 0038                   .dbfunc e Tube_Loop _Tube_Loop#Fvi fV
+ 0038           ;              i -> R20,R21
+ 0038           ;              j -> R22,R23
+ 0038           ;              c -> R10,R11
+                        .even
+ 0038           _Tube_Loop#Fvi::
+ 0038 0E940000          xcall push_xgsetF00C
+ 003C 5801              movw R10,R16
+ 003E                   .dbline -1
+ 003E                   .dbline 39
+ 003E           ; }
+ 003E           ; /************************************************************
+ 003E           ; Function Name: Tube_Loop
+ 003E           ; Inputs: int c
+ 003E           ; Outputs: none
+ 003E           ; Description:    8位数码管从左至右循环显示0~7,循环c次
+ 003E           ; Writer: WZY,MaxMarth
+ 003E           ; *************************************************************/
+ 003E           ; void Tube_Loop(int c)
+ 003E           ; {
+ 003E                   .dbline 41
+ 003E           ;     int i, j;
+ 003E           ;     Tube_Init();
+ 003E E0DF              xcall _Tube_Init#Fvv
+ 0040                   .dbline 42
+ 0040           ;     for(i=0; i<c; i++)  ///控制循环次数
+ 0040 4427              clr R20
+ 0042 5527              clr R21
+ 0044 20C0              xjmp L7
+ 0046           L4:
+ 0046                   .dbline 43
+ 0046           ;     {
+ 0046                   .dbline 44
+ 0046           ;         for(j=0; j<8; j++)
+ 0046 6627              clr R22
+ 0048 7727              clr R23
+ 004A           L8:
+ 004A                   .dbline 45
+ 004A           ;         {
+ 004A                   .dbline 46
+ 004A           ;             PORTB = ~(1<<j);   ///移位导通二极管
+ 004A 01E0              ldi R16,1
+ 004C 162F              mov R17,R22
+ 004E 0E940000          xcall lsl8
+ 0052 202E              mov R2,R16
+ 0054 2094              com R2
+ 0056 28BA              out 0x18,R2
+ 0058                   .dbline 47
+ 0058           ;             PORTD = tube[j];
+ 0058 80E0              ldi R24,<_tube#A10_i
+ 005A 90E0              ldi R25,>_tube#A10_i
+ 005C 1B01              movw R2,R22
+ 005E 220C              lsl R2
+ 0060 331C              rol R3
+ 0062 280E              add R2,R24
+ 0064 391E              adc R3,R25
+ 0066 F101              movw R30,R2
+ 0068 2080              ldd R2,z+0
+ 006A 22BA              out 0x12,R2
+ 006C                   .dbline 48
+ 006C           ;             Delay_ms(300);
+ 006C 0CE2              ldi R16,300
+ 006E 11E0              ldi R17,1
+ 0070 0E940000          xcall _Delay_ms#Fvi
+ 0074                   .dbline 49
+ 0074           ;         }
+ 0074           L9:
+ 0074                   .dbline 44
+ 0074 6F5F              subi R22,255  ; offset = 1
+ 0076 7F4F              sbci R23,255
+ 0078                   .dbline 44
+ 0078 88E0              ldi R24,8
+ 007A 90E0              ldi R25,0
+ 007C 6817              cp R22,R24
+ 007E 7907              cpc R23,R25
+ 0080 24F3              brlt L8
+ 0082           X0:
+ 0082                   .dbline 50
+ 0082           ;     }
+ 0082           L5:
+ 0082                   .dbline 42
+ 0082 4F5F              subi R20,255  ; offset = 1
+ 0084 5F4F              sbci R21,255
+ 0086           L7:
+ 0086                   .dbline 42
+ 0086 4A15              cp R20,R10
+ 0088 5B05              cpc R21,R11
+ 008A ECF2              brlt L4
+ 008C           X1:
+ 008C                   .dbline 51
+ 008C           ;     PORTB = 0xff;
+ 008C 8FEF              ldi R24,255
+ 008E 88BB              out 0x18,R24
+ 0090                   .dbline -2
+ 0090           L3:
+ 0090                   .dbline 0 ; func end
+ 0090 0C940000          xjmp pop_xgsetF00C
+ 0094                   .dbsym r i 20 I
+ 0094                   .dbsym r j 22 I
+ 0094                   .dbsym r c 10 I
+ 0094                   .dbend
+ 0094           ; }

@@ -1,0 +1,142 @@
+                        .module PWM.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile "D:\ICCV8\16年例程 - 副本\PWM\PWM.c"
+                        .area data(ram, con, rel)
+ 0000                   .dbfile "D:\ICCV8\16年例程 - 副本\PWM\PWM.c"
+ 0000           _NoteData#A_h:
+ 0000                   .blkb 2
+                        .area idata(rom)
+ 0000 00FC              .byte 0,252
+                        .area data(ram, con, rel)
+ 0002                   .dbfile "D:\ICCV8\16年例程 - 副本\PWM\PWM.c"
+ 0002                   .blkb 2
+                        .area idata(rom)
+ 0002 E1D4              .byte 225,212
+                        .area data(ram, con, rel)
+ 0004                   .dbfile "D:\ICCV8\16年例程 - 副本\PWM\PWM.c"
+ 0004                   .blkb 2
+                        .area idata(rom)
+ 0004 BCA8              .byte 188,168
+                        .area data(ram, con, rel)
+ 0006                   .dbfile "D:\ICCV8\16年例程 - 副本\PWM\PWM.c"
+ 0006                   .blkb 2
+                        .area idata(rom)
+ 0006 968D              .byte 150,141
+                        .area data(ram, con, rel)
+ 0008                   .dbfile "D:\ICCV8\16年例程 - 副本\PWM\PWM.c"
+ 0008                   .blkb 2
+                        .area idata(rom)
+ 0008 7E70              .byte 126,'p
+                        .area data(ram, con, rel)
+ 000A                   .dbfile "D:\ICCV8\16年例程 - 副本\PWM\PWM.c"
+ 000A                   .blkb 2
+                        .area idata(rom)
+ 000A 695E              .byte 'i,94
+                        .area data(ram, con, rel)
+ 000C                   .dbfile "D:\ICCV8\16年例程 - 副本\PWM\PWM.c"
+ 000C                   .blkb 2
+                        .area idata(rom)
+ 000C 534A              .byte 'S,'J
+                        .area data(ram, con, rel)
+ 000E                   .dbfile "D:\ICCV8\16年例程 - 副本\PWM\PWM.c"
+ 000E                   .blkb 2
+                        .area idata(rom)
+ 000E 463E              .byte 'F,62
+                        .area data(ram, con, rel)
+ 0010                   .dbfile "D:\ICCV8\16年例程 - 副本\PWM\PWM.c"
+ 0010                   .blkb 2
+                        .area idata(rom)
+ 0010 3734              .byte 55,52
+                        .area data(ram, con, rel)
+ 0012                   .dbfile "D:\ICCV8\16年例程 - 副本\PWM\PWM.c"
+ 0012                   .blkb 2
+                        .area idata(rom)
+ 0012 2E29              .byte 46,41
+                        .area data(ram, con, rel)
+ 0014                   .dbfile "D:\ICCV8\16年例程 - 副本\PWM\PWM.c"
+ 0014                   .blkb 1
+                        .area idata(rom)
+ 0014 25                .byte 37
+                        .area data(ram, con, rel)
+ 0015                   .dbfile "D:\ICCV8\16年例程 - 副本\PWM\PWM.c"
+ 0015                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+ 0015                   .dbsym s NoteData _NoteData#A_h A[21:21]c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+ 0000                   .dbfile "D:\ICCV8\16年例程 - 副本\PWM\PWM.c"
+ 0000                   .dbfunc e Fast_PWM _Fast_PWM#Fvi fV
+ 0000           ;        Percent -> R10,R11
+                        .even
+ 0000           _Fast_PWM#Fvi::
+ 0000 AA92              st -y,R10
+ 0002 BA92              st -y,R11
+ 0004 5801              movw R10,R16
+ 0006                   .dbline -1
+ 0006                   .dbline 10
+ 0006           ; #include "PWM.h"
+ 0006           ; /************************************************************
+ 0006           ; Function Name: Fast_PWM
+ 0006           ; Inputs: int Percent
+ 0006           ; Outputs: none
+ 0006           ; Description:    快速PWM模式，占空比可调
+ 0006           ; Writer: WZY, MaxMarth
+ 0006           ; *************************************************************/
+ 0006           ; void Fast_PWM(int Percent)
+ 0006           ; {
+ 0006                   .dbline 11
+ 0006           ;     DDRB  |= (1 << 3); //PB3输出
+ 0006 BB9A              sbi 0x17,3
+ 0008                   .dbline 12
+ 0008           ;     TCCR0 |= ((1 << WGM00) | (1 << WGM01)); //快速PWM
+ 0008 83B7              in R24,0x33
+ 000A 8864              ori R24,72
+ 000C 83BF              out 0x33,R24
+ 000E                   .dbline 13
+ 000E           ;     TCCR0 &= ~(1 << FOC0); //兼容性
+ 000E 83B7              in R24,0x33
+ 0010 8F77              andi R24,127
+ 0012 83BF              out 0x33,R24
+ 0014                   .dbline 14
+ 0014           ;     TCCR0 |= (1 << COM01);
+ 0014 83B7              in R24,0x33
+ 0016 8062              ori R24,32
+ 0018 83BF              out 0x33,R24
+ 001A                   .dbline 15
+ 001A           ;     TCCR0 &= ~(1<<COM00); //比较匹配清零
+ 001A 83B7              in R24,0x33
+ 001C 8F7E              andi R24,239
+ 001E 83BF              out 0x33,R24
+ 0020                   .dbline 16
+ 0020           ;     TCCR0 |= (1 << CS00);
+ 0020 83B7              in R24,0x33
+ 0022 8160              ori R24,1
+ 0024 83BF              out 0x33,R24
+ 0026                   .dbline 17
+ 0026           ;     TCCR0 &= ~((1 << CS01) | (1 << CS02)); //无预分频
+ 0026 83B7              in R24,0x33
+ 0028 897F              andi R24,249
+ 002A 83BF              out 0x33,R24
+ 002C                   .dbline 18
+ 002C           ;     TCNT0  = 0x00;
+ 002C 2224              clr R2
+ 002E 22BE              out 0x32,R2
+ 0030                   .dbline 19
+ 0030           ;     OCR0   = Percent*255/100;
+ 0030 0FEF              ldi R16,255
+ 0032 10E0              ldi R17,0
+ 0034 9501              movw R18,R10
+ 0036 0E940000          xcall empy16s
+ 003A 24E6              ldi R18,100
+ 003C 30E0              ldi R19,0
+ 003E 0E940000          xcall div16s
+ 0042 0CBF              out 0x3c,R16
+ 0044                   .dbline -2
+ 0044           L1:
+ 0044                   .dbline 0 ; func end
+ 0044 B990              ld R11,y+
+ 0046 A990              ld R10,y+
+ 0048 0895              ret
+ 004A                   .dbsym r Percent 10 I
+ 004A                   .dbend
+ 004A           ; 
+ 004A           ; }

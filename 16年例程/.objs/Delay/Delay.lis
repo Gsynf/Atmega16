@@ -1,0 +1,192 @@
+                        .module Delay.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile "D:\ICCV8\16年例程 - 副本\Delay\Delay.c"
+                        .area data(ram, con, rel)
+ 0000                   .dbfile "D:\ICCV8\16年例程 - 副本\Delay\Delay.c"
+ 0000           _NoteData#A_h:
+ 0000                   .blkb 2
+                        .area idata(rom)
+ 0000 00FC              .byte 0,252
+                        .area data(ram, con, rel)
+ 0002                   .dbfile "D:\ICCV8\16年例程 - 副本\Delay\Delay.c"
+ 0002                   .blkb 2
+                        .area idata(rom)
+ 0002 E1D4              .byte 225,212
+                        .area data(ram, con, rel)
+ 0004                   .dbfile "D:\ICCV8\16年例程 - 副本\Delay\Delay.c"
+ 0004                   .blkb 2
+                        .area idata(rom)
+ 0004 BCA8              .byte 188,168
+                        .area data(ram, con, rel)
+ 0006                   .dbfile "D:\ICCV8\16年例程 - 副本\Delay\Delay.c"
+ 0006                   .blkb 2
+                        .area idata(rom)
+ 0006 968D              .byte 150,141
+                        .area data(ram, con, rel)
+ 0008                   .dbfile "D:\ICCV8\16年例程 - 副本\Delay\Delay.c"
+ 0008                   .blkb 2
+                        .area idata(rom)
+ 0008 7E70              .byte 126,'p
+                        .area data(ram, con, rel)
+ 000A                   .dbfile "D:\ICCV8\16年例程 - 副本\Delay\Delay.c"
+ 000A                   .blkb 2
+                        .area idata(rom)
+ 000A 695E              .byte 'i,94
+                        .area data(ram, con, rel)
+ 000C                   .dbfile "D:\ICCV8\16年例程 - 副本\Delay\Delay.c"
+ 000C                   .blkb 2
+                        .area idata(rom)
+ 000C 534A              .byte 'S,'J
+                        .area data(ram, con, rel)
+ 000E                   .dbfile "D:\ICCV8\16年例程 - 副本\Delay\Delay.c"
+ 000E                   .blkb 2
+                        .area idata(rom)
+ 000E 463E              .byte 'F,62
+                        .area data(ram, con, rel)
+ 0010                   .dbfile "D:\ICCV8\16年例程 - 副本\Delay\Delay.c"
+ 0010                   .blkb 2
+                        .area idata(rom)
+ 0010 3734              .byte 55,52
+                        .area data(ram, con, rel)
+ 0012                   .dbfile "D:\ICCV8\16年例程 - 副本\Delay\Delay.c"
+ 0012                   .blkb 2
+                        .area idata(rom)
+ 0012 2E29              .byte 46,41
+                        .area data(ram, con, rel)
+ 0014                   .dbfile "D:\ICCV8\16年例程 - 副本\Delay\Delay.c"
+ 0014                   .blkb 1
+                        .area idata(rom)
+ 0014 25                .byte 37
+                        .area data(ram, con, rel)
+ 0015                   .dbfile "D:\ICCV8\16年例程 - 副本\Delay\Delay.c"
+ 0015                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+ 0015                   .dbsym s NoteData _NoteData#A_h A[21:21]c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+ 0000                   .dbfile "D:\ICCV8\16年例程 - 副本\Delay\Delay.c"
+ 0000                   .dbfunc e Delay_us _Delay_us#Fvi fV
+ 0000           ;              i -> R20,R21
+ 0000           ;              m -> R16,R17
+                        .even
+ 0000           _Delay_us#Fvi::
+ 0000 4A93              st -y,R20
+ 0002 5A93              st -y,R21
+ 0004                   .dbline -1
+ 0004                   .dbline 10
+ 0004           ; #include "Delay.h"
+ 0004           ; /************************************************************
+ 0004           ; Function Name: Delay_us
+ 0004           ; Inputs: int m
+ 0004           ; Outputs: none
+ 0004           ; Description:    微秒级延时，数量为m
+ 0004           ; Writer: WZY
+ 0004           ; *************************************************************/
+ 0004           ; void Delay_us(int m)
+ 0004           ; {
+ 0004                   .dbline 12
+ 0004           ;     int i;
+ 0004           ;     for (i=0; i<m; i++)
+ 0004 4427              clr R20
+ 0006 5527              clr R21
+ 0008 03C0              xjmp L5
+ 000A           L2:
+ 000A                   .dbline 13
+ 000A           ;         {
+ 000A                   .dbline 14
+ 000A           ;             NOP();      ///空指令，1MHz下为1us
+ 000A 0000              nop
+ 000C                   .dbline 16
+ 000C           ;                         //NOP为机械周期
+ 000C           ;         }
+ 000C           L3:
+ 000C                   .dbline 12
+ 000C 4F5F              subi R20,255  ; offset = 1
+ 000E 5F4F              sbci R21,255
+ 0010           L5:
+ 0010                   .dbline 12
+ 0010 4017              cp R20,R16
+ 0012 5107              cpc R21,R17
+ 0014 D4F3              brlt L2
+ 0016           X0:
+ 0016                   .dbline -2
+ 0016           L1:
+ 0016                   .dbline 0 ; func end
+ 0016 5991              ld R21,y+
+ 0018 4991              ld R20,y+
+ 001A 0895              ret
+ 001C                   .dbsym r i 20 I
+ 001C                   .dbsym r m 16 I
+ 001C                   .dbend
+ 001C                   .dbfunc e Delay_ms _Delay_ms#Fvi fV
+ 001C           ;              i -> R20,R21
+ 001C           ;              j -> R22,R23
+ 001C           ;              n -> R16,R17
+                        .even
+ 001C           _Delay_ms#Fvi::
+ 001C 0E940000          xcall push_xgsetF000
+ 0020                   .dbline -1
+ 0020                   .dbline 27
+ 0020           ; }
+ 0020           ; 
+ 0020           ; /************************************************************
+ 0020           ; Function Name: Delay_ms
+ 0020           ; Inputs: int n
+ 0020           ; Outputs: none
+ 0020           ; Description:    毫秒级延时，数量为n
+ 0020           ; Writer: WZY
+ 0020           ; *************************************************************/
+ 0020           ; void Delay_ms(int n)
+ 0020           ; {
+ 0020                   .dbline 29
+ 0020           ;     int i,j;
+ 0020           ;     for(i=0; i<n; i++)
+ 0020 4427              clr R20
+ 0022 5527              clr R21
+ 0024 0CC0              xjmp L10
+ 0026           L7:
+ 0026                   .dbline 30
+ 0026           ;     {
+ 0026                   .dbline 31
+ 0026           ;         for(j=0; j<125; j++)
+ 0026 6627              clr R22
+ 0028 7727              clr R23
+ 002A           L11:
+ 002A                   .dbline 32
+ 002A           ;         {
+ 002A                   .dbline 33
+ 002A           ;             NOP();
+ 002A 0000              nop
+ 002C                   .dbline 34
+ 002C           ;         }
+ 002C           L12:
+ 002C                   .dbline 31
+ 002C 6F5F              subi R22,255  ; offset = 1
+ 002E 7F4F              sbci R23,255
+ 0030                   .dbline 31
+ 0030 8DE7              ldi R24,125
+ 0032 90E0              ldi R25,0
+ 0034 6817              cp R22,R24
+ 0036 7907              cpc R23,R25
+ 0038 C4F3              brlt L11
+ 003A           X1:
+ 003A                   .dbline 35
+ 003A           ;     }
+ 003A           L8:
+ 003A                   .dbline 29
+ 003A 4F5F              subi R20,255  ; offset = 1
+ 003C 5F4F              sbci R21,255
+ 003E           L10:
+ 003E                   .dbline 29
+ 003E 4017              cp R20,R16
+ 0040 5107              cpc R21,R17
+ 0042 8CF3              brlt L7
+ 0044           X2:
+ 0044                   .dbline -2
+ 0044           L6:
+ 0044                   .dbline 0 ; func end
+ 0044 0C940000          xjmp pop_xgsetF000
+ 0048                   .dbsym r i 20 I
+ 0048                   .dbsym r j 22 I
+ 0048                   .dbsym r n 16 I
+ 0048                   .dbend
+ 0048           ; }

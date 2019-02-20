@@ -1,0 +1,663 @@
+                        .module _74HC595.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile "D:\ICCV8\16年例程 - 副本\74HC595\74HC595.c"
+                        .area data(ram, con, rel)
+ 0000                   .dbfile "D:\ICCV8\16年例程 - 副本\74HC595\74HC595.c"
+ 0000           _NoteData#A_h:
+ 0000                   .blkb 2
+                        .area idata(rom)
+ 0000 00FC              .byte 0,252
+                        .area data(ram, con, rel)
+ 0002                   .dbfile "D:\ICCV8\16年例程 - 副本\74HC595\74HC595.c"
+ 0002                   .blkb 2
+                        .area idata(rom)
+ 0002 E1D4              .byte 225,212
+                        .area data(ram, con, rel)
+ 0004                   .dbfile "D:\ICCV8\16年例程 - 副本\74HC595\74HC595.c"
+ 0004                   .blkb 2
+                        .area idata(rom)
+ 0004 BCA8              .byte 188,168
+                        .area data(ram, con, rel)
+ 0006                   .dbfile "D:\ICCV8\16年例程 - 副本\74HC595\74HC595.c"
+ 0006                   .blkb 2
+                        .area idata(rom)
+ 0006 968D              .byte 150,141
+                        .area data(ram, con, rel)
+ 0008                   .dbfile "D:\ICCV8\16年例程 - 副本\74HC595\74HC595.c"
+ 0008                   .blkb 2
+                        .area idata(rom)
+ 0008 7E70              .byte 126,'p
+                        .area data(ram, con, rel)
+ 000A                   .dbfile "D:\ICCV8\16年例程 - 副本\74HC595\74HC595.c"
+ 000A                   .blkb 2
+                        .area idata(rom)
+ 000A 695E              .byte 'i,94
+                        .area data(ram, con, rel)
+ 000C                   .dbfile "D:\ICCV8\16年例程 - 副本\74HC595\74HC595.c"
+ 000C                   .blkb 2
+                        .area idata(rom)
+ 000C 534A              .byte 'S,'J
+                        .area data(ram, con, rel)
+ 000E                   .dbfile "D:\ICCV8\16年例程 - 副本\74HC595\74HC595.c"
+ 000E                   .blkb 2
+                        .area idata(rom)
+ 000E 463E              .byte 'F,62
+                        .area data(ram, con, rel)
+ 0010                   .dbfile "D:\ICCV8\16年例程 - 副本\74HC595\74HC595.c"
+ 0010                   .blkb 2
+                        .area idata(rom)
+ 0010 3734              .byte 55,52
+                        .area data(ram, con, rel)
+ 0012                   .dbfile "D:\ICCV8\16年例程 - 副本\74HC595\74HC595.c"
+ 0012                   .blkb 2
+                        .area idata(rom)
+ 0012 2E29              .byte 46,41
+                        .area data(ram, con, rel)
+ 0014                   .dbfile "D:\ICCV8\16年例程 - 副本\74HC595\74HC595.c"
+ 0014                   .blkb 1
+                        .area idata(rom)
+ 0014 25                .byte 37
+                        .area data(ram, con, rel)
+ 0015                   .dbfile "D:\ICCV8\16年例程 - 副本\74HC595\74HC595.c"
+ 0015                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+ 0015                   .dbsym s NoteData _NoteData#A_h A[21:21]c
+ 0015           _LED#A_h::
+ 0015                   .blkb 2
+                        .area idata(rom)
+ 0015 3F06              .byte 63,6
+                        .area data(ram, con, rel)
+ 0017                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+ 0017                   .blkb 2
+                        .area idata(rom)
+ 0017 5B4F              .byte 91,'O
+                        .area data(ram, con, rel)
+ 0019                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+ 0019                   .blkb 2
+                        .area idata(rom)
+ 0019 666D              .byte 'f,'m
+                        .area data(ram, con, rel)
+ 001B                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+ 001B                   .blkb 2
+                        .area idata(rom)
+ 001B 7D07              .byte 125,7
+                        .area data(ram, con, rel)
+ 001D                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+ 001D                   .blkb 2
+                        .area idata(rom)
+ 001D 7F6F              .byte 127,'o
+                        .area data(ram, con, rel)
+ 001F                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+ 001F                   .blkb 2
+                        .area idata(rom)
+ 001F 777C              .byte 'w,124
+                        .area data(ram, con, rel)
+ 0021                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+ 0021                   .blkb 2
+                        .area idata(rom)
+ 0021 395E              .byte 57,94
+                        .area data(ram, con, rel)
+ 0023                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+ 0023                   .blkb 2
+                        .area idata(rom)
+ 0023 7971              .byte 'y,'q
+                        .area data(ram, con, rel)
+ 0025                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+ 0025                   .blkb 2
+                        .area idata(rom)
+ 0025 4000              .byte 64,0
+                        .area data(ram, con, rel)
+ 0027                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+ 0027                   .dbfile "D:\ICCV8\16年例程 - 副本\74HC595\74HC595.c"
+ 0027                   .dbsym e LED _LED#A_h A[18:18]c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile "D:\ICCV8\16年例程 - 副本\74HC595\74HC595.c"
+ 0000                   .dbfunc s Send_Data_To_74HC595 _Send_Data_To_74HC595#Fvh fV
+ 0000           ;              i -> R20
+ 0000           ;      Data_temp -> R10
+ 0000           ;           data -> R16
+                        .even
+ 0000           _Send_Data_To_74HC595#Fvh:
+ 0000 AA92              st -y,R10
+ 0002 4A93              st -y,R20
+ 0004                   .dbline -1
+ 0004                   .dbline 14
+ 0004           ; #include "74HC595.h"
+ 0004           ; 
+ 0004           ; extern UINT8 LED[]={0x3f, 0x06, 0x5b, 0x4f, 0x66, 0x6d, 0x7d, 0x07, 0x7f, 0x6f, 0x77, 0x7c, 0x39, 0x5e, 0x79, 0x71, 0x40 , 0x00};
+ 0004           ; //显示各种数字和字母的位选编码，分别是0~9，A~F共阴数码管适用,最后一位是显示横杠
+ 0004           ; /**********************************************************
+ 0004           ; Function Name: Send_Data_To_74HC595
+ 0004           ; Description: 发送数据到74HC595
+ 0004           ; Inputs: {data:发送的数据}
+ 0004           ; Outputs: None
+ 0004           ; Writer:  CSJ,MaxMarth
+ 0004           ; ***********************************************************/
+ 0004           ; static void Send_Data_To_74HC595(UINT8 data)
+ 0004           ; 
+ 0004           ; {
+ 0004                   .dbline 15
+ 0004           ;     UINT8 i, Data_temp = 0;
+ 0004                   .dbline 16
+ 0004           ;     Data_temp = data;
+ 0004 A02E              mov R10,R16
+ 0006                   .dbline 17
+ 0006           ;     for (i = 0; i < 8; i++)              //一次只能发送一个字节的数据（8位)
+ 0006 4427              clr R20
+ 0008 0BC0              xjmp L5
+ 000A           L2:
+ 000A                   .dbline 18
+ 000A           ;     {
+ 000A                   .dbline 19
+ 000A           ;         if (Data_temp & (1 << 7))         //从高位开始发送
+ 000A A7FE              sbrs R10,7
+ 000C 02C0              rjmp L6
+ 000E           X0:
+ 000E                   .dbline 20
+ 000E           ;             HC595_DATA_HIGH;            //如果为1，拉高数据线
+ 000E C09A              sbi 0x18,0
+ 0010 01C0              xjmp L7
+ 0012           L6:
+ 0012                   .dbline 22
+ 0012           ;         else
+ 0012           ;             HC595_DATA_LOW;             //如果为0，拉蒂数据线
+ 0012 C098              cbi 0x18,0
+ 0014           L7:
+ 0014                   .dbline 24
+ 0014           ; 
+ 0014           ;         HC595_SCLK_HIGH;                       //时钟线拉高
+ 0014 C29A              sbi 0x18,2
+ 0016                   .dbline 25
+ 0016           ;         NOP(); NOP();
+ 0016 0000              nop
+ 0018                   .dbline 25
+ 0018 0000              nop
+ 001A                   .dbline 26
+ 001A           ;         HC595_SCLK_LOW;                 //时钟线拉低
+ 001A C298              cbi 0x18,2
+ 001C                   .dbline 27
+ 001C           ;         Data_temp <<= 1;                 //数据向左移位，发送下一位
+ 001C AA0C              lsl R10
+ 001E                   .dbline 28
+ 001E           ;     }
+ 001E           L3:
+ 001E                   .dbline 17
+ 001E 4395              inc R20
+ 0020           L5:
+ 0020                   .dbline 17
+ 0020 4830              cpi R20,8
+ 0022 98F3              brlo L2
+ 0024           X1:
+ 0024                   .dbline -2
+ 0024           L1:
+ 0024                   .dbline 0 ; func end
+ 0024 4991              ld R20,y+
+ 0026 A990              ld R10,y+
+ 0028 0895              ret
+ 002A                   .dbsym r i 20 c
+ 002A                   .dbsym r Data_temp 10 c
+ 002A                   .dbsym r data 16 c
+ 002A                   .dbend
+ 002A                   .dbfunc e Display_74HC595 _Display_74HC595#Fvhh fV
+ 002A           ;            seg -> R10
+ 002A           ;            sit -> R12
+                        .even
+ 002A           _Display_74HC595#Fvhh::
+ 002A AA92              st -y,R10
+ 002C CA92              st -y,R12
+ 002E A22E              mov R10,R18
+ 0030 C02E              mov R12,R16
+ 0032                   .dbline -1
+ 0032                   .dbline 51
+ 0032           ; /*
+ 0032           ;     for (i=0;i<8;i++)                       ///一次只能发送一个字节的数据（8位）
+ 0032           ;     {
+ 0032           ;         if( data_temp & (1<<(7-i)) )        ///从高位开始发送
+ 0032           ;             HC595_DATA_HIGH;                      ///数据线拉高
+ 0032           ;         else
+ 0032           ;             HC595_DATA_LOW;                       ///数据线拉低
+ 0032           ;         HC595_SCLK_HIGH ;                         ///时钟线拉高
+ 0032           ;         NOP() ; NOP() ;
+ 0032           ;         HC595_SCLK_LOW ;                          ///时钟线拉低
+ 0032           ;     }
+ 0032           ; */
+ 0032           ; }
+ 0032           ; 
+ 0032           ; /************************************************************
+ 0032           ; Function Name: Display_74HC595
+ 0032           ; Inputs: UINT8 sit, UINT8 seg
+ 0032           ; Outputs: none
+ 0032           ; Description:    向74HC595发送两次数据,前8位为段选，后八位为位选（选一位）
+ 0032           ; Writer: XZ,WH,WZY
+ 0032           ; *************************************************************/
+ 0032           ; void Display_74HC595(UINT8 sit , UINT8 seg)    ///situation为位,segment为段
+ 0032           ; {
+ 0032                   .dbline 52
+ 0032           ;     HC595_Init();
+ 0032 BED0              xcall _HC595_Init#Fvv
+ 0034                   .dbline 53
+ 0034           ;     HC595_LCLK_LOW;
+ 0034 C198              cbi 0x18,1
+ 0036                   .dbline 54
+ 0036           ;     HC595_SCLK_LOW;
+ 0036 C298              cbi 0x18,2
+ 0038                   .dbline 55
+ 0038           ;     Send_Data_To_74HC595(~(1 << sit));
+ 0038 01E0              ldi R16,1
+ 003A 1C2D              mov R17,R12
+ 003C 0E940000          xcall lsl8
+ 0040 0095              com R16
+ 0042 DEDF              xcall _Send_Data_To_74HC595#Fvh
+ 0044                   .dbline 56
+ 0044           ;     Send_Data_To_74HC595(LED[seg]);
+ 0044 80E0              ldi R24,<_LED#A_h
+ 0046 90E0              ldi R25,>_LED#A_h
+ 0048 EA2D              mov R30,R10
+ 004A FF27              clr R31
+ 004C E80F              add R30,R24
+ 004E F91F              adc R31,R25
+ 0050 0081              ldd R16,z+0
+ 0052 D6DF              xcall _Send_Data_To_74HC595#Fvh
+ 0054                   .dbline 57
+ 0054           ;     HC595_LCLK_HIGH;
+ 0054 C19A              sbi 0x18,1
+ 0056                   .dbline -2
+ 0056           L8:
+ 0056                   .dbline 0 ; func end
+ 0056 C990              ld R12,y+
+ 0058 A990              ld R10,y+
+ 005A 0895              ret
+ 005C                   .dbsym r seg 10 c
+ 005C                   .dbsym r sit 12 c
+ 005C                   .dbend
+ 005C                   .dbfunc e HC595_Display_Bit _HC595_Display_Bit#Fvhhh fV
+ 005C           ;              i -> <dead>
+ 005C           ;      data_temp -> R20
+ 005C           ;          point -> R12
+ 005C           ;     a_bit_data -> R14
+ 005C           ;            bit -> R10
+                        .even
+ 005C           _HC595_Display_Bit#Fvhhh::
+ 005C 0E940000          xcall push_xgset30FC
+ 0060 E22E              mov R14,R18
+ 0062 A02E              mov R10,R16
+ 0064 C884              ldd R12,y+8
+ 0066                   .dbline -1
+ 0066                   .dbline 73
+ 0066           ; }
+ 0066           ; 
+ 0066           ; /**********************************************************
+ 0066           ; Function Name: HC595_Display_Bit
+ 0066           ; Description: 数码管的第几位显示数字0-9
+ 0066           ;                    数码管的排列顺序从右到左依次为01234567
+ 0066           ;                    point : 1->在该位显示小数点
+ 0066           ;                    0->在该位不显示小数点
+ 0066           ; Inputs: {bit:哪一位数码管亮;a_bit_data:显示的数字;point:是否显示小数点}
+ 0066           ; Outputs: None
+ 0066           ; Notes: 在2015级学习板上PB0(数据线)，PB1(锁存线)，PB2(时钟线)三端口为控制线
+ 0066           ;        两个74HC595串联需发送16位，连发两次8位数据，最后在拉高输出，
+ 0066           ;        两个移位HC595_DisplayData(寄存器同时输出。
+ 0066           ; ***********************************************************/
+ 0066           ; void HC595_Display_Bit(UINT8 bit, UINT8 a_bit_data, UINT8 point)
+ 0066           ; {
+ 0066                   .dbline 74
+ 0066           ;     UINT8 i, data_temp = 0;
+ 0066                   .dbline 75
+ 0066           ;     data_temp = LED[a_bit_data];         //只能获取数字段选信号
+ 0066 80E0              ldi R24,<_LED#A_h
+ 0068 90E0              ldi R25,>_LED#A_h
+ 006A EE2D              mov R30,R14
+ 006C FF27              clr R31
+ 006E E80F              add R30,R24
+ 0070 F91F              adc R31,R25
+ 0072 4081              ldd R20,z+0
+ 0074                   .dbline 77
+ 0074           ; 
+ 0074           ;     if (point)   SetBit(data_temp,7);     //显示小数点
+ 0074 CC20              tst R12
+ 0076 11F0              breq L10
+ 0078           X2:
+ 0078                   .dbline 77
+ 0078 4068              ori R20,128
+ 007A 01C0              xjmp L11
+ 007C           L10:
+ 007C                   .dbline 78
+ 007C           ;     else        ClrBit(data_temp,7);     //不显示小数点
+ 007C 4F77              andi R20,127
+ 007E           L11:
+ 007E                   .dbline 80
+ 007E           ; 
+ 007E           ;     HC595_Init();
+ 007E 98D0              xcall _HC595_Init#Fvv
+ 0080                   .dbline 81
+ 0080           ;     HC595_LCLK_LOW;    //锁存线拉低
+ 0080 C198              cbi 0x18,1
+ 0082                   .dbline 82
+ 0082           ;     HC595_SCLK_LOW;    //时钟线拉低
+ 0082 C298              cbi 0x18,2
+ 0084                   .dbline 83
+ 0084           ;     Delay_us(5);
+ 0084 05E0              ldi R16,5
+ 0086 10E0              ldi R17,0
+ 0088 0E940000          xcall _Delay_us#Fvi
+ 008C                   .dbline 84
+ 008C           ;     Send_Data_To_74HC595(~(1 << bit));  //发送位选信号
+ 008C 01E0              ldi R16,1
+ 008E 1A2D              mov R17,R10
+ 0090 0E940000          xcall lsl8
+ 0094 0095              com R16
+ 0096 B4DF              xcall _Send_Data_To_74HC595#Fvh
+ 0098                   .dbline 85
+ 0098           ;     Delay_us(5);
+ 0098 05E0              ldi R16,5
+ 009A 10E0              ldi R17,0
+ 009C 0E940000          xcall _Delay_us#Fvi
+ 00A0                   .dbline 86
+ 00A0           ;     Send_Data_To_74HC595(data_temp);   //发送段选信号
+ 00A0 042F              mov R16,R20
+ 00A2 AEDF              xcall _Send_Data_To_74HC595#Fvh
+ 00A4                   .dbline 88
+ 00A4           ; 
+ 00A4           ;     HC595_LCLK_HIGH;      //上升沿实现刚移入的十六位数据的输出及锁存
+ 00A4 C19A              sbi 0x18,1
+ 00A6                   .dbline -2
+ 00A6           L9:
+ 00A6                   .dbline 0 ; func end
+ 00A6 0C940000          xjmp pop_xgset30FC
+ 00AA                   .dbsym l i 1 c
+ 00AA                   .dbsym r data_temp 20 c
+ 00AA                   .dbsym r point 12 c
+ 00AA                   .dbsym r a_bit_data 14 c
+ 00AA                   .dbsym r bit 10 c
+ 00AA                   .dbend
+ 00AA                   .dbfunc e HC595_DisplayData _HC595_DisplayData#Fvhhm fV
+ 00AA           ;           temp -> R20
+ 00AA           ;              j -> R10
+ 00AA           ;              i -> R12
+ 00AA           ;           data -> y+9
+ 00AA           ;           stop -> R14
+ 00AA           ;          start -> R12
+                        .even
+ 00AA           _HC595_DisplayData#Fvhhm::
+ 00AA 0E940000          xcall push_xgset30FC
+ 00AE E22E              mov R14,R18
+ 00B0 C02E              mov R12,R16
+ 00B2 2197              sbiw R28,1
+ 00B4                   .dbline -1
+ 00B4                   .dbline 101
+ 00B4           ; }
+ 00B4           ; 
+ 00B4           ; /**********************************************************
+ 00B4           ; Function Name: HC595_DisplayData()
+ 00B4           ; Description: 从start位到stop位显示数字data
+ 00B4           ;                    数码管的排列顺序从左往右依次为01234567
+ 00B4           ; Inputs: {start:起始位;stop:截止位;data:需要显示的十进制的数字}
+ 00B4           ; Outputs: None
+ 00B4           ; Notes: 在2015级学习板上PB0(数据线)，PB1(锁存线)，PB2(时钟线)三端口为控制线
+ 00B4           ;         如果用的数码管的位数超过十进制数的位数，高位显示0，如001234
+ 00B4           ; ***********************************************************/
+ 00B4           ; void HC595_DisplayData(UINT8 start, UINT8 stop ,UINT32  data)
+ 00B4           ; {
+ 00B4                   .dbline 103
+ 00B4           ;     UINT8 i, j, temp;
+ 00B4           ;     j = stop;
+ 00B4 AE2C              mov R10,R14
+ 00B6                   .dbline 104
+ 00B6           ;     for (i = start; i <= stop ; i++)
+ 00B6 2CC0              xjmp L16
+ 00B8           L13:
+ 00B8                   .dbline 105
+ 00B8           ;     {
+ 00B8                   .dbline 106
+ 00B8           ;     temp = data % 10;   //选出data的第i位（从高位往低位数)
+ 00B8 8AE0              ldi R24,10
+ 00BA 90E0              ldi R25,0
+ 00BC A0E0              ldi R26,0
+ 00BE B0E0              ldi R27,0
+ 00C0 0985              ldd R16,y+9
+ 00C2 1A85              ldd R17,y+10
+ 00C4 2B85              ldd R18,y+11
+ 00C6 3C85              ldd R19,y+12
+ 00C8 BA93              st -y,R27
+ 00CA AA93              st -y,R26
+ 00CC 9A93              st -y,R25
+ 00CE 8A93              st -y,R24
+ 00D0 0E940000          xcall mod32u
+ 00D4 402F              mov R20,R16
+ 00D6                   .dbline 107
+ 00D6           ;     HC595_Display_Bit(j, temp, 0);//通过扫描的方式显示
+ 00D6 2224              clr R2
+ 00D8 2882              std y+0,R2
+ 00DA 242F              mov R18,R20
+ 00DC 0A2D              mov R16,R10
+ 00DE BEDF              xcall _HC595_Display_Bit#Fvhhh
+ 00E0                   .dbline 108
+ 00E0           ;     j--;
+ 00E0 AA94              dec R10
+ 00E2                   .dbline 109
+ 00E2           ;     data /= 10;//去除末位，并将十进制数向右移一位
+ 00E2 8AE0              ldi R24,10
+ 00E4 90E0              ldi R25,0
+ 00E6 A0E0              ldi R26,0
+ 00E8 B0E0              ldi R27,0
+ 00EA 0985              ldd R16,y+9
+ 00EC 1A85              ldd R17,y+10
+ 00EE 2B85              ldd R18,y+11
+ 00F0 3C85              ldd R19,y+12
+ 00F2 BA93              st -y,R27
+ 00F4 AA93              st -y,R26
+ 00F6 9A93              st -y,R25
+ 00F8 8A93              st -y,R24
+ 00FA 0E940000          xcall div32u
+ 00FE 0987              std y+9,R16
+ 0100 1A87              std y+10,R17
+ 0102 2B87              std y+11,R18
+ 0104 3C87              std y+12,R19
+ 0106                   .dbline 110
+ 0106           ;     Delay_ms(200);
+ 0106 08EC              ldi R16,200
+ 0108 10E0              ldi R17,0
+ 010A 0E940000          xcall _Delay_ms#Fvi
+ 010E                   .dbline 111
+ 010E           ;     }
+ 010E           L14:
+ 010E                   .dbline 104
+ 010E C394              inc R12
+ 0110           L16:
+ 0110                   .dbline 104
+ 0110 EC14              cp R14,R12
+ 0112 90F6              brsh L13
+ 0114           X3:
+ 0114                   .dbline -2
+ 0114           L12:
+ 0114                   .dbline 0 ; func end
+ 0114 2196              adiw R28,1
+ 0116 0C940000          xjmp pop_xgset30FC
+ 011A                   .dbsym r temp 20 c
+ 011A                   .dbsym r j 10 c
+ 011A                   .dbsym r i 12 c
+ 011A                   .dbsym l data 9 l
+ 011A                   .dbsym r stop 14 c
+ 011A                   .dbsym r start 12 c
+ 011A                   .dbend
+ 011A                   .dbfunc e HC595_DisplayData_Point _HC595_DisplayData_Point#Fvhhmh fV
+ 011A           ;           temp -> R22
+ 011A           ;              i -> R14
+ 011A           ;              j -> R10
+ 011A           ;      point_bit -> R20
+ 011A           ;           data -> y+11
+ 011A           ;           stop -> R12
+ 011A           ;          start -> R14
+                        .even
+ 011A           _HC595_DisplayData_Point#Fvhhmh::
+ 011A 0E940000          xcall push_xgsetF0FC
+ 011E C22E              mov R12,R18
+ 0120 E02E              mov R14,R16
+ 0122 2197              sbiw R28,1
+ 0124 4F85              ldd R20,y+15
+ 0126                   .dbline -1
+ 0126                   .dbline 127
+ 0126           ; 
+ 0126           ; }
+ 0126           ; 
+ 0126           ; 
+ 0126           ; /**********************************************************
+ 0126           ; Function Name: HC595_DisplayData_Point()
+ 0126           ; Description: 从start位到stop位显示数字data
+ 0126           ;                    数码管的排列顺序从左往右依次为01234567
+ 0126           ; Inputs: {start:起始位;stop:截止位;data:现实的数字;point_bit:在哪一位显示小数点}
+ 0126           ; Outputs: None
+ 0126           ; Notes: 在2015级学习板上PB0(数据线)，PB1(锁存线)，PB2(时钟线)三端口为控制线
+ 0126           ;        小数点是从右往左数01234567
+ 0126           ;        这种显示方法可显示小数
+ 0126           ; ***********************************************************/
+ 0126           ; extern void HC595_DisplayData_Point(UINT8 start, UINT8 stop , UINT32  data , UINT8 point_bit)
+ 0126           ; {
+ 0126                   .dbline 129
+ 0126           ;   UINT8 i, j, temp;
+ 0126           ;   j = stop;
+ 0126 AC2C              mov R10,R12
+ 0128                   .dbline 130
+ 0128           ;   for (i = start; i <= stop ; i++)
+ 0128 3DC0              xjmp L21
+ 012A           L18:
+ 012A                   .dbline 131
+ 012A           ;     {
+ 012A                   .dbline 132
+ 012A           ;     temp = data % 10;     //选出data的末位（从高位往低位数)，首先显示低位
+ 012A 8AE0              ldi R24,10
+ 012C 90E0              ldi R25,0
+ 012E A0E0              ldi R26,0
+ 0130 B0E0              ldi R27,0
+ 0132 0B85              ldd R16,y+11
+ 0134 1C85              ldd R17,y+12
+ 0136 2D85              ldd R18,y+13
+ 0138 3E85              ldd R19,y+14
+ 013A BA93              st -y,R27
+ 013C AA93              st -y,R26
+ 013E 9A93              st -y,R25
+ 0140 8A93              st -y,R24
+ 0142 0E940000          xcall mod32u
+ 0146 602F              mov R22,R16
+ 0148                   .dbline 133
+ 0148           ;     if(j == stop - point_bit)
+ 0148 242E              mov R2,R20
+ 014A 3324              clr R3
+ 014C 4C2C              mov R4,R12
+ 014E 5524              clr R5
+ 0150 4218              sub R4,R2
+ 0152 5308              sbc R5,R3
+ 0154 2A2C              mov R2,R10
+ 0156 3324              clr R3
+ 0158 2414              cp R2,R4
+ 015A 3504              cpc R3,R5
+ 015C 31F4              brne L22
+ 015E           X4:
+ 015E                   .dbline 134
+ 015E           ;        HC595_Display_Bit(j, temp, 1);  //该显示小数点
+ 015E 81E0              ldi R24,1
+ 0160 8883              std y+0,R24
+ 0162 262F              mov R18,R22
+ 0164 022D              mov R16,R2
+ 0166 7ADF              xcall _HC595_Display_Bit#Fvhhh
+ 0168 05C0              xjmp L23
+ 016A           L22:
+ 016A                   .dbline 136
+ 016A           ;     else
+ 016A           ;        HC595_Display_Bit(j, temp, 0);  //不该显示小数点
+ 016A 2224              clr R2
+ 016C 2882              std y+0,R2
+ 016E 262F              mov R18,R22
+ 0170 0A2D              mov R16,R10
+ 0172 74DF              xcall _HC595_Display_Bit#Fvhhh
+ 0174           L23:
+ 0174                   .dbline 137
+ 0174           ;     j--;
+ 0174 AA94              dec R10
+ 0176                   .dbline 138
+ 0176           ;     data /= 10;       //去除末位，并将十进制数向右移一位
+ 0176 8AE0              ldi R24,10
+ 0178 90E0              ldi R25,0
+ 017A A0E0              ldi R26,0
+ 017C B0E0              ldi R27,0
+ 017E 0B85              ldd R16,y+11
+ 0180 1C85              ldd R17,y+12
+ 0182 2D85              ldd R18,y+13
+ 0184 3E85              ldd R19,y+14
+ 0186 BA93              st -y,R27
+ 0188 AA93              st -y,R26
+ 018A 9A93              st -y,R25
+ 018C 8A93              st -y,R24
+ 018E 0E940000          xcall div32u
+ 0192 0B87              std y+11,R16
+ 0194 1C87              std y+12,R17
+ 0196 2D87              std y+13,R18
+ 0198 3E87              std y+14,R19
+ 019A                   .dbline 139
+ 019A           ;     Delay_ms(200);
+ 019A 08EC              ldi R16,200
+ 019C 10E0              ldi R17,0
+ 019E 0E940000          xcall _Delay_ms#Fvi
+ 01A2                   .dbline 140
+ 01A2           ;     }
+ 01A2           L19:
+ 01A2                   .dbline 130
+ 01A2 E394              inc R14
+ 01A4           L21:
+ 01A4                   .dbline 130
+ 01A4 CE14              cp R12,R14
+ 01A6 08F0              brlo X6
+ 01A8 C0CF              xjmp L18
+ 01AA           X6:
+ 01AA           X5:
+ 01AA                   .dbline -2
+ 01AA           L17:
+ 01AA                   .dbline 0 ; func end
+ 01AA 2196              adiw R28,1
+ 01AC 0C940000          xjmp pop_xgsetF0FC
+ 01B0                   .dbsym r temp 22 c
+ 01B0                   .dbsym r i 14 c
+ 01B0                   .dbsym r j 10 c
+ 01B0                   .dbsym r point_bit 20 c
+ 01B0                   .dbsym l data 11 l
+ 01B0                   .dbsym r stop 12 c
+ 01B0                   .dbsym r start 14 c
+ 01B0                   .dbend
+ 01B0                   .dbfunc e HC595_Init _HC595_Init#Fvv fV
+                        .even
+ 01B0           _HC595_Init#Fvv::
+ 01B0                   .dbline -1
+ 01B0                   .dbline 153
+ 01B0           ; }
+ 01B0           ; 
+ 01B0           ; 
+ 01B0           ; /**********************************************************
+ 01B0           ; Function Name: HC595_Init()
+ 01B0           ; Description: 初始化端口，PB0，PB1，PB2端口为输出
+ 01B0           ; Inputs: None
+ 01B0           ; Outputs: None
+ 01B0           ; Notes: 在2015级学习板上PB0(数据线)，PB1(锁存线)，PB2(时钟线)三端口为控制线
+ 01B0           ; Writer: MaxMarth
+ 01B0           ; ***********************************************************/
+ 01B0           ; void HC595_Init(void)
+ 01B0           ; {
+ 01B0                   .dbline 154
+ 01B0           ;     DDRB |= (1<<HC595_DATA_bit);
+ 01B0 B89A              sbi 0x17,0
+ 01B2                   .dbline 155
+ 01B2           ;     DDRB |= (1<<HC595_LCLK_bit);
+ 01B2 B99A              sbi 0x17,1
+ 01B4                   .dbline 156
+ 01B4           ;     DDRB |= (1<<HC595_SCLK_bit);
+ 01B4 BA9A              sbi 0x17,2
+ 01B6                   .dbline 157
+ 01B6           ;     HC595_LCLK_HIGH;      //锁存线拉高
+ 01B6 C19A              sbi 0x18,1
+ 01B8                   .dbline 158
+ 01B8           ;     HC595_SCLK_HIGH;      //时钟线拉高
+ 01B8 C29A              sbi 0x18,2
+ 01BA                   .dbline -2
+ 01BA           L24:
+ 01BA                   .dbline 0 ; func end
+ 01BA 0895              ret
+ 01BC                   .dbend
+ 01BC           ; }

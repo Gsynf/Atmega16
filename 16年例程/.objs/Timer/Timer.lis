@@ -1,0 +1,1459 @@
+                        .module Timer.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.c"
+                        .area data(ram, con, rel)
+ 0000                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.c"
+ 0000           _NoteData#A_h:
+ 0000                   .blkb 2
+                        .area idata(rom)
+ 0000 00FC              .byte 0,252
+                        .area data(ram, con, rel)
+ 0002                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.c"
+ 0002                   .blkb 2
+                        .area idata(rom)
+ 0002 E1D4              .byte 225,212
+                        .area data(ram, con, rel)
+ 0004                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.c"
+ 0004                   .blkb 2
+                        .area idata(rom)
+ 0004 BCA8              .byte 188,168
+                        .area data(ram, con, rel)
+ 0006                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.c"
+ 0006                   .blkb 2
+                        .area idata(rom)
+ 0006 968D              .byte 150,141
+                        .area data(ram, con, rel)
+ 0008                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.c"
+ 0008                   .blkb 2
+                        .area idata(rom)
+ 0008 7E70              .byte 126,'p
+                        .area data(ram, con, rel)
+ 000A                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.c"
+ 000A                   .blkb 2
+                        .area idata(rom)
+ 000A 695E              .byte 'i,94
+                        .area data(ram, con, rel)
+ 000C                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.c"
+ 000C                   .blkb 2
+                        .area idata(rom)
+ 000C 534A              .byte 'S,'J
+                        .area data(ram, con, rel)
+ 000E                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.c"
+ 000E                   .blkb 2
+                        .area idata(rom)
+ 000E 463E              .byte 'F,62
+                        .area data(ram, con, rel)
+ 0010                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.c"
+ 0010                   .blkb 2
+                        .area idata(rom)
+ 0010 3734              .byte 55,52
+                        .area data(ram, con, rel)
+ 0012                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.c"
+ 0012                   .blkb 2
+                        .area idata(rom)
+ 0012 2E29              .byte 46,41
+                        .area data(ram, con, rel)
+ 0014                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.c"
+ 0014                   .blkb 1
+                        .area idata(rom)
+ 0014 25                .byte 37
+                        .area data(ram, con, rel)
+ 0015                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.c"
+ 0015                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+ 0015                   .dbsym s NoteData _NoteData#A_h A[21:21]c
+ 0015           _LED_Flag#i::
+ 0015                   .blkb 2
+                        .area idata(rom)
+ 0015 0000              .word 0
+                        .area data(ram, con, rel)
+ 0017                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+ 0017                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.c"
+ 0017                   .dbsym e LED_Flag _LED_Flag#i I
+                        .area vector(rom, abs)
+                        .org 36
+ 0024 0C940000          jmp _Timer0_Ovf_Isr
+                        .area data(ram, con, rel)
+ 0017                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.c"
+                        .area text(rom, con, rel)
+ 0000                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.c"
+ 0000                   .dbfunc e Timer0_Ovf_Isr _Timer0_Ovf_Isr#Fvv fV
+                        .even
+ 0000           _Timer0_Ovf_Isr#Fvv::
+ 0000 2A92              st -y,R2
+ 0002 3A92              st -y,R3
+ 0004 0A93              st -y,R16
+ 0006 1A93              st -y,R17
+ 0008 8A93              st -y,R24
+ 000A 9A93              st -y,R25
+ 000C AA93              st -y,R26
+ 000E EA93              st -y,R30
+ 0010 2FB6              IN R2,63
+ 0012 2A92              st -y,R2
+ 0014                   .dbline -1
+ 0014                   .dbline 12
+ 0014           ; #include "Timer.h"
+ 0014           ; /************************************************************
+ 0014           ; Function Name:  Timer0_LED_Flow
+ 0014           ; Inputs: none
+ 0014           ; Outputs: 0
+ 0014           ; Description:    200ms流水灯
+ 0014           ; Writer: XZ,WZY,MaxMarth
+ 0014           ; *************************************************************/
+ 0014           ; int LED_Flag = 0;
+ 0014           ; #pragma interrupt_handler Timer0_Ovf_Isr:iv_TIM0_OVF
+ 0014           ; void Timer0_Ovf_Isr(void)   ///溢出中断
+ 0014           ; {
+ 0014                   .dbline 13
+ 0014           ;     TCNT0 = 0x3D;           ///reload counter value
+ 0014 8DE3              ldi R24,61
+ 0016 82BF              out 0x32,R24
+ 0018                   .dbline 15
+ 0018           ;     //TCNT0 = 0b00111110; 即 62
+ 0018           ;     if(turn_flag == 1)
+ 0018 80910000          lds R24,_turn_flag#i
+ 001C 90910100          lds R25,_turn_flag#i+1
+ 0020 8130              cpi R24,1
+ 0022 E0E0              ldi R30,0
+ 0024 9E07              cpc R25,R30
+ 0026 49F4              brne L2
+ 0028           X0:
+ 0028                   .dbline 16
+ 0028           ;         LED_Flag++;
+ 0028 80911500          lds R24,_LED_Flag#i
+ 002C 90911600          lds R25,_LED_Flag#i+1
+ 0030 0196              adiw R24,1
+ 0032 90931600          sts _LED_Flag#i+1,R25
+ 0036 80931500          sts _LED_Flag#i,R24
+ 003A           L2:
+ 003A                   .dbline 17
+ 003A           ;     if(turn_flag == -1)
+ 003A 80910000          lds R24,_turn_flag#i
+ 003E 90910100          lds R25,_turn_flag#i+1
+ 0042 8F3F              cpi R24,255
+ 0044 EFEF              ldi R30,255
+ 0046 9E07              cpc R25,R30
+ 0048 49F4              brne L4
+ 004A           X1:
+ 004A                   .dbline 18
+ 004A           ;         LED_Flag--;
+ 004A 80911500          lds R24,_LED_Flag#i
+ 004E 90911600          lds R25,_LED_Flag#i+1
+ 0052 0197              sbiw R24,1
+ 0054 90931600          sts _LED_Flag#i+1,R25
+ 0058 80931500          sts _LED_Flag#i,R24
+ 005C           L4:
+ 005C                   .dbline 20
+ 005C           ; 
+ 005C           ;     if(LED_Flag < 0)
+ 005C 80911500          lds R24,_LED_Flag#i
+ 0060 90911600          lds R25,_LED_Flag#i+1
+ 0064 8030              cpi R24,0
+ 0066 E0E0              ldi R30,0
+ 0068 9E07              cpc R25,R30
+ 006A 34F4              brge L6
+ 006C           X2:
+ 006C                   .dbline 21
+ 006C           ;         LED_Flag = 7;
+ 006C 87E0              ldi R24,7
+ 006E 90E0              ldi R25,0
+ 0070 90931600          sts _LED_Flag#i+1,R25
+ 0074 80931500          sts _LED_Flag#i,R24
+ 0078           L6:
+ 0078                   .dbline 22
+ 0078           ;     if(LED_Flag > 7)
+ 0078 87E0              ldi R24,7
+ 007A 90E0              ldi R25,0
+ 007C 20901500          lds R2,_LED_Flag#i
+ 0080 30901600          lds R3,_LED_Flag#i+1
+ 0084 8215              cp R24,R2
+ 0086 9305              cpc R25,R3
+ 0088 34F4              brge L8
+ 008A           X3:
+ 008A                   .dbline 23
+ 008A           ;         LED_Flag = 0;
+ 008A 2224              clr R2
+ 008C 3324              clr R3
+ 008E 30921600          sts _LED_Flag#i+1,R3
+ 0092 20921500          sts _LED_Flag#i,R2
+ 0096           L8:
+ 0096                   .dbline 24
+ 0096           ;     PORTC = ~(1 << LED_Flag);
+ 0096 20901500          lds R2,_LED_Flag#i
+ 009A 30901600          lds R3,_LED_Flag#i+1
+ 009E 01E0              ldi R16,1
+ 00A0 122D              mov R17,R2
+ 00A2 0E940000          xcall lsl8
+ 00A6 202E              mov R2,R16
+ 00A8 2094              com R2
+ 00AA 25BA              out 0x15,R2
+ 00AC                   .dbline -2
+ 00AC           L1:
+ 00AC                   .dbline 0 ; func end
+ 00AC 2990              ld R2,y+
+ 00AE 2FBE              OUT 63,R2
+ 00B0 E991              ld R30,y+
+ 00B2 A991              ld R26,y+
+ 00B4 9991              ld R25,y+
+ 00B6 8991              ld R24,y+
+ 00B8 1991              ld R17,y+
+ 00BA 0991              ld R16,y+
+ 00BC 3990              ld R3,y+
+ 00BE 2990              ld R2,y+
+ 00C0 1895              reti
+ 00C2                   .dbend
+ 00C2                   .dbfunc e Timer0_Init _Timer0_Init#Fvv fV
+                        .even
+ 00C2           _Timer0_Init#Fvv::
+ 00C2                   .dbline -1
+ 00C2                   .dbline 27
+ 00C2           ; }
+ 00C2           ; void Timer0_Init(void)
+ 00C2           ; {
+ 00C2                   .dbline 28
+ 00C2           ;     TCCR0 = 0x00;           ///stop
+ 00C2 2224              clr R2
+ 00C4 23BE              out 0x33,R2
+ 00C6                   .dbline 29
+ 00C6           ;     TCNT0 = 0x00;           ///set count
+ 00C6 22BE              out 0x32,R2
+ 00C8                   .dbline 30
+ 00C8           ;     OCR0  = 0xC3;           ///set compare
+ 00C8 83EC              ldi R24,195
+ 00CA 8CBF              out 0x3c,R24
+ 00CC                   .dbline 31
+ 00CC           ;     TCCR0 = 0x05;           ///start timer
+ 00CC 85E0              ldi R24,5
+ 00CE 83BF              out 0x33,R24
+ 00D0                   .dbline 33
+ 00D0           ;     //CLI();                  ///领导说不
+ 00D0           ;     TIMSK = 0x01;           ///定时器中断小boss
+ 00D0 81E0              ldi R24,1
+ 00D2 89BF              out 0x39,R24
+ 00D4                   .dbline -2
+ 00D4           L10:
+ 00D4                   .dbline 0 ; func end
+ 00D4 0895              ret
+ 00D6                   .dbend
+ 00D6                   .dbfunc e Timer0_LED_Flow _Timer0_LED_Flow#Fiv fI
+                        .even
+ 00D6           _Timer0_LED_Flow#Fiv::
+ 00D6                   .dbline -1
+ 00D6                   .dbline 37
+ 00D6           ;     //SEI();                  ///领导同意
+ 00D6           ; }
+ 00D6           ; int Timer0_LED_Flow(void)
+ 00D6           ; {
+ 00D6 0BC0              xjmp L13
+ 00D8           L12:
+ 00D8                   .dbline 41
+ 00D8           ;     //LED_IO_Init();
+ 00D8           ;     //Timer0_Init();
+ 00D8           ;     while(1)
+ 00D8           ;         {
+ 00D8                   .dbline 42
+ 00D8           ;             PORTC = ~(1 << LED_Flag);      ///控制相应的灯
+ 00D8 20901500          lds R2,_LED_Flag#i
+ 00DC 30901600          lds R3,_LED_Flag#i+1
+ 00E0 01E0              ldi R16,1
+ 00E2 122D              mov R17,R2
+ 00E4 0E940000          xcall lsl8
+ 00E8 202E              mov R2,R16
+ 00EA 2094              com R2
+ 00EC 25BA              out 0x15,R2
+ 00EE                   .dbline 43
+ 00EE           ;         }
+ 00EE           L13:
+ 00EE                   .dbline 40
+ 00EE F4CF              xjmp L12
+ 00F0           X4:
+ 00F0                   .dbline -2
+ 00F0           L11:
+ 00F0                   .dbline 0 ; func end
+ 00F0 0895              ret
+ 00F2                   .dbend
+ 00F2                   .dbfunc e InitTimer0 _InitTimer0#Fvv fV
+                        .even
+ 00F2           _InitTimer0#Fvv::
+ 00F2                   .dbline -1
+ 00F2                   .dbline 49
+ 00F2           ;     return 0;
+ 00F2           ; }
+ 00F2           ; 
+ 00F2           ; //--------------------T I M E R 0---------------------------/
+ 00F2           ; void InitTimer0(void)
+ 00F2           ; {
+ 00F2                   .dbline 50
+ 00F2           ;     SetBit(TIMER0_DDR,TIMER0_OCR0);     //设置PB3为输出
+ 00F2 BB9A              sbi 0x17,3
+ 00F4                   .dbline 53
+ 00F4           ;     //配置TCCR0寄存器
+ 00F4           ;     //波形产生              CTC模式
+ 00F4           ;     SetBit(TCCR0,WGM01);
+ 00F4 83B7              in R24,0x33
+ 00F6 8860              ori R24,8
+ 00F8 83BF              out 0x33,R24
+ 00FA                   .dbline 54
+ 00FA           ;     ClrBit(TCCR0,WGM00);
+ 00FA 83B7              in R24,0x33
+ 00FC 8F7B              andi R24,191
+ 00FE 83BF              out 0x33,R24
+ 0100                   .dbline 56
+ 0100           ;     //比较匹配输出模式      比较匹配时OC0取反
+ 0100           ;     SetBit(TCCR0,COM00);
+ 0100 83B7              in R24,0x33
+ 0102 8061              ori R24,16
+ 0104 83BF              out 0x33,R24
+ 0106                   .dbline 57
+ 0106           ;     ClrBit(TCCR0,COM01);
+ 0106 83B7              in R24,0x33
+ 0108 8F7D              andi R24,223
+ 010A 83BF              out 0x33,R24
+ 010C                   .dbline 59
+ 010C           ;     //时钟选择              8分频
+ 010C           ;     ClrBit(TCCR0,CS02);
+ 010C 83B7              in R24,0x33
+ 010E 8B7F              andi R24,251
+ 0110 83BF              out 0x33,R24
+ 0112                   .dbline 60
+ 0112           ;     SetBit(TCCR0,CS01);
+ 0112 83B7              in R24,0x33
+ 0114 8260              ori R24,2
+ 0116 83BF              out 0x33,R24
+ 0118                   .dbline 61
+ 0118           ;     ClrBit(TCCR0,CS00);
+ 0118 83B7              in R24,0x33
+ 011A 8E7F              andi R24,254
+ 011C 83BF              out 0x33,R24
+ 011E                   .dbline -2
+ 011E           L15:
+ 011E                   .dbline 0 ; func end
+ 011E 0895              ret
+ 0120                   .dbend
+ 0120                   .dbfunc e OpenT0CTC _OpenT0CTC#Fvv fV
+                        .even
+ 0120           _OpenT0CTC#Fvv::
+ 0120                   .dbline -1
+ 0120                   .dbline 67
+ 0120           ; }
+ 0120           ; //Timer0 CTC模式
+ 0120           ; //打开或关闭定时器
+ 0120           ; 
+ 0120           ; void OpenT0CTC(void)
+ 0120           ; {
+ 0120                   .dbline 68
+ 0120           ;     SetBit(TCCR0,COM00);
+ 0120 83B7              in R24,0x33
+ 0122 8061              ori R24,16
+ 0124 83BF              out 0x33,R24
+ 0126                   .dbline 69
+ 0126           ;     ClrBit(TCCR0,COM01);
+ 0126 83B7              in R24,0x33
+ 0128 8F7D              andi R24,223
+ 012A 83BF              out 0x33,R24
+ 012C                   .dbline -2
+ 012C           L16:
+ 012C                   .dbline 0 ; func end
+ 012C 0895              ret
+ 012E                   .dbend
+ 012E                   .dbfunc e CloseT0CTC _CloseT0CTC#Fvv fV
+                        .even
+ 012E           _CloseT0CTC#Fvv::
+ 012E                   .dbline -1
+ 012E                   .dbline 72
+ 012E           ; }
+ 012E           ; void CloseT0CTC(void)    //不与OC0连接
+ 012E           ; {
+ 012E                   .dbline 73
+ 012E           ;     ClrBit(TCCR0,COM00);
+ 012E 83B7              in R24,0x33
+ 0130 8F7E              andi R24,239
+ 0132 83BF              out 0x33,R24
+ 0134                   .dbline 74
+ 0134           ;     ClrBit(TCCR0,COM01);
+ 0134 83B7              in R24,0x33
+ 0136 8F7D              andi R24,223
+ 0138 83BF              out 0x33,R24
+ 013A                   .dbline -2
+ 013A           L17:
+ 013A                   .dbline 0 ; func end
+ 013A 0895              ret
+ 013C                   .dbend
+ 013C                   .dbfunc e MusicNote _MusicNote#Fvi fV
+ 013C           ;              n -> R10,R11
+                        .even
+ 013C           _MusicNote#Fvi::
+ 013C AA92              st -y,R10
+ 013E BA92              st -y,R11
+ 0140 5801              movw R10,R16
+ 0142                   .dbline -1
+ 0142                   .dbline 78
+ 0142           ; }
+ 0142           ; 
+ 0142           ; void MusicNote(int n)
+ 0142           ; {
+ 0142                   .dbline 79
+ 0142           ;     if(receive_flag == 1)
+ 0142 80910000          lds R24,_receive_flag#h
+ 0146 8130              cpi R24,1
+ 0148 11F4              brne L19
+ 014A           X5:
+ 014A                   .dbline 80
+ 014A           ;         start();
+ 014A 0E940000          xcall _start#Fvv
+ 014E           L19:
+ 014E                   .dbline 81
+ 014E           ;     if(0==n)
+ 014E AA20              tst R10
+ 0150 41F4              brne L21
+ 0152 BB20              tst R11
+ 0154 31F4              brne L21
+ 0156           X6:
+ 0156                   .dbline 83
+ 0156           ;     {
+ 0156           ;         CloseT0CTC();
+ 0156                   .dbline 83
+ 0156 EBDF              xcall _CloseT0CTC#Fvv
+ 0158                   .dbline 84
+ 0158           ;         Delay_ms(500);
+ 0158 04EF              ldi R16,500
+ 015A 11E0              ldi R17,1
+ 015C 0E940000          xcall _Delay_ms#Fvi
+ 0160                   .dbline 85
+ 0160           ;     }
+ 0160 1CC0              xjmp L22
+ 0162           L21:
+ 0162                   .dbline 87
+ 0162           ;     else
+ 0162           ;     {
+ 0162                   .dbline 88
+ 0162           ;         OCR0 = NoteData[n];
+ 0162 80E0              ldi R24,<_NoteData#A_h
+ 0164 90E0              ldi R25,>_NoteData#A_h
+ 0166 F501              movw R30,R10
+ 0168 E80F              add R30,R24
+ 016A F91F              adc R31,R25
+ 016C 2080              ldd R2,z+0
+ 016E 2CBE              out 0x3c,R2
+ 0170                   .dbline 89
+ 0170           ;         OpenT0CTC();
+ 0170 D7DF              xcall _OpenT0CTC#Fvv
+ 0172                   .dbline 90
+ 0172           ;         Delay_ms(475);
+ 0172 0BED              ldi R16,475
+ 0174 11E0              ldi R17,1
+ 0176 0E940000          xcall _Delay_ms#Fvi
+ 017A                   .dbline 91
+ 017A           ;         CloseT0CTC();
+ 017A D9DF              xcall _CloseT0CTC#Fvv
+ 017C                   .dbline 92
+ 017C           ;         Delay_ms(50);
+ 017C 02E3              ldi R16,50
+ 017E 10E0              ldi R17,0
+ 0180 0E940000          xcall _Delay_ms#Fvi
+ 0184                   .dbline 93
+ 0184           ;         if(N<=10)
+ 0184 00C0              xjmp L23
+ 0186           L23:
+ 0186                   .dbline 100
+ 0186           ;         {
+ 0186           ;             PORTC |= (1<<7);
+ 0186           ;             Delay_ms(150);
+ 0186           ;             PORTC &= ~(1<<7);
+ 0186           ;         }
+ 0186           ;         else
+ 0186           ;         {
+ 0186                   .dbline 101
+ 0186           ;              PORTC |= (1<<7)|(1<<6);
+ 0186 85B3              in R24,0x15
+ 0188 806C              ori R24,192
+ 018A 85BB              out 0x15,R24
+ 018C                   .dbline 102
+ 018C           ;              Delay_ms(150);
+ 018C 06E9              ldi R16,150
+ 018E 10E0              ldi R17,0
+ 0190 0E940000          xcall _Delay_ms#Fvi
+ 0194                   .dbline 103
+ 0194           ;              PORTC &=~((1<<7)|(1<<6));
+ 0194 85B3              in R24,0x15
+ 0196 8F73              andi R24,63
+ 0198 85BB              out 0x15,R24
+ 019A                   .dbline 104
+ 019A           ;         }
+ 019A           L24:
+ 019A                   .dbline 106
+ 019A           ; 
+ 019A           ;     }
+ 019A           L22:
+ 019A                   .dbline -2
+ 019A           L18:
+ 019A                   .dbline 0 ; func end
+ 019A B990              ld R11,y+
+ 019C A990              ld R10,y+
+ 019E 0895              ret
+ 01A0                   .dbsym r n 10 I
+ 01A0                   .dbend
+ 01A0                   .dbfunc e MusicNote2 _MusicNote2#Fvi fV
+ 01A0           ;              n -> R10,R11
+                        .even
+ 01A0           _MusicNote2#Fvi::
+ 01A0 AA92              st -y,R10
+ 01A2 BA92              st -y,R11
+ 01A4 5801              movw R10,R16
+ 01A6                   .dbline -1
+ 01A6                   .dbline 111
+ 01A6           ; 
+ 01A6           ; }
+ 01A6           ; 
+ 01A6           ; void MusicNote2(int n)
+ 01A6           ; {
+ 01A6                   .dbline 112
+ 01A6           ;     if(receive_flag == 1)
+ 01A6 80910000          lds R24,_receive_flag#h
+ 01AA 8130              cpi R24,1
+ 01AC 11F4              brne L26
+ 01AE           X7:
+ 01AE                   .dbline 113
+ 01AE           ;         start();
+ 01AE 0E940000          xcall _start#Fvv
+ 01B2           L26:
+ 01B2                   .dbline 114
+ 01B2           ;     if(0==n)
+ 01B2 AA20              tst R10
+ 01B4 41F4              brne L28
+ 01B6 BB20              tst R11
+ 01B8 31F4              brne L28
+ 01BA           X8:
+ 01BA                   .dbline 116
+ 01BA           ;     {
+ 01BA           ;         CloseT0CTC();
+ 01BA                   .dbline 116
+ 01BA B9DF              xcall _CloseT0CTC#Fvv
+ 01BC                   .dbline 117
+ 01BC           ;         Delay_ms(1000);
+ 01BC 08EE              ldi R16,1000
+ 01BE 13E0              ldi R17,3
+ 01C0 0E940000          xcall _Delay_ms#Fvi
+ 01C4                   .dbline 118
+ 01C4           ;     }
+ 01C4 2BC0              xjmp L29
+ 01C6           L28:
+ 01C6                   .dbline 120
+ 01C6           ;     else
+ 01C6           ;     {
+ 01C6                   .dbline 121
+ 01C6           ;         OCR0 = NoteData[n];
+ 01C6 80E0              ldi R24,<_NoteData#A_h
+ 01C8 90E0              ldi R25,>_NoteData#A_h
+ 01CA F501              movw R30,R10
+ 01CC E80F              add R30,R24
+ 01CE F91F              adc R31,R25
+ 01D0 2080              ldd R2,z+0
+ 01D2 2CBE              out 0x3c,R2
+ 01D4                   .dbline 122
+ 01D4           ;         OpenT0CTC();
+ 01D4 A5DF              xcall _OpenT0CTC#Fvv
+ 01D6                   .dbline 123
+ 01D6           ;         Delay_ms(950);
+ 01D6 06EB              ldi R16,950
+ 01D8 13E0              ldi R17,3
+ 01DA 0E940000          xcall _Delay_ms#Fvi
+ 01DE                   .dbline 124
+ 01DE           ;         CloseT0CTC();
+ 01DE A7DF              xcall _CloseT0CTC#Fvv
+ 01E0                   .dbline 125
+ 01E0           ;         Delay_ms(50);
+ 01E0 02E3              ldi R16,50
+ 01E2 10E0              ldi R17,0
+ 01E4 0E940000          xcall _Delay_ms#Fvi
+ 01E8                   .dbline 126
+ 01E8           ;         if(n<=10)
+ 01E8 8AE0              ldi R24,10
+ 01EA 90E0              ldi R25,0
+ 01EC 8A15              cp R24,R10
+ 01EE 9B05              cpc R25,R11
+ 01F0 5CF0              brlt L30
+ 01F2           X9:
+ 01F2                   .dbline 128
+ 01F2           ;         {
+ 01F2           ;             PORTC |= (1<<7)|(1<<6)|(1<<5);
+ 01F2                   .dbline 128
+ 01F2 85B3              in R24,0x15
+ 01F4 806E              ori R24,224
+ 01F6 85BB              out 0x15,R24
+ 01F8                   .dbline 129
+ 01F8           ;             Delay_ms(150);
+ 01F8 06E9              ldi R16,150
+ 01FA 10E0              ldi R17,0
+ 01FC 0E940000          xcall _Delay_ms#Fvi
+ 0200                   .dbline 130
+ 0200           ;             PORTC &= ~((1<<7)|(1<<6)|(1<<5));
+ 0200 85B3              in R24,0x15
+ 0202 8F71              andi R24,31
+ 0204 85BB              out 0x15,R24
+ 0206                   .dbline 131
+ 0206           ;         }
+ 0206 0AC0              xjmp L31
+ 0208           L30:
+ 0208                   .dbline 133
+ 0208           ;         else
+ 0208           ;         {
+ 0208                   .dbline 134
+ 0208           ;             PORTC |= (1<<7)|(1<<6)|(1<<5)|(1<<4);
+ 0208 85B3              in R24,0x15
+ 020A 806F              ori R24,240
+ 020C 85BB              out 0x15,R24
+ 020E                   .dbline 135
+ 020E           ;             Delay_ms(150);
+ 020E 06E9              ldi R16,150
+ 0210 10E0              ldi R17,0
+ 0212 0E940000          xcall _Delay_ms#Fvi
+ 0216                   .dbline 136
+ 0216           ;             PORTC &= ~((1<<7)|(1<<6)|(1<<5)|(1<<4));
+ 0216 85B3              in R24,0x15
+ 0218 8F70              andi R24,15
+ 021A 85BB              out 0x15,R24
+ 021C                   .dbline 137
+ 021C           ;         }
+ 021C           L31:
+ 021C                   .dbline 139
+ 021C           ; 
+ 021C           ;     }
+ 021C           L29:
+ 021C                   .dbline -2
+ 021C           L25:
+ 021C                   .dbline 0 ; func end
+ 021C B990              ld R11,y+
+ 021E A990              ld R10,y+
+ 0220 0895              ret
+ 0222                   .dbsym r n 10 I
+ 0222                   .dbend
+ 0222                   .dbfunc e MusicNoteHalf _MusicNoteHalf#Fvi fV
+ 0222           ;              n -> R10,R11
+                        .even
+ 0222           _MusicNoteHalf#Fvi::
+ 0222 AA92              st -y,R10
+ 0224 BA92              st -y,R11
+ 0226 5801              movw R10,R16
+ 0228                   .dbline -1
+ 0228                   .dbline 145
+ 0228           ; 
+ 0228           ; }
+ 0228           ; 
+ 0228           ; 
+ 0228           ; void MusicNoteHalf(int n)
+ 0228           ; {
+ 0228                   .dbline 146
+ 0228           ;     if(receive_flag == 1)
+ 0228 80910000          lds R24,_receive_flag#h
+ 022C 8130              cpi R24,1
+ 022E 11F4              brne L33
+ 0230           X10:
+ 0230                   .dbline 147
+ 0230           ;         start();
+ 0230 0E940000          xcall _start#Fvv
+ 0234           L33:
+ 0234                   .dbline 148
+ 0234           ;     if(0==n)
+ 0234 AA20              tst R10
+ 0236 41F4              brne L35
+ 0238 BB20              tst R11
+ 023A 31F4              brne L35
+ 023C           X11:
+ 023C                   .dbline 150
+ 023C           ;     {
+ 023C           ;         CloseT0CTC();
+ 023C                   .dbline 150
+ 023C 78DF              xcall _CloseT0CTC#Fvv
+ 023E                   .dbline 151
+ 023E           ;         Delay_ms(250);
+ 023E 0AEF              ldi R16,250
+ 0240 10E0              ldi R17,0
+ 0242 0E940000          xcall _Delay_ms#Fvi
+ 0246                   .dbline 152
+ 0246           ;     }
+ 0246 2BC0              xjmp L36
+ 0248           L35:
+ 0248                   .dbline 154
+ 0248           ;     else
+ 0248           ;     {
+ 0248                   .dbline 155
+ 0248           ;         OCR0 = NoteData[n];
+ 0248 80E0              ldi R24,<_NoteData#A_h
+ 024A 90E0              ldi R25,>_NoteData#A_h
+ 024C F501              movw R30,R10
+ 024E E80F              add R30,R24
+ 0250 F91F              adc R31,R25
+ 0252 2080              ldd R2,z+0
+ 0254 2CBE              out 0x3c,R2
+ 0256                   .dbline 156
+ 0256           ;         OpenT0CTC();
+ 0256 64DF              xcall _OpenT0CTC#Fvv
+ 0258                   .dbline 157
+ 0258           ;         Delay_ms(225);
+ 0258 01EE              ldi R16,225
+ 025A 10E0              ldi R17,0
+ 025C 0E940000          xcall _Delay_ms#Fvi
+ 0260                   .dbline 158
+ 0260           ;         CloseT0CTC();
+ 0260 66DF              xcall _CloseT0CTC#Fvv
+ 0262                   .dbline 159
+ 0262           ;         Delay_ms(25);
+ 0262 09E1              ldi R16,25
+ 0264 10E0              ldi R17,0
+ 0266 0E940000          xcall _Delay_ms#Fvi
+ 026A                   .dbline 160
+ 026A           ;          if(n<=10)
+ 026A 8AE0              ldi R24,10
+ 026C 90E0              ldi R25,0
+ 026E 8A15              cp R24,R10
+ 0270 9B05              cpc R25,R11
+ 0272 5CF0              brlt L37
+ 0274           X12:
+ 0274                   .dbline 162
+ 0274           ;         {
+ 0274           ;            PORTC |= (1<<7)|(1<<6)|(1<<5)|(1<<4)|(1<<3);
+ 0274                   .dbline 162
+ 0274 85B3              in R24,0x15
+ 0276 886F              ori R24,248
+ 0278 85BB              out 0x15,R24
+ 027A                   .dbline 163
+ 027A           ;             Delay_ms(150);
+ 027A 06E9              ldi R16,150
+ 027C 10E0              ldi R17,0
+ 027E 0E940000          xcall _Delay_ms#Fvi
+ 0282                   .dbline 164
+ 0282           ;             PORTC &=~((1<<7)|(1<<6)|(1<<5)|(1<<4)|(1<<3));
+ 0282 85B3              in R24,0x15
+ 0284 8770              andi R24,7
+ 0286 85BB              out 0x15,R24
+ 0288                   .dbline 165
+ 0288           ;         }
+ 0288 0AC0              xjmp L38
+ 028A           L37:
+ 028A                   .dbline 167
+ 028A           ;         else
+ 028A           ;         {
+ 028A                   .dbline 168
+ 028A           ;             PORTC |= (1<<7)|(1<<6)|(1<<5)|(1<<4)|(1<<3)|(1<<2);
+ 028A 85B3              in R24,0x15
+ 028C 8C6F              ori R24,252
+ 028E 85BB              out 0x15,R24
+ 0290                   .dbline 169
+ 0290           ;             Delay_ms(150);
+ 0290 06E9              ldi R16,150
+ 0292 10E0              ldi R17,0
+ 0294 0E940000          xcall _Delay_ms#Fvi
+ 0298                   .dbline 170
+ 0298           ;             PORTC &= ~((1<<7)|(1<<6)|(1<<5)|(1<<4)|(1<<3)|(1<<2));
+ 0298 85B3              in R24,0x15
+ 029A 8370              andi R24,3
+ 029C 85BB              out 0x15,R24
+ 029E                   .dbline 171
+ 029E           ;         }
+ 029E           L38:
+ 029E                   .dbline 173
+ 029E           ; 
+ 029E           ;     }
+ 029E           L36:
+ 029E                   .dbline -2
+ 029E           L32:
+ 029E                   .dbline 0 ; func end
+ 029E B990              ld R11,y+
+ 02A0 A990              ld R10,y+
+ 02A2 0895              ret
+ 02A4                   .dbsym r n 10 I
+ 02A4                   .dbend
+ 02A4                   .dbfunc e MusicNoteHalfHalf _MusicNoteHalfHalf#Fvi fV
+ 02A4           ;              n -> R10,R11
+                        .even
+ 02A4           _MusicNoteHalfHalf#Fvi::
+ 02A4 AA92              st -y,R10
+ 02A6 BA92              st -y,R11
+ 02A8 5801              movw R10,R16
+ 02AA                   .dbline -1
+ 02AA                   .dbline 177
+ 02AA           ; 
+ 02AA           ; }
+ 02AA           ; void MusicNoteHalfHalf(int n)
+ 02AA           ; {
+ 02AA                   .dbline 178
+ 02AA           ;     if(receive_flag == 1)
+ 02AA 80910000          lds R24,_receive_flag#h
+ 02AE 8130              cpi R24,1
+ 02B0 11F4              brne L40
+ 02B2           X13:
+ 02B2                   .dbline 179
+ 02B2           ;         start();
+ 02B2 0E940000          xcall _start#Fvv
+ 02B6           L40:
+ 02B6                   .dbline 180
+ 02B6           ;     if(0==n)
+ 02B6 AA20              tst R10
+ 02B8 41F4              brne L42
+ 02BA BB20              tst R11
+ 02BC 31F4              brne L42
+ 02BE           X14:
+ 02BE                   .dbline 182
+ 02BE           ;     {
+ 02BE           ;         CloseT0CTC();
+ 02BE                   .dbline 182
+ 02BE 37DF              xcall _CloseT0CTC#Fvv
+ 02C0                   .dbline 183
+ 02C0           ;         Delay_ms(125);
+ 02C0 0DE7              ldi R16,125
+ 02C2 10E0              ldi R17,0
+ 02C4 0E940000          xcall _Delay_ms#Fvi
+ 02C8                   .dbline 184
+ 02C8           ;     }
+ 02C8 2BC0              xjmp L43
+ 02CA           L42:
+ 02CA                   .dbline 186
+ 02CA           ;     else
+ 02CA           ;     {
+ 02CA                   .dbline 187
+ 02CA           ;         OCR0 = NoteData[n];
+ 02CA 80E0              ldi R24,<_NoteData#A_h
+ 02CC 90E0              ldi R25,>_NoteData#A_h
+ 02CE F501              movw R30,R10
+ 02D0 E80F              add R30,R24
+ 02D2 F91F              adc R31,R25
+ 02D4 2080              ldd R2,z+0
+ 02D6 2CBE              out 0x3c,R2
+ 02D8                   .dbline 188
+ 02D8           ;         OpenT0CTC();
+ 02D8 23DF              xcall _OpenT0CTC#Fvv
+ 02DA                   .dbline 189
+ 02DA           ;         Delay_ms(100);
+ 02DA 04E6              ldi R16,100
+ 02DC 10E0              ldi R17,0
+ 02DE 0E940000          xcall _Delay_ms#Fvi
+ 02E2                   .dbline 190
+ 02E2           ;         CloseT0CTC();
+ 02E2 25DF              xcall _CloseT0CTC#Fvv
+ 02E4                   .dbline 191
+ 02E4           ;         Delay_ms(25);
+ 02E4 09E1              ldi R16,25
+ 02E6 10E0              ldi R17,0
+ 02E8 0E940000          xcall _Delay_ms#Fvi
+ 02EC                   .dbline 192
+ 02EC           ;         if(n<=10)
+ 02EC 8AE0              ldi R24,10
+ 02EE 90E0              ldi R25,0
+ 02F0 8A15              cp R24,R10
+ 02F2 9B05              cpc R25,R11
+ 02F4 5CF0              brlt L44
+ 02F6           X15:
+ 02F6                   .dbline 194
+ 02F6           ;         {
+ 02F6           ;             PORTC |= (1<<7)|(1<<6)|(1<<5)|(1<<4)|(1<<3)|(1<<2)|(1<<1);
+ 02F6                   .dbline 194
+ 02F6 85B3              in R24,0x15
+ 02F8 8E6F              ori R24,254
+ 02FA 85BB              out 0x15,R24
+ 02FC                   .dbline 195
+ 02FC           ;             Delay_ms(150);
+ 02FC 06E9              ldi R16,150
+ 02FE 10E0              ldi R17,0
+ 0300 0E940000          xcall _Delay_ms#Fvi
+ 0304                   .dbline 196
+ 0304           ;             PORTC &=~((1<<7)|(1<<6)|(1<<5)|(1<<4)|(1<<3)|(1<<2)|(1<<1));
+ 0304 85B3              in R24,0x15
+ 0306 8170              andi R24,1
+ 0308 85BB              out 0x15,R24
+ 030A                   .dbline 197
+ 030A           ;         }
+ 030A 0AC0              xjmp L45
+ 030C           L44:
+ 030C                   .dbline 199
+ 030C           ;         else
+ 030C           ;         {
+ 030C                   .dbline 200
+ 030C           ;             PORTC |= (1<<7)|(1<<6)|(1<<5)|(1<<4)|(1<<3)|(1<<2)|(1<<1)|(1<<0);
+ 030C 85B3              in R24,0x15
+ 030E 8F6F              ori R24,255
+ 0310 85BB              out 0x15,R24
+ 0312                   .dbline 201
+ 0312           ;             Delay_ms(150);
+ 0312 06E9              ldi R16,150
+ 0314 10E0              ldi R17,0
+ 0316 0E940000          xcall _Delay_ms#Fvi
+ 031A                   .dbline 202
+ 031A           ;             PORTC &=~((1<<7)|(1<<6)|(1<<5)|(1<<4)|(1<<3)|(1<<2)|(1<<1)|(1<<0));
+ 031A 85B3              in R24,0x15
+ 031C 8070              andi R24,0
+ 031E 85BB              out 0x15,R24
+ 0320                   .dbline 203
+ 0320           ;         }
+ 0320           L45:
+ 0320                   .dbline 205
+ 0320           ; 
+ 0320           ;     }
+ 0320           L43:
+ 0320                   .dbline -2
+ 0320           L39:
+ 0320                   .dbline 0 ; func end
+ 0320 B990              ld R11,y+
+ 0322 A990              ld R10,y+
+ 0324 0895              ret
+ 0326                   .dbsym r n 10 I
+ 0326                   .dbend
+ 0326                   .dbfunc e MaiBaoGe _MaiBaoGe#Fvv fV
+                        .even
+ 0326           _MaiBaoGe#Fvv::
+ 0326                   .dbline -1
+ 0326                   .dbline 211
+ 0326           ; 
+ 0326           ; }
+ 0326           ; 
+ 0326           ; //歌曲1 卖报歌
+ 0326           ; void MaiBaoGe(void)
+ 0326           ; {
+ 0326                   .dbline 212
+ 0326           ;     SolH SolH  Sol SolH SolH Sol
+ 0326 0BE0              ldi R16,11
+ 0328 10E0              ldi R17,0
+ 032A 7BDF              xcall _MusicNoteHalf#Fvi
+ 032C                   .dbline 212
+ 032C 0BE0              ldi R16,11
+ 032E 10E0              ldi R17,0
+ 0330 78DF              xcall _MusicNoteHalf#Fvi
+ 0332                   .dbline 212
+ 0332 0BE0              ldi R16,11
+ 0334 10E0              ldi R17,0
+ 0336 02DF              xcall _MusicNote#Fvi
+ 0338                   .dbline 212
+ 0338 0BE0              ldi R16,11
+ 033A 10E0              ldi R17,0
+ 033C 72DF              xcall _MusicNoteHalf#Fvi
+ 033E                   .dbline 212
+ 033E 0BE0              ldi R16,11
+ 0340 10E0              ldi R17,0
+ 0342 6FDF              xcall _MusicNoteHalf#Fvi
+ 0344                   .dbline 212
+ 0344 0BE0              ldi R16,11
+ 0346 10E0              ldi R17,0
+ 0348 F9DE              xcall _MusicNote#Fvi
+ 034A                   .dbline 213
+ 034A           ;     MiH  SolH  LaH SolHH MiHH ReH MiH Sol
+ 034A 09E0              ldi R16,9
+ 034C 10E0              ldi R17,0
+ 034E 69DF              xcall _MusicNoteHalf#Fvi
+ 0350                   .dbline 213
+ 0350 0BE0              ldi R16,11
+ 0352 10E0              ldi R17,0
+ 0354 66DF              xcall _MusicNoteHalf#Fvi
+ 0356                   .dbline 213
+ 0356 0CE0              ldi R16,12
+ 0358 10E0              ldi R17,0
+ 035A 63DF              xcall _MusicNoteHalf#Fvi
+ 035C                   .dbline 213
+ 035C 0BE0              ldi R16,11
+ 035E 10E0              ldi R17,0
+ 0360 A1DF              xcall _MusicNoteHalfHalf#Fvi
+ 0362                   .dbline 213
+ 0362 09E0              ldi R16,9
+ 0364 10E0              ldi R17,0
+ 0366 9EDF              xcall _MusicNoteHalfHalf#Fvi
+ 0368                   .dbline 213
+ 0368 08E0              ldi R16,8
+ 036A 10E0              ldi R17,0
+ 036C 5ADF              xcall _MusicNoteHalf#Fvi
+ 036E                   .dbline 213
+ 036E 09E0              ldi R16,9
+ 0370 10E0              ldi R17,0
+ 0372 57DF              xcall _MusicNoteHalf#Fvi
+ 0374                   .dbline 213
+ 0374 0BE0              ldi R16,11
+ 0376 10E0              ldi R17,0
+ 0378 E1DE              xcall _MusicNote#Fvi
+ 037A                   .dbline 214
+ 037A           ;     SolH MiH SolH MiHH ReHH DoH MiH Re
+ 037A 0BE0              ldi R16,11
+ 037C 10E0              ldi R17,0
+ 037E 51DF              xcall _MusicNoteHalf#Fvi
+ 0380                   .dbline 214
+ 0380 09E0              ldi R16,9
+ 0382 10E0              ldi R17,0
+ 0384 4EDF              xcall _MusicNoteHalf#Fvi
+ 0386                   .dbline 214
+ 0386 0BE0              ldi R16,11
+ 0388 10E0              ldi R17,0
+ 038A 4BDF              xcall _MusicNoteHalf#Fvi
+ 038C                   .dbline 214
+ 038C 09E0              ldi R16,9
+ 038E 10E0              ldi R17,0
+ 0390 89DF              xcall _MusicNoteHalfHalf#Fvi
+ 0392                   .dbline 214
+ 0392 08E0              ldi R16,8
+ 0394 10E0              ldi R17,0
+ 0396 86DF              xcall _MusicNoteHalfHalf#Fvi
+ 0398                   .dbline 214
+ 0398 07E0              ldi R16,7
+ 039A 10E0              ldi R17,0
+ 039C 42DF              xcall _MusicNoteHalf#Fvi
+ 039E                   .dbline 214
+ 039E 09E0              ldi R16,9
+ 03A0 10E0              ldi R17,0
+ 03A2 3FDF              xcall _MusicNoteHalf#Fvi
+ 03A4                   .dbline 214
+ 03A4 08E0              ldi R16,8
+ 03A6 10E0              ldi R17,0
+ 03A8 C9DE              xcall _MusicNote#Fvi
+ 03AA                   .dbline 215
+ 03AA           ;     MiH MiH Re _LaH DoH Re
+ 03AA 09E0              ldi R16,9
+ 03AC 10E0              ldi R17,0
+ 03AE 39DF              xcall _MusicNoteHalf#Fvi
+ 03B0                   .dbline 215
+ 03B0 09E0              ldi R16,9
+ 03B2 10E0              ldi R17,0
+ 03B4 36DF              xcall _MusicNoteHalf#Fvi
+ 03B6                   .dbline 215
+ 03B6 08E0              ldi R16,8
+ 03B8 10E0              ldi R17,0
+ 03BA C0DE              xcall _MusicNote#Fvi
+ 03BC                   .dbline 215
+ 03BC 05E0              ldi R16,5
+ 03BE 10E0              ldi R17,0
+ 03C0 30DF              xcall _MusicNoteHalf#Fvi
+ 03C2                   .dbline 215
+ 03C2 07E0              ldi R16,7
+ 03C4 10E0              ldi R17,0
+ 03C6 2DDF              xcall _MusicNoteHalf#Fvi
+ 03C8                   .dbline 215
+ 03C8 08E0              ldi R16,8
+ 03CA 10E0              ldi R17,0
+ 03CC B7DE              xcall _MusicNote#Fvi
+ 03CE                   .dbline 216
+ 03CE           ;     La LaH SolH MiH LaH Sol SolH MiH ReH MiH Sol _O
+ 03CE 0CE0              ldi R16,12
+ 03D0 10E0              ldi R17,0
+ 03D2 B4DE              xcall _MusicNote#Fvi
+ 03D4                   .dbline 216
+ 03D4 0CE0              ldi R16,12
+ 03D6 10E0              ldi R17,0
+ 03D8 24DF              xcall _MusicNoteHalf#Fvi
+ 03DA                   .dbline 216
+ 03DA 0BE0              ldi R16,11
+ 03DC 10E0              ldi R17,0
+ 03DE 21DF              xcall _MusicNoteHalf#Fvi
+ 03E0                   .dbline 216
+ 03E0 09E0              ldi R16,9
+ 03E2 10E0              ldi R17,0
+ 03E4 1EDF              xcall _MusicNoteHalf#Fvi
+ 03E6                   .dbline 216
+ 03E6 0CE0              ldi R16,12
+ 03E8 10E0              ldi R17,0
+ 03EA 1BDF              xcall _MusicNoteHalf#Fvi
+ 03EC                   .dbline 216
+ 03EC 0BE0              ldi R16,11
+ 03EE 10E0              ldi R17,0
+ 03F0 A5DE              xcall _MusicNote#Fvi
+ 03F2                   .dbline 216
+ 03F2 0BE0              ldi R16,11
+ 03F4 10E0              ldi R17,0
+ 03F6 15DF              xcall _MusicNoteHalf#Fvi
+ 03F8                   .dbline 216
+ 03F8 09E0              ldi R16,9
+ 03FA 10E0              ldi R17,0
+ 03FC 12DF              xcall _MusicNoteHalf#Fvi
+ 03FE                   .dbline 216
+ 03FE 08E0              ldi R16,8
+ 0400 10E0              ldi R17,0
+ 0402 0FDF              xcall _MusicNoteHalf#Fvi
+ 0404                   .dbline 216
+ 0404 09E0              ldi R16,9
+ 0406 10E0              ldi R17,0
+ 0408 0CDF              xcall _MusicNoteHalf#Fvi
+ 040A                   .dbline 216
+ 040A 0BE0              ldi R16,11
+ 040C 10E0              ldi R17,0
+ 040E 96DE              xcall _MusicNote#Fvi
+ 0410                   .dbline 216
+ 0410 0027              clr R16
+ 0412 1127              clr R17
+ 0414 93DE              xcall _MusicNote#Fvi
+ 0416                   .dbline 217
+ 0416           ;     SolH MiH ReH MiH SolH MiH ReH MiH
+ 0416 0BE0              ldi R16,11
+ 0418 10E0              ldi R17,0
+ 041A 03DF              xcall _MusicNoteHalf#Fvi
+ 041C                   .dbline 217
+ 041C 09E0              ldi R16,9
+ 041E 10E0              ldi R17,0
+ 0420 00DF              xcall _MusicNoteHalf#Fvi
+ 0422                   .dbline 217
+ 0422 08E0              ldi R16,8
+ 0424 10E0              ldi R17,0
+ 0426 FDDE              xcall _MusicNoteHalf#Fvi
+ 0428                   .dbline 217
+ 0428 09E0              ldi R16,9
+ 042A 10E0              ldi R17,0
+ 042C FADE              xcall _MusicNoteHalf#Fvi
+ 042E                   .dbline 217
+ 042E 0BE0              ldi R16,11
+ 0430 10E0              ldi R17,0
+ 0432 F7DE              xcall _MusicNoteHalf#Fvi
+ 0434                   .dbline 217
+ 0434 09E0              ldi R16,9
+ 0436 10E0              ldi R17,0
+ 0438 F4DE              xcall _MusicNoteHalf#Fvi
+ 043A                   .dbline 217
+ 043A 08E0              ldi R16,8
+ 043C 10E0              ldi R17,0
+ 043E F1DE              xcall _MusicNoteHalf#Fvi
+ 0440                   .dbline 217
+ 0440 09E0              ldi R16,9
+ 0442 10E0              ldi R17,0
+ 0444 EEDE              xcall _MusicNoteHalf#Fvi
+ 0446                   .dbline 218
+ 0446           ;     _LaH DoH ReH MiH Do _O _O
+ 0446 05E0              ldi R16,5
+ 0448 10E0              ldi R17,0
+ 044A EBDE              xcall _MusicNoteHalf#Fvi
+ 044C                   .dbline 218
+ 044C 07E0              ldi R16,7
+ 044E 10E0              ldi R17,0
+ 0450 E8DE              xcall _MusicNoteHalf#Fvi
+ 0452                   .dbline 218
+ 0452 08E0              ldi R16,8
+ 0454 10E0              ldi R17,0
+ 0456 E5DE              xcall _MusicNoteHalf#Fvi
+ 0458                   .dbline 218
+ 0458 09E0              ldi R16,9
+ 045A 10E0              ldi R17,0
+ 045C E2DE              xcall _MusicNoteHalf#Fvi
+ 045E                   .dbline 218
+ 045E 07E0              ldi R16,7
+ 0460 10E0              ldi R17,0
+ 0462 6CDE              xcall _MusicNote#Fvi
+ 0464                   .dbline 218
+ 0464 0027              clr R16
+ 0466 1127              clr R17
+ 0468 69DE              xcall _MusicNote#Fvi
+ 046A                   .dbline 218
+ 046A 0027              clr R16
+ 046C 1127              clr R17
+ 046E                   .dbline -2
+ 046E           L46:
+ 046E                   .dbline 0 ; func end
+ 046E 66CE              xjmp _MusicNote#Fvi
+ 0470                   .dbend
+ 0470                   .dbfunc e HuanLeSong _HuanLeSong#Fvv fV
+                        .even
+ 0470           _HuanLeSong#Fvv::
+ 0470                   .dbline -1
+ 0470                   .dbline 226
+ 0470           ; 
+ 0470           ; }
+ 0470           ; 
+ 0470           ; 
+ 0470           ; 
+ 0470           ; //歌曲2 欢乐颂
+ 0470           ;  void HuanLeSong(void)
+ 0470           ;  {
+ 0470                   .dbline 227
+ 0470           ;      Mi Mi Fa Sol Sol Fa Mi Re
+ 0470 09E0              ldi R16,9
+ 0472 10E0              ldi R17,0
+ 0474 63DE              xcall _MusicNote#Fvi
+ 0476                   .dbline 227
+ 0476 09E0              ldi R16,9
+ 0478 10E0              ldi R17,0
+ 047A 60DE              xcall _MusicNote#Fvi
+ 047C                   .dbline 227
+ 047C 0AE0              ldi R16,10
+ 047E 10E0              ldi R17,0
+ 0480 5DDE              xcall _MusicNote#Fvi
+ 0482                   .dbline 227
+ 0482 0BE0              ldi R16,11
+ 0484 10E0              ldi R17,0
+ 0486 5ADE              xcall _MusicNote#Fvi
+ 0488                   .dbline 227
+ 0488 0BE0              ldi R16,11
+ 048A 10E0              ldi R17,0
+ 048C 57DE              xcall _MusicNote#Fvi
+ 048E                   .dbline 227
+ 048E 0AE0              ldi R16,10
+ 0490 10E0              ldi R17,0
+ 0492 54DE              xcall _MusicNote#Fvi
+ 0494                   .dbline 227
+ 0494 09E0              ldi R16,9
+ 0496 10E0              ldi R17,0
+ 0498 51DE              xcall _MusicNote#Fvi
+ 049A                   .dbline 227
+ 049A 08E0              ldi R16,8
+ 049C 10E0              ldi R17,0
+ 049E 4EDE              xcall _MusicNote#Fvi
+ 04A0                   .dbline 228
+ 04A0           ;      Do Do Re Mi  Mi MiH ReH Re Re
+ 04A0 07E0              ldi R16,7
+ 04A2 10E0              ldi R17,0
+ 04A4 4BDE              xcall _MusicNote#Fvi
+ 04A6                   .dbline 228
+ 04A6 07E0              ldi R16,7
+ 04A8 10E0              ldi R17,0
+ 04AA 48DE              xcall _MusicNote#Fvi
+ 04AC                   .dbline 228
+ 04AC 08E0              ldi R16,8
+ 04AE 10E0              ldi R17,0
+ 04B0 45DE              xcall _MusicNote#Fvi
+ 04B2                   .dbline 228
+ 04B2 09E0              ldi R16,9
+ 04B4 10E0              ldi R17,0
+ 04B6 42DE              xcall _MusicNote#Fvi
+ 04B8                   .dbline 228
+ 04B8 09E0              ldi R16,9
+ 04BA 10E0              ldi R17,0
+ 04BC 3FDE              xcall _MusicNote#Fvi
+ 04BE                   .dbline 228
+ 04BE 09E0              ldi R16,9
+ 04C0 10E0              ldi R17,0
+ 04C2 AFDE              xcall _MusicNoteHalf#Fvi
+ 04C4                   .dbline 228
+ 04C4 08E0              ldi R16,8
+ 04C6 10E0              ldi R17,0
+ 04C8 ACDE              xcall _MusicNoteHalf#Fvi
+ 04CA                   .dbline 228
+ 04CA 08E0              ldi R16,8
+ 04CC 10E0              ldi R17,0
+ 04CE 36DE              xcall _MusicNote#Fvi
+ 04D0                   .dbline 228
+ 04D0 08E0              ldi R16,8
+ 04D2 10E0              ldi R17,0
+ 04D4 33DE              xcall _MusicNote#Fvi
+ 04D6                   .dbline 229
+ 04D6           ;      Mi Mi Fa Sol Sol Fa Mi Re
+ 04D6 09E0              ldi R16,9
+ 04D8 10E0              ldi R17,0
+ 04DA 30DE              xcall _MusicNote#Fvi
+ 04DC                   .dbline 229
+ 04DC 09E0              ldi R16,9
+ 04DE 10E0              ldi R17,0
+ 04E0 2DDE              xcall _MusicNote#Fvi
+ 04E2                   .dbline 229
+ 04E2 0AE0              ldi R16,10
+ 04E4 10E0              ldi R17,0
+ 04E6 2ADE              xcall _MusicNote#Fvi
+ 04E8                   .dbline 229
+ 04E8 0BE0              ldi R16,11
+ 04EA 10E0              ldi R17,0
+ 04EC 27DE              xcall _MusicNote#Fvi
+ 04EE                   .dbline 229
+ 04EE 0BE0              ldi R16,11
+ 04F0 10E0              ldi R17,0
+ 04F2 24DE              xcall _MusicNote#Fvi
+ 04F4                   .dbline 229
+ 04F4 0AE0              ldi R16,10
+ 04F6 10E0              ldi R17,0
+ 04F8 21DE              xcall _MusicNote#Fvi
+ 04FA                   .dbline 229
+ 04FA 09E0              ldi R16,9
+ 04FC 10E0              ldi R17,0
+ 04FE 1EDE              xcall _MusicNote#Fvi
+ 0500                   .dbline 229
+ 0500 08E0              ldi R16,8
+ 0502 10E0              ldi R17,0
+ 0504 1BDE              xcall _MusicNote#Fvi
+ 0506                   .dbline 230
+ 0506           ;      Do Do Re Mi  Re ReH DoH Do Do
+ 0506 07E0              ldi R16,7
+ 0508 10E0              ldi R17,0
+ 050A 18DE              xcall _MusicNote#Fvi
+ 050C                   .dbline 230
+ 050C 07E0              ldi R16,7
+ 050E 10E0              ldi R17,0
+ 0510 15DE              xcall _MusicNote#Fvi
+ 0512                   .dbline 230
+ 0512 08E0              ldi R16,8
+ 0514 10E0              ldi R17,0
+ 0516 12DE              xcall _MusicNote#Fvi
+ 0518                   .dbline 230
+ 0518 09E0              ldi R16,9
+ 051A 10E0              ldi R17,0
+ 051C 0FDE              xcall _MusicNote#Fvi
+ 051E                   .dbline 230
+ 051E 08E0              ldi R16,8
+ 0520 10E0              ldi R17,0
+ 0522 0CDE              xcall _MusicNote#Fvi
+ 0524                   .dbline 230
+ 0524 08E0              ldi R16,8
+ 0526 10E0              ldi R17,0
+ 0528 7CDE              xcall _MusicNoteHalf#Fvi
+ 052A                   .dbline 230
+ 052A 07E0              ldi R16,7
+ 052C 10E0              ldi R17,0
+ 052E 79DE              xcall _MusicNoteHalf#Fvi
+ 0530                   .dbline 230
+ 0530 07E0              ldi R16,7
+ 0532 10E0              ldi R17,0
+ 0534 03DE              xcall _MusicNote#Fvi
+ 0536                   .dbline 230
+ 0536 07E0              ldi R16,7
+ 0538 10E0              ldi R17,0
+ 053A 00DE              xcall _MusicNote#Fvi
+ 053C                   .dbline 231
+ 053C           ;      Re Re Mi Do Re MiH FaH Mi Do
+ 053C 08E0              ldi R16,8
+ 053E 10E0              ldi R17,0
+ 0540 FDDD              xcall _MusicNote#Fvi
+ 0542                   .dbline 231
+ 0542 08E0              ldi R16,8
+ 0544 10E0              ldi R17,0
+ 0546 FADD              xcall _MusicNote#Fvi
+ 0548                   .dbline 231
+ 0548 09E0              ldi R16,9
+ 054A 10E0              ldi R17,0
+ 054C F7DD              xcall _MusicNote#Fvi
+ 054E                   .dbline 231
+ 054E 07E0              ldi R16,7
+ 0550 10E0              ldi R17,0
+ 0552 F4DD              xcall _MusicNote#Fvi
+ 0554                   .dbline 231
+ 0554 08E0              ldi R16,8
+ 0556 10E0              ldi R17,0
+ 0558 F1DD              xcall _MusicNote#Fvi
+ 055A                   .dbline 231
+ 055A 09E0              ldi R16,9
+ 055C 10E0              ldi R17,0
+ 055E 61DE              xcall _MusicNoteHalf#Fvi
+ 0560                   .dbline 231
+ 0560 0AE0              ldi R16,10
+ 0562 10E0              ldi R17,0
+ 0564 5EDE              xcall _MusicNoteHalf#Fvi
+ 0566                   .dbline 231
+ 0566 09E0              ldi R16,9
+ 0568 10E0              ldi R17,0
+ 056A E8DD              xcall _MusicNote#Fvi
+ 056C                   .dbline 231
+ 056C 07E0              ldi R16,7
+ 056E 10E0              ldi R17,0
+ 0570 E5DD              xcall _MusicNote#Fvi
+ 0572                   .dbline 232
+ 0572           ;      Re MiH FaH Mi Re Do Re Sol_ Sol
+ 0572 08E0              ldi R16,8
+ 0574 10E0              ldi R17,0
+ 0576 E2DD              xcall _MusicNote#Fvi
+ 0578                   .dbline 232
+ 0578 09E0              ldi R16,9
+ 057A 10E0              ldi R17,0
+ 057C 52DE              xcall _MusicNoteHalf#Fvi
+ 057E                   .dbline 232
+ 057E 0AE0              ldi R16,10
+ 0580 10E0              ldi R17,0
+ 0582 4FDE              xcall _MusicNoteHalf#Fvi
+ 0584                   .dbline 232
+ 0584 09E0              ldi R16,9
+ 0586 10E0              ldi R17,0
+ 0588 D9DD              xcall _MusicNote#Fvi
+ 058A                   .dbline 232
+ 058A 08E0              ldi R16,8
+ 058C 10E0              ldi R17,0
+ 058E D6DD              xcall _MusicNote#Fvi
+ 0590                   .dbline 232
+ 0590 07E0              ldi R16,7
+ 0592 10E0              ldi R17,0
+ 0594 D3DD              xcall _MusicNote#Fvi
+ 0596                   .dbline 232
+ 0596 08E0              ldi R16,8
+ 0598 10E0              ldi R17,0
+ 059A D0DD              xcall _MusicNote#Fvi
+ 059C                   .dbline 232
+ 059C 02E1              ldi R16,18
+ 059E 10E0              ldi R17,0
+ 05A0 CDDD              xcall _MusicNote#Fvi
+ 05A2                   .dbline 232
+ 05A2 0BE0              ldi R16,11
+ 05A4 10E0              ldi R17,0
+ 05A6 CADD              xcall _MusicNote#Fvi
+ 05A8                   .dbline 233
+ 05A8           ;      Mi Mi Fa Sol Sol Fa Mi Re
+ 05A8 09E0              ldi R16,9
+ 05AA 10E0              ldi R17,0
+ 05AC C7DD              xcall _MusicNote#Fvi
+ 05AE                   .dbline 233
+ 05AE 09E0              ldi R16,9
+ 05B0 10E0              ldi R17,0
+ 05B2 C4DD              xcall _MusicNote#Fvi
+ 05B4                   .dbline 233
+ 05B4 0AE0              ldi R16,10
+ 05B6 10E0              ldi R17,0
+ 05B8 C1DD              xcall _MusicNote#Fvi
+ 05BA                   .dbline 233
+ 05BA 0BE0              ldi R16,11
+ 05BC 10E0              ldi R17,0
+ 05BE BEDD              xcall _MusicNote#Fvi
+ 05C0                   .dbline 233
+ 05C0 0BE0              ldi R16,11
+ 05C2 10E0              ldi R17,0
+ 05C4 BBDD              xcall _MusicNote#Fvi
+ 05C6                   .dbline 233
+ 05C6 0AE0              ldi R16,10
+ 05C8 10E0              ldi R17,0
+ 05CA B8DD              xcall _MusicNote#Fvi
+ 05CC                   .dbline 233
+ 05CC 09E0              ldi R16,9
+ 05CE 10E0              ldi R17,0
+ 05D0 B5DD              xcall _MusicNote#Fvi
+ 05D2                   .dbline 233
+ 05D2 08E0              ldi R16,8
+ 05D4 10E0              ldi R17,0
+ 05D6 B2DD              xcall _MusicNote#Fvi
+ 05D8                   .dbline 234
+ 05D8           ;      Do Do Re Mi  Re ReH DoH Do Do
+ 05D8 07E0              ldi R16,7
+ 05DA 10E0              ldi R17,0
+ 05DC AFDD              xcall _MusicNote#Fvi
+ 05DE                   .dbline 234
+ 05DE 07E0              ldi R16,7
+ 05E0 10E0              ldi R17,0
+ 05E2 ACDD              xcall _MusicNote#Fvi
+ 05E4                   .dbline 234
+ 05E4 08E0              ldi R16,8
+ 05E6 10E0              ldi R17,0
+ 05E8 A9DD              xcall _MusicNote#Fvi
+ 05EA                   .dbline 234
+ 05EA 09E0              ldi R16,9
+ 05EC 10E0              ldi R17,0
+ 05EE A6DD              xcall _MusicNote#Fvi
+ 05F0                   .dbline 234
+ 05F0 08E0              ldi R16,8
+ 05F2 10E0              ldi R17,0
+ 05F4 A3DD              xcall _MusicNote#Fvi
+ 05F6                   .dbline 234
+ 05F6 08E0              ldi R16,8
+ 05F8 10E0              ldi R17,0
+ 05FA 13DE              xcall _MusicNoteHalf#Fvi
+ 05FC                   .dbline 234
+ 05FC 07E0              ldi R16,7
+ 05FE 10E0              ldi R17,0
+ 0600 10DE              xcall _MusicNoteHalf#Fvi
+ 0602                   .dbline 234
+ 0602 07E0              ldi R16,7
+ 0604 10E0              ldi R17,0
+ 0606 9ADD              xcall _MusicNote#Fvi
+ 0608                   .dbline 234
+ 0608 07E0              ldi R16,7
+ 060A 10E0              ldi R17,0
+ 060C                   .dbline -2
+ 060C           L47:
+ 060C                   .dbline 0 ; func end
+ 060C 97CD              xjmp _MusicNote#Fvi
+ 060E                   .dbend
+ 060E           ;  }
+ 060E           ; 
+ 060E           ; 
+ 060E           ; 
+ 060E           ; 
+ 060E           ; 
+ 060E           ; 
+ 060E           ; 
+ 060E           ; 
+ 060E           ; 
+ 060E           ; 
+ 060E           ; 
+ 060E           ; 
+ 060E           ; 
+ 060E           ; 
+ 060E           ; 
+ 060E           ; 

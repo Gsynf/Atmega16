@@ -1,0 +1,391 @@
+                        .module Key.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile "D:\ICCV8\16年例程 - 副本\Key\Key.c"
+                        .area data(ram, con, rel)
+ 0000                   .dbfile "D:\ICCV8\16年例程 - 副本\Key\Key.c"
+ 0000           _NoteData#A_h:
+ 0000                   .blkb 2
+                        .area idata(rom)
+ 0000 00FC              .byte 0,252
+                        .area data(ram, con, rel)
+ 0002                   .dbfile "D:\ICCV8\16年例程 - 副本\Key\Key.c"
+ 0002                   .blkb 2
+                        .area idata(rom)
+ 0002 E1D4              .byte 225,212
+                        .area data(ram, con, rel)
+ 0004                   .dbfile "D:\ICCV8\16年例程 - 副本\Key\Key.c"
+ 0004                   .blkb 2
+                        .area idata(rom)
+ 0004 BCA8              .byte 188,168
+                        .area data(ram, con, rel)
+ 0006                   .dbfile "D:\ICCV8\16年例程 - 副本\Key\Key.c"
+ 0006                   .blkb 2
+                        .area idata(rom)
+ 0006 968D              .byte 150,141
+                        .area data(ram, con, rel)
+ 0008                   .dbfile "D:\ICCV8\16年例程 - 副本\Key\Key.c"
+ 0008                   .blkb 2
+                        .area idata(rom)
+ 0008 7E70              .byte 126,'p
+                        .area data(ram, con, rel)
+ 000A                   .dbfile "D:\ICCV8\16年例程 - 副本\Key\Key.c"
+ 000A                   .blkb 2
+                        .area idata(rom)
+ 000A 695E              .byte 'i,94
+                        .area data(ram, con, rel)
+ 000C                   .dbfile "D:\ICCV8\16年例程 - 副本\Key\Key.c"
+ 000C                   .blkb 2
+                        .area idata(rom)
+ 000C 534A              .byte 'S,'J
+                        .area data(ram, con, rel)
+ 000E                   .dbfile "D:\ICCV8\16年例程 - 副本\Key\Key.c"
+ 000E                   .blkb 2
+                        .area idata(rom)
+ 000E 463E              .byte 'F,62
+                        .area data(ram, con, rel)
+ 0010                   .dbfile "D:\ICCV8\16年例程 - 副本\Key\Key.c"
+ 0010                   .blkb 2
+                        .area idata(rom)
+ 0010 3734              .byte 55,52
+                        .area data(ram, con, rel)
+ 0012                   .dbfile "D:\ICCV8\16年例程 - 副本\Key\Key.c"
+ 0012                   .blkb 2
+                        .area idata(rom)
+ 0012 2E29              .byte 46,41
+                        .area data(ram, con, rel)
+ 0014                   .dbfile "D:\ICCV8\16年例程 - 副本\Key\Key.c"
+ 0014                   .blkb 1
+                        .area idata(rom)
+ 0014 25                .byte 37
+                        .area data(ram, con, rel)
+ 0015                   .dbfile "D:\ICCV8\16年例程 - 副本\Key\Key.c"
+ 0015                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+ 0015                   .dbsym s NoteData _NoteData#A_h A[21:21]c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+ 0000                   .dbfile "D:\ICCV8\16年例程 - 副本\Key\Key.c"
+ 0000                   .dbfunc e Key_Init _Key_Init#Fvv fV
+                        .even
+ 0000           _Key_Init#Fvv::
+ 0000                   .dbline -1
+ 0000                   .dbline 10
+ 0000           ; #include "Key.h"
+ 0000           ; /************************************************************
+ 0000           ; Function Name:  Key_Init
+ 0000           ; Inputs: none
+ 0000           ; Outputs: none
+ 0000           ; Description:    按键端口初始化
+ 0000           ; Writer: WZY
+ 0000           ; *************************************************************/
+ 0000           ; void Key_Init(void)
+ 0000           ; {
+ 0000                   .dbline 11
+ 0000           ;     DDRD &= ~((1 << 2) | ( 1 << 3));     ///将D端口2、3置为输入
+ 0000 81B3              in R24,0x11
+ 0002 837F              andi R24,243
+ 0004 81BB              out 0x11,R24
+ 0006                   .dbline -2
+ 0006           L1:
+ 0006                   .dbline 0 ; func end
+ 0006 0895              ret
+ 0008                   .dbend
+ 0008                   .dbfunc e LED_Move _LED_Move#Fvv fV
+ 0008           ;              i -> R20,R21
+                        .even
+ 0008           _LED_Move#Fvv::
+ 0008 4A93              st -y,R20
+ 000A 5A93              st -y,R21
+ 000C                   .dbline -1
+ 000C                   .dbline 51
+ 000C           ; }
+ 000C           ; 
+ 000C           ; /************************************************************
+ 000C           ; Function Name:  LED_Switch_0_7
+ 000C           ; Inputs: none
+ 000C           ; Outputs: 0
+ 000C           ; Description:    按键控制LED灯,K1控制LED0，K2控制LED7
+ 000C           ; Writer: WH,MaxMarth
+ 000C           ; *************************************************************/
+ 000C           ; //int LED_Switch_0_7(void)
+ 000C           ; //{
+ 000C           ; //    LED_IO_Init();
+ 000C           ; //    Key_Init();
+ 000C           ; //    while (1)
+ 000C           ; //    {
+ 000C           ; //        if (~PIND & ( 1 << 2))               ///判断按键K1是否触发。
+ 000C           ; //        {
+ 000C           ; //            PORTC &= ~(1 << 0);           ///按键K1按下，LED0亮起。
+ 000C           ; //            Delay_ms(500);              ///延迟
+ 000C           ; //            PORTC = 0xff;               ///LED0熄灭
+ 000C           ; //        }
+ 000C           ; //        if (~PIND&(1 << 3))
+ 000C           ; //        {
+ 000C           ; //            PORTC &= ~(1 << 7);
+ 000C           ; //            Delay_ms(500);
+ 000C           ; //            PORTC = 0xff;
+ 000C           ; //        }
+ 000C           ; //    }
+ 000C           ; //    return 0;
+ 000C           ; //}
+ 000C           ; 
+ 000C           ; /************************************************************
+ 000C           ; Function Name:  LED_Move
+ 000C           ; Inputs: none
+ 000C           ; Outputs: none
+ 000C           ; Description:    初始时LEDi亮，按下K1向左移动，按下K2向右移动
+ 000C           ; Writer: WZY,MaxMarth
+ 000C           ; *************************************************************/
+ 000C           ; void LED_Move(void)
+ 000C           ; {
+ 000C                   .dbline 52
+ 000C           ;     int i = 5;
+ 000C 45E0              ldi R20,5
+ 000E 50E0              ldi R21,0
+ 0010                   .dbline 53
+ 0010           ;     Key_Init();
+ 0010 F7DF              xcall _Key_Init#Fvv
+ 0012                   .dbline 54
+ 0012           ;     LED_IO_Init();
+ 0012 0E940000          xcall _LED_IO_Init#Fi
+ 0016                   .dbline 55
+ 0016           ;     PORTC = ~( 1<< i);
+ 0016 01E0              ldi R16,1
+ 0018 142F              mov R17,R20
+ 001A 0E940000          xcall lsl8
+ 001E 202E              mov R2,R16
+ 0020 2094              com R2
+ 0022 25BA              out 0x15,R2
+ 0024 2FC0              xjmp L4
+ 0026           L3:
+ 0026                   .dbline 57
+ 0026           ;     while(1)
+ 0026           ;       {
+ 0026                   .dbline 58
+ 0026           ;         if (~PIND & ( 1<< 2))   ///PD2置零
+ 0026 20B2              in R2,0x10
+ 0028 2094              com R2
+ 002A 22FE              sbrs R2,2
+ 002C 13C0              rjmp L6
+ 002E           X0:
+ 002E                   .dbline 60
+ 002E           ;         {
+ 002E           ;             i = i-1;
+ 002E                   .dbline 60
+ 002E 4150              subi R20,1
+ 0030 5040              sbci R21,0
+ 0032                   .dbline 61
+ 0032           ;             if (i < 0)
+ 0032 4030              cpi R20,0
+ 0034 E0E0              ldi R30,0
+ 0036 5E07              cpc R21,R30
+ 0038 14F4              brge L8
+ 003A           X1:
+ 003A                   .dbline 62
+ 003A           ;                 i = 7;
+ 003A 47E0              ldi R20,7
+ 003C 50E0              ldi R21,0
+ 003E           L8:
+ 003E                   .dbline 63
+ 003E           ;                 PORTC = ~( 1<< i);
+ 003E 01E0              ldi R16,1
+ 0040 142F              mov R17,R20
+ 0042 0E940000          xcall lsl8
+ 0046 202E              mov R2,R16
+ 0048 2094              com R2
+ 004A 25BA              out 0x15,R2
+ 004C                   .dbline 64
+ 004C           ;                 Delay_ms(300);
+ 004C 0CE2              ldi R16,300
+ 004E 11E0              ldi R17,1
+ 0050 0E940000          xcall _Delay_ms#Fvi
+ 0054                   .dbline 65
+ 0054           ;         }
+ 0054           L6:
+ 0054                   .dbline 66
+ 0054           ;         if(~PIND & ( 1<< 3))   ///PD3置零
+ 0054 20B2              in R2,0x10
+ 0056 2094              com R2
+ 0058 23FE              sbrs R2,3
+ 005A 14C0              rjmp L10
+ 005C           X2:
+ 005C                   .dbline 68
+ 005C           ;         {
+ 005C           ;             i = i+1;
+ 005C                   .dbline 68
+ 005C 4F5F              subi R20,255  ; offset = 1
+ 005E 5F4F              sbci R21,255
+ 0060                   .dbline 69
+ 0060           ;             if (i > 7)
+ 0060 87E0              ldi R24,7
+ 0062 90E0              ldi R25,0
+ 0064 8417              cp R24,R20
+ 0066 9507              cpc R25,R21
+ 0068 14F4              brge L12
+ 006A           X3:
+ 006A                   .dbline 70
+ 006A           ;                 i = 0;
+ 006A 4427              clr R20
+ 006C 5527              clr R21
+ 006E           L12:
+ 006E                   .dbline 71
+ 006E           ;                 PORTC = ~( 1<< i);
+ 006E 01E0              ldi R16,1
+ 0070 142F              mov R17,R20
+ 0072 0E940000          xcall lsl8
+ 0076 202E              mov R2,R16
+ 0078 2094              com R2
+ 007A 25BA              out 0x15,R2
+ 007C                   .dbline 72
+ 007C           ;                 Delay_ms(300);
+ 007C 0CE2              ldi R16,300
+ 007E 11E0              ldi R17,1
+ 0080 0E940000          xcall _Delay_ms#Fvi
+ 0084                   .dbline 73
+ 0084           ;         }
+ 0084           L10:
+ 0084                   .dbline 74
+ 0084           ;       }
+ 0084           L4:
+ 0084                   .dbline 56
+ 0084 D0CF              xjmp L3
+ 0086           X4:
+ 0086                   .dbline -2
+ 0086           L2:
+ 0086                   .dbline 0 ; func end
+ 0086 5991              ld R21,y+
+ 0088 4991              ld R20,y+
+ 008A 0895              ret
+ 008C                   .dbsym r i 20 I
+ 008C                   .dbend
+ 008C                   .dbfunc e Key_Flow_Tube _Key_Flow_Tube#Fiv fI
+ 008C           ;              n -> R20,R21
+ 008C           ;              m -> R22,R23
+                        .even
+ 008C           _Key_Flow_Tube#Fiv::
+ 008C 0E940000          xcall push_xgsetF000
+ 0090                   .dbline -1
+ 0090                   .dbline 85
+ 0090           ; }
+ 0090           ; 
+ 0090           ; /************************************************************
+ 0090           ; Function Name:  Key_Flow_Tube
+ 0090           ; Inputs: none
+ 0090           ; Outputs: 0
+ 0090           ; Description:    按键控制数字流水
+ 0090           ; Writer: WH，WZY,MaxMarth
+ 0090           ; *************************************************************/
+ 0090           ; int  Key_Flow_Tube(void)
+ 0090           ; {
+ 0090                   .dbline 86
+ 0090           ;     int m = 0, n = 0;
+ 0090 6627              clr R22
+ 0092 7727              clr R23
+ 0094                   .dbline 86
+ 0094 4427              clr R20
+ 0096 5527              clr R21
+ 0098                   .dbline 87
+ 0098           ;     Key_Init();                             ///将PD2，PD3置为低电平
+ 0098 B3DF              xcall _Key_Init#Fvv
+ 009A                   .dbline 88
+ 009A           ;     HC595_Init();
+ 009A 0E940000          xcall _HC595_Init#Fvv
+ 009E 26C0              xjmp L16
+ 00A0           L15:
+ 00A0                   .dbline 90
+ 00A0           ;     while(1)
+ 00A0           ;         {
+ 00A0                   .dbline 91
+ 00A0           ;             if ((PIND & ( 1<< 2))==0 )                         ///判断按键K1是否触发
+ 00A0 8299              sbic 0x10,2
+ 00A2 11C0              rjmp L18
+ 00A4           X5:
+ 00A4                   .dbline 93
+ 00A4           ;             {
+ 00A4           ;                 for (m=0; m<8; m++)                       ///按下K2，从左至右显示0~7
+ 00A4                   .dbline 93
+ 00A4 6627              clr R22
+ 00A6 7727              clr R23
+ 00A8           L20:
+ 00A8                   .dbline 94
+ 00A8           ;                 {
+ 00A8                   .dbline 95
+ 00A8           ;                     Display_74HC595(m,m);
+ 00A8 262F              mov R18,R22
+ 00AA 062F              mov R16,R22
+ 00AC 0E940000          xcall _Display_74HC595#Fvhh
+ 00B0                   .dbline 96
+ 00B0           ;                     Delay_ms(250);
+ 00B0 0AEF              ldi R16,250
+ 00B2 10E0              ldi R17,0
+ 00B4 0E940000          xcall _Delay_ms#Fvi
+ 00B8                   .dbline 97
+ 00B8           ;                 }
+ 00B8           L21:
+ 00B8                   .dbline 93
+ 00B8 6F5F              subi R22,255  ; offset = 1
+ 00BA 7F4F              sbci R23,255
+ 00BC                   .dbline 93
+ 00BC 88E0              ldi R24,8
+ 00BE 90E0              ldi R25,0
+ 00C0 6817              cp R22,R24
+ 00C2 7907              cpc R23,R25
+ 00C4 8CF3              brlt L20
+ 00C6           X6:
+ 00C6                   .dbline 98
+ 00C6           ;             }
+ 00C6           L18:
+ 00C6                   .dbline 99
+ 00C6           ;             if ((PIND & (1 << 3))==0 )
+ 00C6 8399              sbic 0x10,3
+ 00C8 11C0              rjmp L24
+ 00CA           X7:
+ 00CA                   .dbline 101
+ 00CA           ;             {
+ 00CA           ;                 for (n=7; n>-1; n--)                      ///按下K3，从右至左显示7~0
+ 00CA                   .dbline 101
+ 00CA 47E0              ldi R20,7
+ 00CC 50E0              ldi R21,0
+ 00CE           L26:
+ 00CE                   .dbline 102
+ 00CE           ;                 {
+ 00CE                   .dbline 103
+ 00CE           ;                     Display_74HC595(n,n);
+ 00CE 242F              mov R18,R20
+ 00D0 042F              mov R16,R20
+ 00D2 0E940000          xcall _Display_74HC595#Fvhh
+ 00D6                   .dbline 104
+ 00D6           ;                     Delay_ms(250);
+ 00D6 0AEF              ldi R16,250
+ 00D8 10E0              ldi R17,0
+ 00DA 0E940000          xcall _Delay_ms#Fvi
+ 00DE                   .dbline 105
+ 00DE           ;                 }
+ 00DE           L27:
+ 00DE                   .dbline 101
+ 00DE 4150              subi R20,1
+ 00E0 5040              sbci R21,0
+ 00E2                   .dbline 101
+ 00E2 8FEF              ldi R24,-1
+ 00E4 9FEF              ldi R25,-1
+ 00E6 8417              cp R24,R20
+ 00E8 9507              cpc R25,R21
+ 00EA 8CF3              brlt L26
+ 00EC           X8:
+ 00EC                   .dbline 106
+ 00EC           ;             }
+ 00EC           L24:
+ 00EC                   .dbline 107
+ 00EC           ;         }
+ 00EC           L16:
+ 00EC                   .dbline 89
+ 00EC D9CF              xjmp L15
+ 00EE           X9:
+ 00EE                   .dbline -2
+ 00EE           L14:
+ 00EE                   .dbline 0 ; func end
+ 00EE 0C940000          xjmp pop_xgsetF000
+ 00F2                   .dbsym r n 20 I
+ 00F2                   .dbsym r m 22 I
+ 00F2                   .dbend
+ 00F2           ;    return 0;
+ 00F2           ; }

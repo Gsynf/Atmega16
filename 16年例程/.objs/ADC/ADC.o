@@ -1,0 +1,112 @@
+XL
+H 3 areas 7 global symbols
+M ADC.c
+S mod32u Ref0000
+S div32u Ref0000
+S push_xgsetF03C Ref0000
+S pop_xgsetF03C Ref0000
+S _Display_74HC595#Fvhh Ref0000
+A text size B8 flags 0
+dbfile "D:\ICCV8\16年例程 - 副本\ADC\ADC.c"
+dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+dbfile "D:\ICCV8\16年例程 - 副本\ADC\ADC.c"
+dbfunc e ADC_Init 0 fV
+dbline FFFFFFFF 0
+dbline A 0
+dbline B 0
+dbline C 2
+dbline D 4
+dbline E 6
+dbline F 8
+dbline 10 E
+dbline 11 10
+dbline 12 12
+dbline 13 14
+dbline 14 1A
+dbline 15 20
+dbline 16 26
+dbline FFFFFFFE 28
+dbline 0 28
+dbfunc e Display_ADC 2A fV
+dbsym r m C I
+dbsym r i 16 I
+dbsym r n 14 I
+dbsym l c 0 l
+dbsym r b A I
+dbsym r a C I
+dbline FFFFFFFF 34
+dbline 21 34
+dbline 23 34
+dbline 24 3E
+dbline 26 42
+dbline 26 42
+dbline 27 44
+dbline 28 54
+dbline 29 58
+dbline 2A 58
+dbline 2B 78
+dbline 2C 80
+dbline 2D 84
+dbline 2E A8
+dbline 28 A8
+dbline 28 AC
+dbline 2F B2
+dbline FFFFFFFE B2
+dbline 0 B2
+S _Display_ADC#Fvii Def002A
+S _ADC_Init#Fvv Def0000
+A data size 15 flags 20
+dbfile "D:\ICCV8\16年例程 - 副本\ADC\ADC.c"
+dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+dbsym s NoteData 0 A[21:21]c
+A idata size 15 flags 0
+T 00 00 00 FC
+R 00 00 02 00
+T 02 00 E1 D4
+R 00 00 02 00
+T 04 00 BC A8
+R 00 00 02 00
+T 06 00 96 8D
+R 00 00 02 00
+T 08 00 7E 70
+R 00 00 02 00
+T 0A 00 69 5E
+R 00 00 02 00
+T 0C 00 53 4A
+R 00 00 02 00
+T 0E 00 46 3E
+R 00 00 02 00
+T 10 00 37 34
+R 00 00 02 00
+T 12 00 2E 29
+R 00 00 02 00
+T 14 00 25
+R 00 00 02 00
+T 00 00 D0 98 3F 98 3E 9A 3D 98 87 B1 80 7E 87 B9
+R 00 00 00 00
+T 0E 00 37 9A 35 9A 32 98 86 B1 83 60 86 B9 80 B7
+R 00 00 00 00
+T 1C 00 8F 71 80 BF 80 B7 8F 7E 80 BF 36 9A 08 95
+R 00 00 00 00
+T 2A 00 0E 94 00 00 59 01 68 01 24 97 80 E0 88 83
+R 00 00 00 00 12 04 02 00
+T 38 00 89 83 8A 83 8B 83 34 9B 38 C0 A5 01 24 B0
+R 00 00 00 00
+T 46 00 35 B0 44 24 55 24 28 82 39 82 4A 82 5B 82
+R 00 00 00 00
+T 54 00 B6 01 2A C0 8A E0 90 E0 A0 E0 B0 E0 08 81
+R 00 00 00 00
+T 62 00 19 81 2A 81 3B 81 BA 93 AA 93 9A 93 8A 93
+R 00 00 00 00
+T 70 00 0E 94 00 00 C0 2E DD 24 2C 2D 04 2F
+R 00 00 00 00 12 04 00 00
+T 7C 00 0E 94 00 00 41 50 50 40 8A E0 90 E0 A0 E0
+R 00 00 00 00 12 04 04 00
+T 8A 00 B0 E0 08 81 19 81 2A 81 3B 81 BA 93 AA 93
+R 00 00 00 00
+T 98 00 9A 93 8A 93 0E 94 00 00 08 83 19 83 2A 83
+R 00 00 00 00 12 08 01 00
+T A6 00 3B 83 6F 5F 7F 4F A6 16 B7 06 9C F6 24 96
+R 00 00 00 00
+T B4 00 0C 94 00 00
+R 00 00 00 00 12 04 03 00

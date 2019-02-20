@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="16年例程" />
+		<Option pch_mode="2" />
+		<Option compiler="iccavr" />
+		<Build>
+			<Target title="default">
+				<Option output="..\16年例程 - 副本\16年例程" prefix_auto="0" extension_auto="0" />
+				<Option type="1" />
+				<Option compiler="iccavr" />
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-e" />
+			<Add option="-DATMega16" />
+			<Add option="-l" />
+			<Add option="-A" />
+			<Add option="-g" />
+			<Add option="-MLongJump" />
+			<Add option="-MHasMul" />
+			<Add option="-MEnhanced" />
+			<Add option="-D__ICC_VERSION=80502" />
+			<Add option="-D__BUILD=77" />
+		</Compiler>
+		<Linker>
+			<Add option="-g" />
+			<Add option="-e:0x4000" />
+			<Add option="-ucrtatmega.o" />
+			<Add option="-bfunc_lit:0x54.0x4000" />
+			<Add option="-dram_end:0x45f" />
+			<Add option="-bdata:0x60.0x45f" />
+			<Add option="-dhwstk_size:20" />
+			<Add option="-beeprom:0.512" />
+			<Add option="-fihx_coff" />
+			<Add option="-S2" />
+			<Add option="-nb:77" />
+			<Add library="catmega" />
+		</Linker>
+		<Unit filename="74HC595\74HC595.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="74HC595\74HC595.h" />
+		<Unit filename="ADC\ADC.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ADC\ADC.h" />
+		<Unit filename="Delay\Delay.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Delay\Delay.h" />
+		<Unit filename="Headers\Config.h" />
+		<Unit filename="Headers\Global.h" />
+		<Unit filename="Interrupt\Interrupt.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Interrupt\Interrupt.h" />
+		<Unit filename="PWM\PWM.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="PWM\PWM.h" />
+		<Unit filename="Timer\Timer.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Timer\Timer.h" />
+		<Unit filename="Usart\usart.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Usart\usart.h" />
+		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

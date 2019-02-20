@@ -1,0 +1,472 @@
+                        .module LED.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile D:\ICCV8\16年例程\LED\LED.c
+                        .area data(ram, con, rel)
+ 0000                   .dbfile D:\ICCV8\16年例程\LED\LED.c
+ 0000           _NoteData#A_h:
+ 0000                   .blkb 2
+                        .area idata(rom)
+ 0000 00FC              .byte 0,252
+                        .area data(ram, con, rel)
+ 0002                   .dbfile D:\ICCV8\16年例程\LED\LED.c
+ 0002                   .blkb 2
+                        .area idata(rom)
+ 0002 E1D4              .byte 225,212
+                        .area data(ram, con, rel)
+ 0004                   .dbfile D:\ICCV8\16年例程\LED\LED.c
+ 0004                   .blkb 2
+                        .area idata(rom)
+ 0004 BCA8              .byte 188,168
+                        .area data(ram, con, rel)
+ 0006                   .dbfile D:\ICCV8\16年例程\LED\LED.c
+ 0006                   .blkb 2
+                        .area idata(rom)
+ 0006 968D              .byte 150,141
+                        .area data(ram, con, rel)
+ 0008                   .dbfile D:\ICCV8\16年例程\LED\LED.c
+ 0008                   .blkb 2
+                        .area idata(rom)
+ 0008 7E70              .byte 126,'p
+                        .area data(ram, con, rel)
+ 000A                   .dbfile D:\ICCV8\16年例程\LED\LED.c
+ 000A                   .blkb 2
+                        .area idata(rom)
+ 000A 695E              .byte 'i,94
+                        .area data(ram, con, rel)
+ 000C                   .dbfile D:\ICCV8\16年例程\LED\LED.c
+ 000C                   .blkb 2
+                        .area idata(rom)
+ 000C 534A              .byte 'S,'J
+                        .area data(ram, con, rel)
+ 000E                   .dbfile D:\ICCV8\16年例程\LED\LED.c
+ 000E                   .blkb 2
+                        .area idata(rom)
+ 000E 463E              .byte 'F,62
+                        .area data(ram, con, rel)
+ 0010                   .dbfile D:\ICCV8\16年例程\LED\LED.c
+ 0010                   .blkb 2
+                        .area idata(rom)
+ 0010 3734              .byte 55,52
+                        .area data(ram, con, rel)
+ 0012                   .dbfile D:\ICCV8\16年例程\LED\LED.c
+ 0012                   .blkb 2
+                        .area idata(rom)
+ 0012 2E29              .byte 46,41
+                        .area data(ram, con, rel)
+ 0014                   .dbfile D:\ICCV8\16年例程\LED\LED.c
+ 0014                   .blkb 1
+                        .area idata(rom)
+ 0014 25                .byte 37
+                        .area data(ram, con, rel)
+ 0015                   .dbfile D:\ICCV8\16年例程\LED\LED.c
+ 0015                   .dbfile D:\ICCV8\16年例程\Timer\Timer.h
+ 0015                   .dbsym s NoteData _NoteData#A_h A[21:21]c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile D:\ICCV8\16年例程\Timer\Timer.h
+ 0000                   .dbfile D:\ICCV8\16年例程\LED\LED.c
+ 0000                   .dbfunc e LED_IO_Init _LED_IO_Init#Fvv fV
+                        .even
+ 0000           _LED_IO_Init#Fvv::
+ 0000                   .dbline -1
+ 0000                   .dbline 10
+ 0000           ; #include "LED.h"
+ 0000           ; /************************************************************
+ 0000           ; Function Name: LED_IO_Init
+ 0000           ; Inputs: none
+ 0000           ; Outputs: none
+ 0000           ; Description:    初始化LED灯IO口
+ 0000           ; Writer: WH
+ 0000           ; *************************************************************/
+ 0000           ; void LED_IO_Init(void)
+ 0000           ; {
+ 0000                   .dbline 11
+ 0000           ;     MCUCSR = 0x80;
+ 0000 80E8              ldi R24,128
+ 0002 84BF              out 0x34,R24
+ 0004                   .dbline 12
+ 0004           ;     MCUCSR = 0x80;       //取消复用
+ 0004 84BF              out 0x34,R24
+ 0006                   .dbline 13
+ 0006           ;     DDRC = 0xff;         //C端口输出-
+ 0006 8FEF              ldi R24,255
+ 0008 84BB              out 0x14,R24
+ 000A                   .dbline 14
+ 000A           ;     PORTC = 0xff;        //LED共阳，高电平全灭
+ 000A 85BB              out 0x15,R24
+ 000C                   .dbline -2
+ 000C           L1:
+ 000C                   .dbline 0 ; func end
+ 000C 0895              ret
+ 000E                   .dbend
+ 000E                   .dbfunc e LED_All_On _LED_All_On#Fvv fV
+                        .even
+ 000E           _LED_All_On#Fvv::
+ 000E                   .dbline -1
+ 000E                   .dbline 25
+ 000E           ; }
+ 000E           ; 
+ 000E           ; /************************************************************
+ 000E           ; Function Name: Led_All_On
+ 000E           ; Inputs: none
+ 000E           ; Outputs: none
+ 000E           ; Description:    8位LED灯全亮，延时后熄灭
+ 000E           ; Writer: WZY
+ 000E           ; *************************************************************/
+ 000E           ; void LED_All_On(void)
+ 000E           ; {
+ 000E                   .dbline 26
+ 000E           ;     LED_IO_Init();
+ 000E F8DF              xcall _LED_IO_Init#Fvv
+ 0010                   .dbline 27
+ 0010           ;     PORTC = 0x00;       ///LED共阳接法，设置输出为低电平
+ 0010 2224              clr R2
+ 0012 25BA              out 0x15,R2
+ 0014                   .dbline 28
+ 0014           ;     Delay_ms(1000);
+ 0014 08EE              ldi R16,1000
+ 0016 13E0              ldi R17,3
+ 0018 0E940000          xcall _Delay_ms#Fvi
+ 001C                   .dbline 29
+ 001C           ;     PORTC = 0xFF;
+ 001C 8FEF              ldi R24,255
+ 001E 85BB              out 0x15,R24
+ 0020                   .dbline -2
+ 0020           L2:
+ 0020                   .dbline 0 ; func end
+ 0020 0895              ret
+ 0022                   .dbend
+ 0022                   .dbfunc e Flow_LED_Test _Flow_LED_Test#Fvv fV
+ 0022           ;              i -> R20,R21
+                        .even
+ 0022           _Flow_LED_Test#Fvv::
+ 0022 4A93              st -y,R20
+ 0024 5A93              st -y,R21
+ 0026                   .dbline -1
+ 0026                   .dbline 40
+ 0026           ; }
+ 0026           ; 
+ 0026           ; /************************************************************
+ 0026           ; Function Name:  Flow_LED_Test
+ 0026           ; Inputs: none
+ 0026           ; Outputs: none
+ 0026           ; Description:    LED流水测试程序
+ 0026           ; Writer: MaxMarth
+ 0026           ; *************************************************************/
+ 0026           ; void Flow_LED_Test(void)
+ 0026           ; {
+ 0026                   .dbline 42
+ 0026           ;     int i;
+ 0026           ;     LED_IO_Init();
+ 0026 ECDF              xcall _LED_IO_Init#Fvv
+ 0028 2AC0              xjmp L5
+ 002A           L4:
+ 002A                   .dbline 44
+ 002A           ;     while(1)
+ 002A           ;    {
+ 002A                   .dbline 45
+ 002A           ;        for (i=0; i<8; i++)
+ 002A 4427              clr R20
+ 002C 5527              clr R21
+ 002E           L7:
+ 002E                   .dbline 46
+ 002E           ;        {
+ 002E                   .dbline 47
+ 002E           ;            PORTC &= ~(1 << i);//顺次置零
+ 002E 01E0              ldi R16,1
+ 0030 142F              mov R17,R20
+ 0032 0E940000          xcall lsl8
+ 0036 202E              mov R2,R16
+ 0038 2094              com R2
+ 003A 35B2              in R3,0x15
+ 003C 3220              and R3,R2
+ 003E 35BA              out 0x15,R3
+ 0040                   .dbline 48
+ 0040           ;            Delay_ms(100);
+ 0040 04E6              ldi R16,100
+ 0042 10E0              ldi R17,0
+ 0044 0E940000          xcall _Delay_ms#Fvi
+ 0048                   .dbline 49
+ 0048           ;        }
+ 0048           L8:
+ 0048                   .dbline 45
+ 0048 4F5F              subi R20,255  ; offset = 1
+ 004A 5F4F              sbci R21,255
+ 004C                   .dbline 45
+ 004C 88E0              ldi R24,8
+ 004E 90E0              ldi R25,0
+ 0050 4817              cp R20,R24
+ 0052 5907              cpc R21,R25
+ 0054 64F3              brlt L7
+ 0056           X0:
+ 0056                   .dbline 50
+ 0056           ;        for (i=0; i<8; i++)
+ 0056 4427              clr R20
+ 0058 5527              clr R21
+ 005A           L11:
+ 005A                   .dbline 51
+ 005A           ;        {
+ 005A                   .dbline 52
+ 005A           ;            PORTC |= (1<<i);
+ 005A 01E0              ldi R16,1
+ 005C 142F              mov R17,R20
+ 005E 0E940000          xcall lsl8
+ 0062 25B2              in R2,0x15
+ 0064 202A              or R2,R16
+ 0066 25BA              out 0x15,R2
+ 0068                   .dbline 53
+ 0068           ;            Delay_ms(100);
+ 0068 04E6              ldi R16,100
+ 006A 10E0              ldi R17,0
+ 006C 0E940000          xcall _Delay_ms#Fvi
+ 0070                   .dbline 54
+ 0070           ;        }
+ 0070           L12:
+ 0070                   .dbline 50
+ 0070 4F5F              subi R20,255  ; offset = 1
+ 0072 5F4F              sbci R21,255
+ 0074                   .dbline 50
+ 0074 88E0              ldi R24,8
+ 0076 90E0              ldi R25,0
+ 0078 4817              cp R20,R24
+ 007A 5907              cpc R21,R25
+ 007C 74F3              brlt L11
+ 007E           X1:
+ 007E                   .dbline 55
+ 007E           ;    }
+ 007E           L5:
+ 007E                   .dbline 43
+ 007E D5CF              xjmp L4
+ 0080           X2:
+ 0080                   .dbline -2
+ 0080           L3:
+ 0080                   .dbline 0 ; func end
+ 0080 5991              ld R21,y+
+ 0082 4991              ld R20,y+
+ 0084 0895              ret
+ 0086                   .dbsym r i 20 I
+ 0086                   .dbend
+ 0086                   .dbfunc e LED_Change _LED_Change#Fvv fV
+                        .even
+ 0086           _LED_Change#Fvv::
+ 0086                   .dbline -1
+ 0086                   .dbline 66
+ 0086           ; }
+ 0086           ; 
+ 0086           ; /************************************************************
+ 0086           ; Function Name:  LED_Change
+ 0086           ; Inputs: none
+ 0086           ; Outputs: none
+ 0086           ; Description:    实现LED0246，1357交替闪烁
+ 0086           ; Writer: WZY
+ 0086           ; *************************************************************/
+ 0086           ; void LED_Change(void)
+ 0086           ; {
+ 0086                   .dbline 67
+ 0086           ;     LED_IO_Init();
+ 0086 BCDF              xcall _LED_IO_Init#Fvv
+ 0088 0EC0              xjmp L17
+ 008A           L16:
+ 008A                   .dbline 69
+ 008A           ;     while (1)
+ 008A           ;     {
+ 008A                   .dbline 70
+ 008A           ;         PORTC = ((1 << 1) | (1 << 3) | (1 << 5) | (1 << 7));   ///偶数位LED灯亮
+ 008A 8AEA              ldi R24,170
+ 008C 85BB              out 0x15,R24
+ 008E                   .dbline 71
+ 008E           ;         Delay_ms(600);
+ 008E 08E5              ldi R16,600
+ 0090 12E0              ldi R17,2
+ 0092 0E940000          xcall _Delay_ms#Fvi
+ 0096                   .dbline 72
+ 0096           ;         PORTC = ((1 << 0) | (1 << 2) | (1 << 4) | (1 << 6));   ///奇数位LED灯亮
+ 0096 85E5              ldi R24,85
+ 0098 85BB              out 0x15,R24
+ 009A                   .dbline 73
+ 009A           ;         Delay_ms(600);
+ 009A 08E5              ldi R16,600
+ 009C 12E0              ldi R17,2
+ 009E 0E940000          xcall _Delay_ms#Fvi
+ 00A2                   .dbline 74
+ 00A2           ;         PORTC = 0xFF;
+ 00A2 8FEF              ldi R24,255
+ 00A4 85BB              out 0x15,R24
+ 00A6                   .dbline 75
+ 00A6           ;     }
+ 00A6           L17:
+ 00A6                   .dbline 68
+ 00A6 F1CF              xjmp L16
+ 00A8           X3:
+ 00A8                   .dbline -2
+ 00A8           L15:
+ 00A8                   .dbline 0 ; func end
+ 00A8 0895              ret
+ 00AA                   .dbend
+ 00AA                   .dbfunc e Breathe_LED _Breathe_LED#Fvv fV
+ 00AA           ;              j -> R20,R21
+                        .even
+ 00AA           _Breathe_LED#Fvv::
+ 00AA 4A93              st -y,R20
+ 00AC 5A93              st -y,R21
+ 00AE                   .dbline -1
+ 00AE                   .dbline 86
+ 00AE           ; }
+ 00AE           ; 
+ 00AE           ; /************************************************************
+ 00AE           ; Function Name:  Breathe_LED
+ 00AE           ; Inputs:   PC4
+ 00AE           ; Outputs:  PB3
+ 00AE           ; Description:   快速PWM模式改变P波占空比调节LED亮度
+ 00AE           ; Writer: MaxMarth
+ 00AE           ; *************************************************************/
+ 00AE           ; void Breathe_LED(void)
+ 00AE           ; {
+ 00AE                   .dbline 87
+ 00AE           ;    int j = 0;
+ 00AE 4427              clr R20
+ 00B0 5527              clr R21
+ 00B2                   .dbline 88
+ 00B2           ;    MCUCSR = 0x80;
+ 00B2 80E8              ldi R24,128
+ 00B4 84BF              out 0x34,R24
+ 00B6                   .dbline 89
+ 00B6           ;    MCUCSR = 0x80;
+ 00B6 84BF              out 0x34,R24
+ 00B8                   .dbline 90
+ 00B8           ;    DDRC &= ~(1 << 4);   //选用4号灯
+ 00B8 A498              cbi 0x14,4
+ 00BA                   .dbline 91
+ 00BA           ;    DDRB |= (1 << 3);    //PB3端口输出
+ 00BA BB9A              sbi 0x17,3
+ 00BC                   .dbline 92
+ 00BC           ;    TCCR0 &= ~(1 << FOC0);
+ 00BC 83B7              in R24,0x33
+ 00BE 8F77              andi R24,127
+ 00C0 83BF              out 0x33,R24
+ 00C2                   .dbline 93
+ 00C2           ;    TCCR0 |= ((1 << WGM00) | (1 << WGM01));//快速PWM
+ 00C2 83B7              in R24,0x33
+ 00C4 8864              ori R24,72
+ 00C6 83BF              out 0x33,R24
+ 00C8                   .dbline 94
+ 00C8           ;    TCCR0 |= ((1 << COM01) | (1 << COM00));
+ 00C8 83B7              in R24,0x33
+ 00CA 8063              ori R24,48
+ 00CC 83BF              out 0x33,R24
+ 00CE                   .dbline 96
+ 00CE           ;    //比较匹配发生OC0A置位，计数到TOP时OC0清零
+ 00CE           ;    TCCR0 &= ~((1 << CS02) | (1 << CS01));
+ 00CE 83B7              in R24,0x33
+ 00D0 897F              andi R24,249
+ 00D2 83BF              out 0x33,R24
+ 00D4                   .dbline 97
+ 00D4           ;    TCCR0 |= (1 << CS00);//无分频
+ 00D4 83B7              in R24,0x33
+ 00D6 8160              ori R24,1
+ 00D8 83BF              out 0x33,R24
+ 00DA                   .dbline 98
+ 00DA           ;    OCR0 = 0;
+ 00DA 2224              clr R2
+ 00DC 2CBE              out 0x3c,R2
+ 00DE                   .dbline 99
+ 00DE           ;    TIMSK |= (1 << OCIE0);
+ 00DE 89B7              in R24,0x39
+ 00E0 8260              ori R24,2
+ 00E2 89BF              out 0x39,R24
+ 00E4 1CC0              xjmp L21
+ 00E6           L20:
+ 00E6                   .dbline 102
+ 00E6           ; 
+ 00E6           ;    while(1)
+ 00E6           ;   {
+ 00E6                   .dbline 104
+ 00E6           ; 
+ 00E6           ;     Delay_ms(100);
+ 00E6 04E6              ldi R16,100
+ 00E8 10E0              ldi R17,0
+ 00EA 0E940000          xcall _Delay_ms#Fvi
+ 00EE                   .dbline 105
+ 00EE           ;     if(j==0)
+ 00EE 4030              cpi R20,0
+ 00F0 4507              cpc R20,R21
+ 00F2 19F4              brne L23
+ 00F4           X4:
+ 00F4                   .dbline 107
+ 00F4           ;     {
+ 00F4           ;       OCR0 += 5;
+ 00F4                   .dbline 107
+ 00F4 8CB7              in R24,0x3c
+ 00F6 8B5F              subi R24,251    ; addi 5
+ 00F8 8CBF              out 0x3c,R24
+ 00FA                   .dbline 108
+ 00FA           ;     }
+ 00FA           L23:
+ 00FA                   .dbline 110
+ 00FA           ; 
+ 00FA           ;     if(OCR0>240)
+ 00FA 80EF              ldi R24,240
+ 00FC 2CB6              in R2,0x3c
+ 00FE 8215              cp R24,R2
+ 0100 10F4              brsh L25
+ 0102           X5:
+ 0102                   .dbline 112
+ 0102           ;     {
+ 0102           ;       j = 1;
+ 0102                   .dbline 112
+ 0102 41E0              ldi R20,1
+ 0104 50E0              ldi R21,0
+ 0106                   .dbline 113
+ 0106           ;     }
+ 0106           L25:
+ 0106                   .dbline 114
+ 0106           ;     if(j==1)
+ 0106 4130              cpi R20,1
+ 0108 E0E0              ldi R30,0
+ 010A 5E07              cpc R21,R30
+ 010C 19F4              brne L27
+ 010E           X6:
+ 010E                   .dbline 116
+ 010E           ;     {
+ 010E           ;       OCR0 = OCR0-5;
+ 010E                   .dbline 116
+ 010E 8CB7              in R24,0x3c
+ 0110 8550              subi R24,5
+ 0112 8CBF              out 0x3c,R24
+ 0114                   .dbline 117
+ 0114           ;     }
+ 0114           L27:
+ 0114                   .dbline 118
+ 0114           ;     if(OCR0 < 10)
+ 0114 8CB7              in R24,0x3c
+ 0116 8A30              cpi R24,10
+ 0118 10F4              brsh L29
+ 011A           X7:
+ 011A                   .dbline 120
+ 011A           ;     {
+ 011A           ;         j = 0;
+ 011A                   .dbline 120
+ 011A 4427              clr R20
+ 011C 5527              clr R21
+ 011E                   .dbline 121
+ 011E           ;     }
+ 011E           L29:
+ 011E                   .dbline 127
+ 011E           ; 
+ 011E           ; //     OCR0  =249;
+ 011E           ; //     TIMSK|=(1<<OCIE0);
+ 011E           ; //     OCR0  =149;
+ 011E           ; //     TIMSK|=(1<<OCIE0);
+ 011E           ;    }
+ 011E           L21:
+ 011E                   .dbline 101
+ 011E E3CF              xjmp L20
+ 0120           X8:
+ 0120                   .dbline -2
+ 0120           L19:
+ 0120                   .dbline 0 ; func end
+ 0120 5991              ld R21,y+
+ 0122 4991              ld R20,y+
+ 0124 0895              ret
+ 0126                   .dbsym r j 20 I
+ 0126                   .dbend
+ 0126           ; }

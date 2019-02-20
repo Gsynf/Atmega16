@@ -1,0 +1,2496 @@
+Interrupt Vectors
+00000 940C 0093 JMP	__start|__text_start
+00002 940C 01CC JMP	_Int0_isr           
+00004 940C 01DB JMP	_Int1_isr           
+...
+00012 940C 0246 JMP	_Timer0_Ovf_Isr     
+...
+00016 940C 060D JMP	_uart0_rx_isr       
+Program Code (text area)
+_Fast_PWM:
+  Percent              --> R10
+    000B6 92AA      ST	-Y,R10
+    000B7 92BA      ST	-Y,R11
+    000B8 0158      MOVW	R10,R16
+FILE: D:\ICCV8\16年例程 - 副本\PWM\PWM.c
+(0001) #include "PWM.h"
+(0002) /************************************************************
+(0003) Function Name: Fast_PWM
+(0004) Inputs: int Percent
+(0005) Outputs: none
+(0006) Description:    快速PWM模式，占空比可调
+(0007) Writer: WZY, MaxMarth
+(0008) *************************************************************/
+(0009) void Fast_PWM(int Percent)
+(0010) {
+(0011)     DDRB  |= (1 << 3); //PB3输出
+    000B9 9ABB      SBI	0x17,3
+(0012)     TCCR0 |= ((1 << WGM00) | (1 << WGM01)); //快速PWM
+    000BA B783      IN	R24,0x33
+    000BB 6488      ORI	R24,0x48
+    000BC BF83      OUT	0x33,R24
+(0013)     TCCR0 &= ~(1 << FOC0); //兼容性
+    000BD B783      IN	R24,0x33
+    000BE 778F      ANDI	R24,0x7F
+    000BF BF83      OUT	0x33,R24
+(0014)     TCCR0 |= (1 << COM01);
+    000C0 B783      IN	R24,0x33
+    000C1 6280      ORI	R24,0x20
+    000C2 BF83      OUT	0x33,R24
+(0015)     TCCR0 &= ~(1<<COM00); //比较匹配清零
+    000C3 B783      IN	R24,0x33
+    000C4 7E8F      ANDI	R24,0xEF
+    000C5 BF83      OUT	0x33,R24
+(0016)     TCCR0 |= (1 << CS00);
+    000C6 B783      IN	R24,0x33
+    000C7 6081      ORI	R24,1
+    000C8 BF83      OUT	0x33,R24
+(0017)     TCCR0 &= ~((1 << CS01) | (1 << CS02)); //无预分频
+    000C9 B783      IN	R24,0x33
+    000CA 7F89      ANDI	R24,0xF9
+    000CB BF83      OUT	0x33,R24
+(0018)     TCNT0  = 0x00;
+    000CC 2422      CLR	R2
+    000CD BE22      OUT	0x32,R2
+(0019)     OCR0   = Percent*255/100;
+    000CE EF0F      LDI	R16,0xFF
+(0020) 
+(0021) }
+74HC595.c":Send_Data_To_74HC595:
+  i                    --> R20
+  Data_temp            --> R10
+  data                 --> R16
+    000DB 92AA      ST	-Y,R10
+    000DC 934A      ST	-Y,R20
+FILE: D:\ICCV8\16年例程 - 副本\74HC595\74HC595.c
+(0001) #include "74HC595.h"
+(0002) 
+(0003) extern UINT8 LED[]={0x3f, 0x06, 0x5b, 0x4f, 0x66, 0x6d, 0x7d, 0x07, 0x7f, 0x6f, 0x77, 0x7c, 0x39, 0x5e, 0x79, 0x71, 0x40 , 0x00};
+(0004) //显示各种数字和字母的位选编码，分别是0~9，A~F共阴数码管适用,最后一位是显示横杠
+(0005) /**********************************************************
+(0006) Function Name: Send_Data_To_74HC595
+(0007) Description: 发送数据到74HC595
+(0008) Inputs: {data:发送的数据}
+(0009) Outputs: None
+(0010) Writer:  CSJ,MaxMarth
+(0011) ***********************************************************/
+(0012) static void Send_Data_To_74HC595(UINT8 data)
+(0013) 
+(0014) {
+(0015)     UINT8 i, Data_temp = 0;
+(0016)     Data_temp = data;
+    000DD 2EA0      MOV	R10,R16
+(0017)     for (i = 0; i < 8; i++)              //一次只能发送一个字节的数据（8位)
+    000DE 2744      CLR	R20
+    000DF C00B      RJMP	0x00EB
+(0018)     {
+(0019)         if (Data_temp & (1 << 7))         //从高位开始发送
+    000E0 FEA7      SBRS	R10,7
+    000E1 C002      RJMP	0x00E4
+(0020)             HC595_DATA_HIGH;            //如果为1，拉高数据线
+    000E2 9AC0      SBI	0x18,0
+    000E3 C001      RJMP	0x00E5
+(0021)         else
+(0022)             HC595_DATA_LOW;             //如果为0，拉蒂数据线
+    000E4 98C0      CBI	0x18,0
+(0023) 
+(0024)         HC595_SCLK_HIGH;   			 //时钟线拉高
+    000E5 9AC2      SBI	0x18,2
+(0025)         NOP(); NOP();
+    000E6 0000      NOP
+    000E7 0000      NOP
+(0026)         HC595_SCLK_LOW;                 //时钟线拉低
+    000E8 98C2      CBI	0x18,2
+(0027)         Data_temp <<= 1;                 //数据向左移位，发送下一位
+    000E9 0CAA      LSL	R10
+(0028)     }
+    000EA 9543      INC	R20
+    000EB 3048      CPI	R20,0x8
+    000EC F398      BCS	0x00E0
+    000ED 9149      LD	R20,Y+
+    000EE 90A9      LD	R10,Y+
+    000EF 9508      RET
+_Display_74HC595:
+  seg                  --> R10
+  sit                  --> R12
+    000F0 92AA      ST	-Y,R10
+    000F1 92CA      ST	-Y,R12
+    000F2 2EA2      MOV	R10,R18
+    000F3 2EC0      MOV	R12,R16
+(0029) /*
+(0030)     for (i=0;i<8;i++)                       ///一次只能发送一个字节的数据（8位）
+(0031)     {
+(0032)         if( data_temp & (1<<(7-i)) )        ///从高位开始发送
+(0033)             HC595_DATA_HIGH;                      ///数据线拉高
+(0034)         else
+(0035)             HC595_DATA_LOW;                       ///数据线拉低
+(0036)         HC595_SCLK_HIGH ;                         ///时钟线拉高
+(0037)         NOP() ; NOP() ;
+(0038)         HC595_SCLK_LOW ;                          ///时钟线拉低
+(0039)     }
+(0040) */
+(0041) }
+(0042) 
+(0043) /************************************************************
+(0044) Function Name: Display_74HC595
+(0045) Inputs: UINT8 sit, UINT8 seg
+(0046) Outputs: none
+(0047) Description:    向74HC595发送两次数据,前8位为段选，后八位为位选（选一位）
+(0048) Writer: XZ,WH,WZY
+(0049) *************************************************************/
+(0050) void Display_74HC595(UINT8 sit , UINT8 seg)    ///situation为位,segment为段
+(0051) {
+(0052)     HC595_Init();
+    000F4 D0BE      RCALL	_HC595_Init
+(0053)     HC595_LCLK_LOW;
+    000F5 98C1      CBI	0x18,1
+(0054)     HC595_SCLK_LOW;
+    000F6 98C2      CBI	0x18,2
+(0055)     Send_Data_To_74HC595(~(1 << sit));
+    000F7 E001      LDI	R16,1
+    000F8 2D1C      MOV	R17,R12
+    000F9 940E 079A CALL	lsl8
+    000FB 9500      COM	R16
+    000FC DFDE      RCALL	74HC595.c":Send_Data_To_74HC595
+(0056)     Send_Data_To_74HC595(LED[seg]);
+    000FD E88A      LDI	R24,0x8A
+    000FE E090      LDI	R25,0
+    000FF 2DEA      MOV	R30,R10
+    00100 27FF      CLR	R31
+    00101 0FE8      ADD	R30,R24
+    00102 1FF9      ADC	R31,R25
+    00103 8100      LD	R16,Z
+    00104 DFD6      RCALL	74HC595.c":Send_Data_To_74HC595
+(0057)     HC595_LCLK_HIGH;
+    00105 9AC1      SBI	0x18,1
+    00106 90C9      LD	R12,Y+
+    00107 90A9      LD	R10,Y+
+    00108 9508      RET
+_HC595_Display_Bit:
+  i                    --> Y,+1
+  data_temp            --> R20
+  point                --> R12
+  a_bit_data           --> R14
+  bit                  --> R10
+    00109 940E 076C CALL	push_xgset30FC
+    0010B 2EE2      MOV	R14,R18
+    0010C 2EA0      MOV	R10,R16
+    0010D 84C8      LDD	R12,Y+8
+(0058) }
+(0059) 
+(0060) /**********************************************************
+(0061) Function Name: HC595_Display_Bit
+(0062) Description: 数码管的第几位显示数字0-9
+(0063) 		     数码管的排列顺序从右到左依次为01234567
+(0064) 		     point : 1->在该位显示小数点
+(0065) 		     0->在该位不显示小数点
+(0066) Inputs: {bit:哪一位数码管亮;a_bit_data:显示的数字;point:是否显示小数点}
+(0067) Outputs: None
+(0068) Notes: 在2015级学习板上PB0(数据线)，PB1(锁存线)，PB2(时钟线)三端口为控制线
+(0069)        两个74HC595串联需发送16位，连发两次8位数据，最后在拉高输出，
+(0070)        两个移位HC595_DisplayData(寄存器同时输出。
+(0071) ***********************************************************/
+(0072) void HC595_Display_Bit(UINT8 bit, UINT8 a_bit_data, UINT8 point)
+(0073) {
+(0074)     UINT8 i, data_temp = 0;
+(0075)     data_temp = LED[a_bit_data];         //只能获取数字段选信号
+    0010E E88A      LDI	R24,0x8A
+    0010F E090      LDI	R25,0
+    00110 2DEE      MOV	R30,R14
+    00111 27FF      CLR	R31
+    00112 0FE8      ADD	R30,R24
+    00113 1FF9      ADC	R31,R25
+    00114 8140      LD	R20,Z
+(0076) 
+(0077)     if (point)   SetBit(data_temp,7);     //显示小数点
+    00115 20CC      TST	R12
+    00116 F011      BEQ	0x0119
+    00117 6840      ORI	R20,0x80
+    00118 C001      RJMP	0x011A
+(0078)     else        ClrBit(data_temp,7);     //不显示小数点
+    00119 774F      ANDI	R20,0x7F
+(0079) 
+(0080)     HC595_Init();
+    0011A D098      RCALL	_HC595_Init
+(0081)     HC595_LCLK_LOW;    //锁存线拉低
+    0011B 98C1      CBI	0x18,1
+(0082)     HC595_SCLK_LOW;    //时钟线拉低
+    0011C 98C2      CBI	0x18,2
+(0083)     Delay_us(5);
+    0011D E005      LDI	R16,5
+    0011E E010      LDI	R17,0
+    0011F 940E 067E CALL	_Delay_us
+(0084)     Send_Data_To_74HC595(~(1 << bit));  //发送位选信号
+    00121 E001      LDI	R16,1
+    00122 2D1A      MOV	R17,R10
+    00123 940E 079A CALL	lsl8
+    00125 9500      COM	R16
+    00126 DFB4      RCALL	74HC595.c":Send_Data_To_74HC595
+(0085)     Delay_us(5);
+    00127 E005      LDI	R16,5
+    00128 E010      LDI	R17,0
+    00129 940E 067E CALL	_Delay_us
+(0086)     Send_Data_To_74HC595(data_temp);   //发送段选信号
+    0012B 2F04      MOV	R16,R20
+    0012C DFAE      RCALL	74HC595.c":Send_Data_To_74HC595
+(0087) 
+(0088)     HC595_LCLK_HIGH;      //上升沿实现刚移入的十六位数据的输出及锁存
+    0012D 9AC1      SBI	0x18,1
+    0012E 940C 0756 JMP	pop_xgset30FC
+_HC595_DisplayData:
+  temp                 --> R20
+  j                    --> R10
+  i                    --> R12
+  data                 --> Y,+9
+  stop                 --> R14
+  start                --> R12
+    00130 940E 076C CALL	push_xgset30FC
+    00132 2EE2      MOV	R14,R18
+    00133 2EC0      MOV	R12,R16
+    00134 9721      SBIW	R28,1
+(0089) }
+(0090) 
+(0091) /**********************************************************
+(0092) Function Name: HC595_DisplayData()
+(0093) Description: 从start位到stop位显示数字data
+(0094) 		     数码管的排列顺序从左往右依次为01234567
+(0095) Inputs: {start:起始位;stop:截止位;data:需要显示的十进制的数字}
+(0096) Outputs: None
+(0097) Notes: 在2015级学习板上PB0(数据线)，PB1(锁存线)，PB2(时钟线)三端口为控制线
+(0098)         如果用的数码管的位数超过十进制数的位数，高位显示0，如001234
+(0099) ***********************************************************/
+(0100) void HC595_DisplayData(UINT8 start, UINT8 stop ,UINT32  data)
+(0101) {
+(0102)     UINT8 i, j, temp;
+(0103)     j = stop;
+    00135 2CAE      MOV	R10,R14
+(0104)     for (i = start; i <= stop ; i++)
+    00136 C02C      RJMP	0x0163
+(0105)     {
+(0106)     temp = data % 10;   //选出data的第i位（从高位往低位数)
+    00137 E08A      LDI	R24,0xA
+    00138 E090      LDI	R25,0
+    00139 E0A0      LDI	R26,0
+    0013A E0B0      LDI	R27,0
+    0013B 8509      LDD	R16,Y+9
+    0013C 851A      LDD	R17,Y+10
+    0013D 852B      LDD	R18,Y+11
+    0013E 853C      LDD	R19,Y+12
+    0013F 93BA      ST	-Y,R27
+    00140 93AA      ST	-Y,R26
+    00141 939A      ST	-Y,R25
+    00142 938A      ST	-Y,R24
+    00143 940E 06DE CALL	mod32u
+    00145 2F40      MOV	R20,R16
+(0107)     HC595_Display_Bit(j, temp, 0);//通过扫描的方式显示
+    00146 2422      CLR	R2
+    00147 8228      ST	Y,R2
+    00148 2F24      MOV	R18,R20
+    00149 2D0A      MOV	R16,R10
+    0014A DFBE      RCALL	_HC595_Display_Bit
+(0108)     j--;
+    0014B 94AA      DEC	R10
+(0109)     data /= 10;//去除末位，并将十进制数向右移一位
+    0014C E08A      LDI	R24,0xA
+    0014D E090      LDI	R25,0
+    0014E E0A0      LDI	R26,0
+    0014F E0B0      LDI	R27,0
+    00150 8509      LDD	R16,Y+9
+    00151 851A      LDD	R17,Y+10
+    00152 852B      LDD	R18,Y+11
+    00153 853C      LDD	R19,Y+12
+    00154 93BA      ST	-Y,R27
+    00155 93AA      ST	-Y,R26
+    00156 939A      ST	-Y,R25
+    00157 938A      ST	-Y,R24
+    00158 940E 06DC CALL	div32u
+    0015A 8709      STD	Y+9,R16
+    0015B 871A      STD	Y+10,R17
+    0015C 872B      STD	Y+11,R18
+    0015D 873C      STD	Y+12,R19
+(0110)     Delay_ms(200);
+    0015E EC08      LDI	R16,0xC8
+    0015F E010      LDI	R17,0
+    00160 940E 068C CALL	_Delay_ms
+(0111)     }
+    00162 94C3      INC	R12
+    00163 14EC      CP	R14,R12
+    00164 F690      BCC	0x0137
+    00165 9621      ADIW	R28,1
+    00166 940C 0756 JMP	pop_xgset30FC
+_HC595_DisplayData_Point:
+  temp                 --> R22
+  i                    --> R14
+  j                    --> R10
+  point_bit            --> R20
+  data                 --> Y,+11
+  stop                 --> R12
+  start                --> R14
+    00168 940E 076A CALL	push_xgsetF0FC
+    0016A 2EC2      MOV	R12,R18
+    0016B 2EE0      MOV	R14,R16
+    0016C 9721      SBIW	R28,1
+    0016D 854F      LDD	R20,Y+15
+(0112) 
+(0113) }
+(0114) 
+(0115) 
+(0116) /**********************************************************
+(0117) Function Name: HC595_DisplayData_Point()
+(0118) Description: 从start位到stop位显示数字data
+(0119) 		     数码管的排列顺序从左往右依次为01234567
+(0120) Inputs: {start:起始位;stop:截止位;data:现实的数字;point_bit:在哪一位显示小数点}
+(0121) Outputs: None
+(0122) Notes: 在2015级学习板上PB0(数据线)，PB1(锁存线)，PB2(时钟线)三端口为控制线
+(0123)        小数点是从右往左数01234567
+(0124)        这种显示方法可显示小数
+(0125) ***********************************************************/
+(0126) extern void HC595_DisplayData_Point(UINT8 start, UINT8 stop , UINT32  data , UINT8 point_bit)
+(0127) {
+(0128)   UINT8 i, j, temp;
+(0129)   j = stop;
+    0016E 2CAC      MOV	R10,R12
+(0130)   for (i = start; i <= stop ; i++)
+    0016F C03D      RJMP	0x01AD
+(0131)     {
+(0132)     temp = data % 10;     //选出data的末位（从高位往低位数)，首先显示低位
+    00170 E08A      LDI	R24,0xA
+    00171 E090      LDI	R25,0
+    00172 E0A0      LDI	R26,0
+    00173 E0B0      LDI	R27,0
+    00174 850B      LDD	R16,Y+11
+    00175 851C      LDD	R17,Y+12
+    00176 852D      LDD	R18,Y+13
+    00177 853E      LDD	R19,Y+14
+    00178 93BA      ST	-Y,R27
+    00179 93AA      ST	-Y,R26
+    0017A 939A      ST	-Y,R25
+    0017B 938A      ST	-Y,R24
+    0017C 940E 06DE CALL	mod32u
+    0017E 2F60      MOV	R22,R16
+(0133)     if(j == stop - point_bit)
+    0017F 2E24      MOV	R2,R20
+    00180 2433      CLR	R3
+    00181 2C4C      MOV	R4,R12
+    00182 2455      CLR	R5
+    00183 1842      SUB	R4,R2
+    00184 0853      SBC	R5,R3
+    00185 2C2A      MOV	R2,R10
+    00186 2433      CLR	R3
+    00187 1424      CP	R2,R4
+    00188 0435      CPC	R3,R5
+    00189 F431      BNE	0x0190
+(0134)        HC595_Display_Bit(j, temp, 1);  //该显示小数点
+    0018A E081      LDI	R24,1
+    0018B 8388      ST	Y,R24
+    0018C 2F26      MOV	R18,R22
+    0018D 2D02      MOV	R16,R2
+    0018E DF7A      RCALL	_HC595_Display_Bit
+    0018F C005      RJMP	0x0195
+(0135)     else
+(0136)        HC595_Display_Bit(j, temp, 0);  //不该显示小数点
+    00190 2422      CLR	R2
+    00191 8228      ST	Y,R2
+    00192 2F26      MOV	R18,R22
+    00193 2D0A      MOV	R16,R10
+    00194 DF74      RCALL	_HC595_Display_Bit
+(0137)     j--;
+    00195 94AA      DEC	R10
+(0138)     data /= 10;       //去除末位，并将十进制数向右移一位
+    00196 E08A      LDI	R24,0xA
+    00197 E090      LDI	R25,0
+    00198 E0A0      LDI	R26,0
+    00199 E0B0      LDI	R27,0
+    0019A 850B      LDD	R16,Y+11
+    0019B 851C      LDD	R17,Y+12
+    0019C 852D      LDD	R18,Y+13
+    0019D 853E      LDD	R19,Y+14
+    0019E 93BA      ST	-Y,R27
+    0019F 93AA      ST	-Y,R26
+    001A0 939A      ST	-Y,R25
+    001A1 938A      ST	-Y,R24
+    001A2 940E 06DC CALL	div32u
+    001A4 870B      STD	Y+11,R16
+    001A5 871C      STD	Y+12,R17
+    001A6 872D      STD	Y+13,R18
+    001A7 873E      STD	Y+14,R19
+(0139)     Delay_ms(200);
+    001A8 EC08      LDI	R16,0xC8
+    001A9 E010      LDI	R17,0
+    001AA 940E 068C CALL	_Delay_ms
+(0140)     }
+    001AC 94E3      INC	R14
+    001AD 14CE      CP	R12,R14
+    001AE F008      BCS	0x01B0
+    001AF CFC0      RJMP	0x0170
+    001B0 9621      ADIW	R28,1
+    001B1 940C 075F JMP	pop_xgsetF0FC
+(0141) }
+(0142) 
+(0143) 
+(0144) /**********************************************************
+(0145) Function Name: HC595_Init()
+(0146) Description: 初始化端口，PB0，PB1，PB2端口为输出
+(0147) Inputs: None
+(0148) Outputs: None
+(0149) Notes: 在2015级学习板上PB0(数据线)，PB1(锁存线)，PB2(时钟线)三端口为控制线
+(0150) Writer: MaxMarth
+(0151) ***********************************************************/
+(0152) void HC595_Init(void)
+(0153) {
+(0154)     DDRB |= (1<<HC595_DATA_bit);
+_HC595_Init:
+    001B3 9AB8      SBI	0x17,0
+(0155)     DDRB |= (1<<HC595_LCLK_bit);
+    001B4 9AB9      SBI	0x17,1
+(0156)     DDRB |= (1<<HC595_SCLK_bit);
+    001B5 9ABA      SBI	0x17,2
+(0157)     HC595_LCLK_HIGH;      //锁存线拉高
+    001B6 9AC1      SBI	0x18,1
+(0158)     HC595_SCLK_HIGH;      //时钟线拉高
+    001B7 9AC2      SBI	0x18,2
+(0159) }
+    001B8 9508      RET
+FILE: D:\ICCV8\16年例程 - 副本\Interrupt\Interrupt.c
+(0001) #include "Interrupt.h"
+(0002) 
+(0003) int turn_flag = 1;
+(0004) /************************************************************
+(0005) Function Name: Interrupt_Init
+(0006) Inputs: none
+(0007) Outputs: none
+(0008) Description:    初始化外部中断INT0
+(0009) Writer: XZ，WZY
+(0010) *************************************************************/
+(0011) void Interrupt_Init(void)
+(0012) {
+(0013)    // CLI();                        ///关闭全局中断，避免在设置时受到其他干扰
+(0014)     //将第0位置0，第1位置1，即选择了下降沿触发中断INT0
+(0015)     MCUCR &= ~(1 << ISC00);      ///将寄存器MCUCR的第0位置0
+_Interrupt_Init:
+    001B9 B785      IN	R24,0x35
+    001BA 7F8E      ANDI	R24,0xFE
+    001BB BF85      OUT	0x35,R24
+(0016)     MCUCR |=  (1 << ISC01);      ///将寄存器MCUCR的第1位置1
+    001BC B785      IN	R24,0x35
+    001BD 6082      ORI	R24,2
+    001BE BF85      OUT	0x35,R24
+(0017)     GICR  |= (1 << INT0);         ///将第6位INT0置1，使能INT0
+    001BF B78B      IN	R24,0x3B
+    001C0 6480      ORI	R24,0x40
+    001C1 BF8B      OUT	0x3B,R24
+(0018)     //将第2位置0，第3位置1，即选择了下升沿触发中断INT1
+(0019)     MCUCR &= ~(1 << ISC10);      ///将寄存器MCUCR的第2位置0
+    001C2 B785      IN	R24,0x35
+    001C3 7F8B      ANDI	R24,0xFB
+    001C4 BF85      OUT	0x35,R24
+(0020)     MCUCR |=  (1 << ISC11);      ///将寄存器MCUCR的第3位置1
+    001C5 B785      IN	R24,0x35
+    001C6 6088      ORI	R24,0x8
+    001C7 BF85      OUT	0x35,R24
+(0021)     GICR  |= (1 << INT1);         ///将第7位INT1置1，使能INT1
+    001C8 B78B      IN	R24,0x3B
+    001C9 6880      ORI	R24,0x80
+    001CA BF8B      OUT	0x3B,R24
+    001CB 9508      RET
+_Int0_isr:
+    001CC 938A      ST	-Y,R24
+    001CD 939A      ST	-Y,R25
+    001CE B78F      IN	R24,0x3F
+    001CF 938A      ST	-Y,R24
+(0022)    // SEI();                        ///打开全局中断，就是中断的总开关
+(0023) }
+(0024) 
+(0025) #pragma interrupt_handler Int0_isr:iv_INT0
+(0026) void Int0_isr(void)
+(0027) {
+(0028)    turn_flag = -1; //LED_All_On();
+    001D0 EF8F      LDI	R24,0xFF
+    001D1 EF9F      LDI	R25,0xFF
+    001D2 9390 00B2 STS	turn_flag+1,R25
+    001D4 9380 00B1 STS	turn_flag,R24
+    001D6 9189      LD	R24,Y+
+    001D7 BF8F      OUT	0x3F,R24
+    001D8 9199      LD	R25,Y+
+    001D9 9189      LD	R24,Y+
+    001DA 9518      RETI
+_Int1_isr:
+    001DB 938A      ST	-Y,R24
+    001DC 939A      ST	-Y,R25
+    001DD B78F      IN	R24,0x3F
+    001DE 938A      ST	-Y,R24
+(0029) }
+(0030) 
+(0031) #pragma interrupt_handler Int1_isr:iv_INT1
+(0032) void Int1_isr(void)
+(0033) {
+(0034)    turn_flag = 1; //Flow_LED_Test();  //外部中断不能放死循环
+    001DF E081      LDI	R24,1
+(0035) }
+    001E0 E090      LDI	R25,0
+    001E1 9390 00B2 STS	turn_flag+1,R25
+    001E3 9380 00B1 STS	turn_flag,R24
+    001E5 9189      LD	R24,Y+
+    001E6 BF8F      OUT	0x3F,R24
+    001E7 9199      LD	R25,Y+
+    001E8 9189      LD	R24,Y+
+    001E9 9518      RETI
+FILE: D:\ICCV8\16年例程 - 副本\ADC\ADC.c
+(0001) #include "ADC.h"
+(0002) /************************************************************
+(0003) Function Name:  ADC_Init
+(0004) Inputs: none
+(0005) Outputs: none
+(0006) Description:    模数转换寄存器初始化
+(0007) Writer: MaxMarth
+(0008) *************************************************************/
+(0009) void ADC_Init(void)
+(0010) {
+(0011)     DDRA   &= ~(1<<0) ;        //PA0输入
+_ADC_Init:
+    001EA 98D0      CBI	0x1A,0
+(0012)     ADMUX  &= ~(1<<REFS1);
+    001EB 983F      CBI	0x07,7
+(0013)     ADMUX  |= 1<<REFS0;      //参考电0压选择AVCC
+    001EC 9A3E      SBI	0x07,6
+(0014)     ADMUX  &= ~(1<<ADLAR);   //转换结果左对齐
+    001ED 983D      CBI	0x07,5
+(0015)     ADMUX  &= ~( (1<<MUX0) | (1<<MUX1) | (1<<MUX2) | (1<<MUX3) | (1<<MUX4) ); //选择通道ADC0
+    001EE B187      IN	R24,0x07
+    001EF 7E80      ANDI	R24,0xE0
+    001F0 B987      OUT	0x07,R24
+(0016)     ADCSRA |= 1<<ADEN;       //ADC使能
+    001F1 9A37      SBI	0x06,7
+(0017)     ADCSRA |= 1<<ADATE;      //ADC自动触发使能
+    001F2 9A35      SBI	0x06,5
+(0018)     ADCSRA &= ~(1<<ADPS2);
+    001F3 9832      CBI	0x06,2
+(0019)     ADCSRA |= ( (1<<ADPS0) | (1<<ADPS1) );  //八分频
+    001F4 B186      IN	R24,0x06
+    001F5 6083      ORI	R24,3
+    001F6 B986      OUT	0x06,R24
+(0020)     SFIOR  &= ~( (1<<ADTS0) | (1<<ADTS1) | (1<<ADTS2) ); //连续转换模式
+    001F7 B780      IN	R24,0x30
+    001F8 718F      ANDI	R24,0x1F
+    001F9 BF80      OUT	0x30,R24
+(0021)     SFIOR  &= ~(1<<4);       //Bit4为保留位
+    001FA B780      IN	R24,0x30
+    001FB 7E8F      ANDI	R24,0xEF
+    001FC BF80      OUT	0x30,R24
+(0022)     ADCSRA |= (1<<ADSC);     //ADC开始转换
+    001FD 9A36      SBI	0x06,6
+    001FE 9508      RET
+_Display_ADC:
+  m                    --> R12
+  i                    --> R22
+  n                    --> R20
+  c                    --> Y,+0
+  b                    --> R10
+  a                    --> R12
+    001FF 940E 077F CALL	push_xgsetF03C
+    00201 0159      MOVW	R10,R18
+    00202 0168      MOVW	R12,R16
+    00203 9724      SBIW	R28,4
+(0023) }
+(0024) 
+(0025) /************************************************************
+(0026) Function Name:  Display_ADC
+(0027) Inputs: int a,int b
+(0028) Outputs: none
+(0029) Description:    将ADC的值在数码管上显示出来
+(0030) Writer: WH,WZY,MaxMarth
+(0031) *************************************************************/
+(0032) void Display_ADC(int a , int b)
+(0033) {
+(0034)     int m ,n , i ;
+(0035)     unsigned long c=0 ;
+    00204 E080      LDI	R24,0
+    00205 8388      ST	Y,R24
+    00206 8389      STD	Y+1,R24
+    00207 838A      STD	Y+2,R24
+    00208 838B      STD	Y+3,R24
+(0036)         if (ADCSRA & ( 1<< 4 ))                 ///ADC中断标志，判断ADC转换是否结束，结束则第四位为1。
+    00209 9B34      SBIS	0x06,4
+    0020A C038      RJMP	0x0243
+(0037)         {
+(0038)             n = b;
+    0020B 01A5      MOVW	R20,R10
+(0039)             c = ADC ;
+    0020C B024      IN	R2,0x04
+    0020D B035      IN	R3,0x05
+    0020E 2444      CLR	R4
+    0020F 2455      CLR	R5
+    00210 8228      ST	Y,R2
+    00211 8239      STD	Y+1,R3
+    00212 824A      STD	Y+2,R4
+    00213 825B      STD	Y+3,R5
+(0040)         for (i=a; i<=b; i++)
+    00214 01B6      MOVW	R22,R12
+    00215 C02A      RJMP	0x0240
+(0041)             {
+(0042)                 m = c%10 ;
+    00216 E08A      LDI	R24,0xA
+    00217 E090      LDI	R25,0
+    00218 E0A0      LDI	R26,0
+    00219 E0B0      LDI	R27,0
+    0021A 8108      LD	R16,Y
+    0021B 8119      LDD	R17,Y+1
+    0021C 812A      LDD	R18,Y+2
+    0021D 813B      LDD	R19,Y+3
+    0021E 93BA      ST	-Y,R27
+    0021F 93AA      ST	-Y,R26
+    00220 939A      ST	-Y,R25
+    00221 938A      ST	-Y,R24
+    00222 940E 06DE CALL	mod32u
+    00224 2EC0      MOV	R12,R16
+    00225 24DD      CLR	R13
+(0043)                 Display_74HC595(n, m);
+    00226 2D2C      MOV	R18,R12
+    00227 2F04      MOV	R16,R20
+    00228 940E 00F0 CALL	_Display_74HC595
+(0044)                 n--;
+    0022A 5041      SUBI	R20,1
+    0022B 4050      SBCI	R21,0
+(0045)                 c= c/10;
+    0022C E08A      LDI	R24,0xA
+    0022D E090      LDI	R25,0
+    0022E E0A0      LDI	R26,0
+    0022F E0B0      LDI	R27,0
+    00230 8108      LD	R16,Y
+    00231 8119      LDD	R17,Y+1
+    00232 812A      LDD	R18,Y+2
+    00233 813B      LDD	R19,Y+3
+    00234 93BA      ST	-Y,R27
+    00235 93AA      ST	-Y,R26
+    00236 939A      ST	-Y,R25
+    00237 938A      ST	-Y,R24
+    00238 940E 06DC CALL	div32u
+    0023A 8308      ST	Y,R16
+    0023B 8319      STD	Y+1,R17
+    0023C 832A      STD	Y+2,R18
+    0023D 833B      STD	Y+3,R19
+(0046)             }
+    0023E 5F6F      SUBI	R22,0xFF
+    0023F 4F7F      SBCI	R23,0xFF
+    00240 16A6      CP	R10,R22
+    00241 06B7      CPC	R11,R23
+    00242 F69C      BGE	0x0216
+(0047)         }
+    00243 9624      ADIW	R28,4
+(0048) 
+(0049) }
+_Timer0_Ovf_Isr:
+    00246 922A      ST	-Y,R2
+    00247 923A      ST	-Y,R3
+    00248 930A      ST	-Y,R16
+    00249 931A      ST	-Y,R17
+    0024A 938A      ST	-Y,R24
+    0024B 939A      ST	-Y,R25
+    0024C 93AA      ST	-Y,R26
+    0024D 93EA      ST	-Y,R30
+    0024E B62F      IN	R2,0x3F
+    0024F 922A      ST	-Y,R2
+FILE: D:\ICCV8\16年例程 - 副本\Timer\Timer.c
+(0001) #include "Timer.h"
+(0002) /************************************************************
+(0003) Function Name:  Timer0_LED_Flow
+(0004) Inputs: none
+(0005) Outputs: 0
+(0006) Description:    200ms流水灯
+(0007) Writer: XZ,WZY,MaxMarth
+(0008) *************************************************************/
+(0009) int LED_Flag = 0;
+(0010) #pragma interrupt_handler Timer0_Ovf_Isr:iv_TIM0_OVF
+(0011) void Timer0_Ovf_Isr(void)   ///溢出中断
+(0012) {
+(0013)     TCNT0 = 0x3D;           ///reload counter value
+    00250 E38D      LDI	R24,0x3D
+    00251 BF82      OUT	0x32,R24
+(0014)     //TCNT0 = 0b00111110; 即 62
+(0015)     if(turn_flag == 1)
+    00252 9180 00B1 LDS	R24,turn_flag
+    00254 9190 00B2 LDS	R25,turn_flag+1
+    00256 3081      CPI	R24,1
+    00257 E0E0      LDI	R30,0
+    00258 079E      CPC	R25,R30
+    00259 F449      BNE	0x0263
+(0016)         LED_Flag++;
+    0025A 9180 00DD LDS	R24,LED_Flag
+    0025C 9190 00DE LDS	R25,LED_Flag+1
+    0025E 9601      ADIW	R24,1
+    0025F 9390 00DE STS	LED_Flag+1,R25
+    00261 9380 00DD STS	LED_Flag,R24
+(0017)     if(turn_flag == -1)
+    00263 9180 00B1 LDS	R24,turn_flag
+    00265 9190 00B2 LDS	R25,turn_flag+1
+    00267 3F8F      CPI	R24,0xFF
+    00268 EFEF      LDI	R30,0xFF
+    00269 079E      CPC	R25,R30
+    0026A F449      BNE	0x0274
+(0018)         LED_Flag--;
+    0026B 9180 00DD LDS	R24,LED_Flag
+    0026D 9190 00DE LDS	R25,LED_Flag+1
+    0026F 9701      SBIW	R24,1
+    00270 9390 00DE STS	LED_Flag+1,R25
+    00272 9380 00DD STS	LED_Flag,R24
+(0019) 
+(0020)     if(LED_Flag < 0)
+    00274 9180 00DD LDS	R24,LED_Flag
+    00276 9190 00DE LDS	R25,LED_Flag+1
+    00278 3080      CPI	R24,0
+    00279 E0E0      LDI	R30,0
+    0027A 079E      CPC	R25,R30
+    0027B F434      BGE	0x0282
+(0021)         LED_Flag = 7;
+    0027C E087      LDI	R24,7
+    0027D E090      LDI	R25,0
+    0027E 9390 00DE STS	LED_Flag+1,R25
+    00280 9380 00DD STS	LED_Flag,R24
+(0022)     if(LED_Flag > 7)
+    00282 E087      LDI	R24,7
+    00283 E090      LDI	R25,0
+    00284 9020 00DD LDS	R2,LED_Flag
+    00286 9030 00DE LDS	R3,LED_Flag+1
+    00288 1582      CP	R24,R2
+    00289 0593      CPC	R25,R3
+    0028A F434      BGE	0x0291
+(0023)         LED_Flag = 0;
+    0028B 2422      CLR	R2
+    0028C 2433      CLR	R3
+    0028D 9230 00DE STS	LED_Flag+1,R3
+    0028F 9220 00DD STS	LED_Flag,R2
+(0024)     PORTC = ~(1 << LED_Flag);
+    00291 9020 00DD LDS	R2,LED_Flag
+    00293 9030 00DE LDS	R3,LED_Flag+1
+    00295 E001      LDI	R16,1
+    00296 2D12      MOV	R17,R2
+    00297 940E 079A CALL	lsl8
+    00299 2E20      MOV	R2,R16
+    0029A 9420      COM	R2
+    0029B BA25      OUT	0x15,R2
+    0029C 9029      LD	R2,Y+
+    0029D BE2F      OUT	0x3F,R2
+    0029E 91E9      LD	R30,Y+
+    0029F 91A9      LD	R26,Y+
+    002A0 9199      LD	R25,Y+
+    002A1 9189      LD	R24,Y+
+    002A2 9119      LD	R17,Y+
+    002A3 9109      LD	R16,Y+
+    002A4 9039      LD	R3,Y+
+    002A5 9029      LD	R2,Y+
+    002A6 9518      RETI
+(0025) }
+(0026) void Timer0_Init(void)
+(0027) {
+(0028)     TCCR0 = 0x00;           ///stop
+_Timer0_Init:
+    002A7 2422      CLR	R2
+    002A8 BE23      OUT	0x33,R2
+(0029)     TCNT0 = 0x00;           ///set count
+    002A9 BE22      OUT	0x32,R2
+(0030)     OCR0  = 0xC3;           ///set compare
+    002AA EC83      LDI	R24,0xC3
+    002AB BF8C      OUT	0x3C,R24
+(0031)     TCCR0 = 0x05;           ///start timer
+    002AC E085      LDI	R24,5
+    002AD BF83      OUT	0x33,R24
+(0032)     //CLI();                  ///领导说不
+(0033)     TIMSK = 0x01;           ///定时器中断小boss
+    002AE E081      LDI	R24,1
+    002AF BF89      OUT	0x39,R24
+    002B0 9508      RET
+(0034)     //SEI();                  ///领导同意
+(0035) }
+(0036) int Timer0_LED_Flow(void)
+(0037) {
+_Timer0_LED_Flow:
+    002B1 C00B      RJMP	0x02BD
+(0038)     //LED_IO_Init();
+(0039)     //Timer0_Init();
+(0040)     while(1)
+(0041)         {
+(0042)             PORTC = ~(1 << LED_Flag);      ///控制相应的灯
+    002B2 9020 00DD LDS	R2,LED_Flag
+    002B4 9030 00DE LDS	R3,LED_Flag+1
+    002B6 E001      LDI	R16,1
+    002B7 2D12      MOV	R17,R2
+    002B8 940E 079A CALL	lsl8
+    002BA 2E20      MOV	R2,R16
+    002BB 9420      COM	R2
+    002BC BA25      OUT	0x15,R2
+(0043)         }
+    002BD CFF4      RJMP	0x02B2
+    002BE 9508      RET
+(0044)     return 0;
+(0045) }
+(0046) 
+(0047) //--------------------T I M E R 0---------------------------/
+(0048) void InitTimer0(void)
+(0049) {
+(0050)     SetBit(TIMER0_DDR,TIMER0_OCR0);     //设置PB3为输出
+_InitTimer0:
+    002BF 9ABB      SBI	0x17,3
+(0051)     //配置TCCR0寄存器
+(0052)     //波形产生              CTC模式
+(0053)     SetBit(TCCR0,WGM01);
+    002C0 B783      IN	R24,0x33
+    002C1 6088      ORI	R24,0x8
+    002C2 BF83      OUT	0x33,R24
+(0054)     ClrBit(TCCR0,WGM00);
+    002C3 B783      IN	R24,0x33
+    002C4 7B8F      ANDI	R24,0xBF
+    002C5 BF83      OUT	0x33,R24
+(0055)     //比较匹配输出模式      比较匹配时OC0取反
+(0056)     SetBit(TCCR0,COM00);
+    002C6 B783      IN	R24,0x33
+    002C7 6180      ORI	R24,0x10
+    002C8 BF83      OUT	0x33,R24
+(0057)     ClrBit(TCCR0,COM01);
+    002C9 B783      IN	R24,0x33
+    002CA 7D8F      ANDI	R24,0xDF
+    002CB BF83      OUT	0x33,R24
+(0058)     //时钟选择              8分频
+(0059)     ClrBit(TCCR0,CS02);
+    002CC B783      IN	R24,0x33
+    002CD 7F8B      ANDI	R24,0xFB
+    002CE BF83      OUT	0x33,R24
+(0060)     SetBit(TCCR0,CS01);
+    002CF B783      IN	R24,0x33
+    002D0 6082      ORI	R24,2
+    002D1 BF83      OUT	0x33,R24
+(0061)     ClrBit(TCCR0,CS00);
+    002D2 B783      IN	R24,0x33
+    002D3 7F8E      ANDI	R24,0xFE
+    002D4 BF83      OUT	0x33,R24
+    002D5 9508      RET
+(0062) }
+(0063) //Timer0 CTC模式
+(0064) //打开或关闭定时器
+(0065) 
+(0066) void OpenT0CTC(void)
+(0067) {
+(0068)     SetBit(TCCR0,COM00);
+_OpenT0CTC:
+    002D6 B783      IN	R24,0x33
+    002D7 6180      ORI	R24,0x10
+    002D8 BF83      OUT	0x33,R24
+(0069)     ClrBit(TCCR0,COM01);
+    002D9 B783      IN	R24,0x33
+    002DA 7D8F      ANDI	R24,0xDF
+    002DB BF83      OUT	0x33,R24
+    002DC 9508      RET
+(0070) }
+(0071) void CloseT0CTC(void)    //不与OC0连接
+(0072) {
+(0073)     ClrBit(TCCR0,COM00);
+_CloseT0CTC:
+    002DD B783      IN	R24,0x33
+    002DE 7E8F      ANDI	R24,0xEF
+    002DF BF83      OUT	0x33,R24
+(0074)     ClrBit(TCCR0,COM01);
+    002E0 B783      IN	R24,0x33
+    002E1 7D8F      ANDI	R24,0xDF
+    002E2 BF83      OUT	0x33,R24
+    002E3 9508      RET
+_MusicNote:
+  n                    --> R10
+    002E4 92AA      ST	-Y,R10
+    002E5 92BA      ST	-Y,R11
+    002E6 0158      MOVW	R10,R16
+(0075) }
+(0076) 
+(0077) void MusicNote(int n)
+(0078) {
+(0079)     if(receive_flag == 1)
+    002E7 9180 011B LDS	R24,receive_flag
+    002E9 3081      CPI	R24,1
+    002EA F411      BNE	0x02ED
+(0080)         start();
+    002EB 940E 05B4 CALL	_start
+(0081)     if(0==n)
+    002ED 20AA      TST	R10
+    002EE F441      BNE	0x02F7
+    002EF 20BB      TST	R11
+    002F0 F431      BNE	0x02F7
+(0082)     {
+(0083)         CloseT0CTC();
+    002F1 DFEB      RCALL	_CloseT0CTC
+(0084)         Delay_ms(500);
+    002F2 EF04      LDI	R16,0xF4
+    002F3 E011      LDI	R17,1
+    002F4 940E 068C CALL	_Delay_ms
+(0085)     }
+    002F6 C01C      RJMP	0x0313
+(0086)     else
+(0087)     {
+(0088)         OCR0 = NoteData[n];
+    002F7 EC88      LDI	R24,0xC8
+    002F8 E090      LDI	R25,0
+    002F9 01F5      MOVW	R30,R10
+    002FA 0FE8      ADD	R30,R24
+    002FB 1FF9      ADC	R31,R25
+    002FC 8020      LD	R2,Z
+    002FD BE2C      OUT	0x3C,R2
+(0089)         OpenT0CTC();
+    002FE DFD7      RCALL	_OpenT0CTC
+(0090)         Delay_ms(475);
+    002FF ED0B      LDI	R16,0xDB
+    00300 E011      LDI	R17,1
+    00301 940E 068C CALL	_Delay_ms
+(0091)         CloseT0CTC();
+    00303 DFD9      RCALL	_CloseT0CTC
+(0092)         Delay_ms(50);
+    00304 E302      LDI	R16,0x32
+    00305 E010      LDI	R17,0
+    00306 940E 068C CALL	_Delay_ms
+(0093)         if(N<=10)
+    00308 C000      RJMP	0x0309
+(0094)         {
+(0095)             PORTC |= (1<<7);
+(0096)             Delay_ms(150);
+(0097)             PORTC &= ~(1<<7);
+(0098)         }
+(0099)         else
+(0100)         {
+(0101)              PORTC |= (1<<7)|(1<<6);
+    00309 B385      IN	R24,0x15
+    0030A 6C80      ORI	R24,0xC0
+    0030B BB85      OUT	0x15,R24
+(0102)              Delay_ms(150);
+    0030C E906      LDI	R16,0x96
+    0030D E010      LDI	R17,0
+    0030E 940E 068C CALL	_Delay_ms
+(0103)              PORTC &=~((1<<7)|(1<<6));
+    00310 B385      IN	R24,0x15
+    00311 738F      ANDI	R24,0x3F
+    00312 BB85      OUT	0x15,R24
+(0104)         }
+(0105) 
+(0106)     }
+    00313 90B9      LD	R11,Y+
+    00314 90A9      LD	R10,Y+
+    00315 9508      RET
+_MusicNote2:
+  n                    --> R10
+    00316 92AA      ST	-Y,R10
+    00317 92BA      ST	-Y,R11
+    00318 0158      MOVW	R10,R16
+(0107) 
+(0108) }
+(0109) 
+(0110) void MusicNote2(int n)
+(0111) {
+(0112)     if(receive_flag == 1)
+    00319 9180 011B LDS	R24,receive_flag
+    0031B 3081      CPI	R24,1
+    0031C F411      BNE	0x031F
+(0113)         start();
+    0031D 940E 05B4 CALL	_start
+(0114)     if(0==n)
+    0031F 20AA      TST	R10
+    00320 F441      BNE	0x0329
+    00321 20BB      TST	R11
+    00322 F431      BNE	0x0329
+(0115)     {
+(0116)         CloseT0CTC();
+    00323 DFB9      RCALL	_CloseT0CTC
+(0117)         Delay_ms(1000);
+    00324 EE08      LDI	R16,0xE8
+    00325 E013      LDI	R17,3
+    00326 940E 068C CALL	_Delay_ms
+(0118)     }
+    00328 C02B      RJMP	0x0354
+(0119)     else
+(0120)     {
+(0121)         OCR0 = NoteData[n];
+    00329 EC88      LDI	R24,0xC8
+    0032A E090      LDI	R25,0
+    0032B 01F5      MOVW	R30,R10
+    0032C 0FE8      ADD	R30,R24
+    0032D 1FF9      ADC	R31,R25
+    0032E 8020      LD	R2,Z
+    0032F BE2C      OUT	0x3C,R2
+(0122)         OpenT0CTC();
+    00330 DFA5      RCALL	_OpenT0CTC
+(0123)         Delay_ms(950);
+    00331 EB06      LDI	R16,0xB6
+    00332 E013      LDI	R17,3
+    00333 940E 068C CALL	_Delay_ms
+(0124)         CloseT0CTC();
+    00335 DFA7      RCALL	_CloseT0CTC
+(0125)         Delay_ms(50);
+    00336 E302      LDI	R16,0x32
+    00337 E010      LDI	R17,0
+    00338 940E 068C CALL	_Delay_ms
+(0126)         if(n<=10)
+    0033A E08A      LDI	R24,0xA
+    0033B E090      LDI	R25,0
+    0033C 158A      CP	R24,R10
+    0033D 059B      CPC	R25,R11
+    0033E F05C      BLT	0x034A
+(0127)         {
+(0128)             PORTC |= (1<<7)|(1<<6)|(1<<5);
+    0033F B385      IN	R24,0x15
+    00340 6E80      ORI	R24,0xE0
+    00341 BB85      OUT	0x15,R24
+(0129)             Delay_ms(150);
+    00342 E906      LDI	R16,0x96
+    00343 E010      LDI	R17,0
+    00344 940E 068C CALL	_Delay_ms
+(0130)             PORTC &= ~((1<<7)|(1<<6)|(1<<5));
+    00346 B385      IN	R24,0x15
+    00347 718F      ANDI	R24,0x1F
+    00348 BB85      OUT	0x15,R24
+(0131)         }
+    00349 C00A      RJMP	0x0354
+(0132)         else
+(0133)         {
+(0134)             PORTC |= (1<<7)|(1<<6)|(1<<5)|(1<<4);
+    0034A B385      IN	R24,0x15
+    0034B 6F80      ORI	R24,0xF0
+    0034C BB85      OUT	0x15,R24
+(0135)             Delay_ms(150);
+    0034D E906      LDI	R16,0x96
+    0034E E010      LDI	R17,0
+    0034F 940E 068C CALL	_Delay_ms
+(0136)             PORTC &= ~((1<<7)|(1<<6)|(1<<5)|(1<<4));
+    00351 B385      IN	R24,0x15
+    00352 708F      ANDI	R24,0xF
+    00353 BB85      OUT	0x15,R24
+(0137)         }
+(0138) 
+(0139)     }
+    00354 90B9      LD	R11,Y+
+    00355 90A9      LD	R10,Y+
+    00356 9508      RET
+_MusicNoteHalf:
+  n                    --> R10
+    00357 92AA      ST	-Y,R10
+    00358 92BA      ST	-Y,R11
+    00359 0158      MOVW	R10,R16
+(0140) 
+(0141) }
+(0142) 
+(0143) 
+(0144) void MusicNoteHalf(int n)
+(0145) {
+(0146)     if(receive_flag == 1)
+    0035A 9180 011B LDS	R24,receive_flag
+    0035C 3081      CPI	R24,1
+    0035D F411      BNE	0x0360
+(0147)         start();
+    0035E 940E 05B4 CALL	_start
+(0148)     if(0==n)
+    00360 20AA      TST	R10
+    00361 F441      BNE	0x036A
+    00362 20BB      TST	R11
+    00363 F431      BNE	0x036A
+(0149)     {
+(0150)         CloseT0CTC();
+    00364 DF78      RCALL	_CloseT0CTC
+(0151)         Delay_ms(250);
+    00365 EF0A      LDI	R16,0xFA
+    00366 E010      LDI	R17,0
+    00367 940E 068C CALL	_Delay_ms
+(0152)     }
+    00369 C02B      RJMP	0x0395
+(0153)     else
+(0154)     {
+(0155)         OCR0 = NoteData[n];
+    0036A EC88      LDI	R24,0xC8
+    0036B E090      LDI	R25,0
+    0036C 01F5      MOVW	R30,R10
+    0036D 0FE8      ADD	R30,R24
+    0036E 1FF9      ADC	R31,R25
+    0036F 8020      LD	R2,Z
+    00370 BE2C      OUT	0x3C,R2
+(0156)         OpenT0CTC();
+    00371 DF64      RCALL	_OpenT0CTC
+(0157)         Delay_ms(225);
+    00372 EE01      LDI	R16,0xE1
+    00373 E010      LDI	R17,0
+    00374 940E 068C CALL	_Delay_ms
+(0158)         CloseT0CTC();
+    00376 DF66      RCALL	_CloseT0CTC
+(0159)         Delay_ms(25);
+    00377 E109      LDI	R16,0x19
+    00378 E010      LDI	R17,0
+    00379 940E 068C CALL	_Delay_ms
+(0160)          if(n<=10)
+    0037B E08A      LDI	R24,0xA
+    0037C E090      LDI	R25,0
+    0037D 158A      CP	R24,R10
+    0037E 059B      CPC	R25,R11
+    0037F F05C      BLT	0x038B
+(0161)         {
+(0162)            PORTC |= (1<<7)|(1<<6)|(1<<5)|(1<<4)|(1<<3);
+    00380 B385      IN	R24,0x15
+    00381 6F88      ORI	R24,0xF8
+    00382 BB85      OUT	0x15,R24
+(0163)             Delay_ms(150);
+    00383 E906      LDI	R16,0x96
+    00384 E010      LDI	R17,0
+    00385 940E 068C CALL	_Delay_ms
+(0164)             PORTC &=~((1<<7)|(1<<6)|(1<<5)|(1<<4)|(1<<3));
+    00387 B385      IN	R24,0x15
+    00388 7087      ANDI	R24,7
+    00389 BB85      OUT	0x15,R24
+(0165)         }
+    0038A C00A      RJMP	0x0395
+(0166)         else
+(0167)         {
+(0168)             PORTC |= (1<<7)|(1<<6)|(1<<5)|(1<<4)|(1<<3)|(1<<2);
+    0038B B385      IN	R24,0x15
+    0038C 6F8C      ORI	R24,0xFC
+    0038D BB85      OUT	0x15,R24
+(0169)             Delay_ms(150);
+    0038E E906      LDI	R16,0x96
+    0038F E010      LDI	R17,0
+    00390 940E 068C CALL	_Delay_ms
+(0170)             PORTC &= ~((1<<7)|(1<<6)|(1<<5)|(1<<4)|(1<<3)|(1<<2));
+    00392 B385      IN	R24,0x15
+    00393 7083      ANDI	R24,3
+    00394 BB85      OUT	0x15,R24
+(0171)         }
+(0172) 
+(0173)     }
+    00395 90B9      LD	R11,Y+
+    00396 90A9      LD	R10,Y+
+    00397 9508      RET
+_MusicNoteHalfHalf:
+  n                    --> R10
+    00398 92AA      ST	-Y,R10
+    00399 92BA      ST	-Y,R11
+    0039A 0158      MOVW	R10,R16
+(0174) 
+(0175) }
+(0176) void MusicNoteHalfHalf(int n)
+(0177) {
+(0178)     if(receive_flag == 1)
+    0039B 9180 011B LDS	R24,receive_flag
+    0039D 3081      CPI	R24,1
+    0039E F411      BNE	0x03A1
+(0179)         start();
+    0039F 940E 05B4 CALL	_start
+(0180)     if(0==n)
+    003A1 20AA      TST	R10
+    003A2 F441      BNE	0x03AB
+    003A3 20BB      TST	R11
+    003A4 F431      BNE	0x03AB
+(0181)     {
+(0182)         CloseT0CTC();
+    003A5 DF37      RCALL	_CloseT0CTC
+(0183)         Delay_ms(125);
+    003A6 E70D      LDI	R16,0x7D
+    003A7 E010      LDI	R17,0
+    003A8 940E 068C CALL	_Delay_ms
+(0184)     }
+    003AA C02B      RJMP	0x03D6
+(0185)     else
+(0186)     {
+(0187)         OCR0 = NoteData[n];
+    003AB EC88      LDI	R24,0xC8
+    003AC E090      LDI	R25,0
+    003AD 01F5      MOVW	R30,R10
+    003AE 0FE8      ADD	R30,R24
+    003AF 1FF9      ADC	R31,R25
+    003B0 8020      LD	R2,Z
+    003B1 BE2C      OUT	0x3C,R2
+(0188)         OpenT0CTC();
+    003B2 DF23      RCALL	_OpenT0CTC
+(0189)         Delay_ms(100);
+    003B3 E604      LDI	R16,0x64
+    003B4 E010      LDI	R17,0
+    003B5 940E 068C CALL	_Delay_ms
+(0190)         CloseT0CTC();
+    003B7 DF25      RCALL	_CloseT0CTC
+(0191)         Delay_ms(25);
+    003B8 E109      LDI	R16,0x19
+    003B9 E010      LDI	R17,0
+    003BA 940E 068C CALL	_Delay_ms
+(0192)         if(n<=10)
+    003BC E08A      LDI	R24,0xA
+    003BD E090      LDI	R25,0
+    003BE 158A      CP	R24,R10
+    003BF 059B      CPC	R25,R11
+    003C0 F05C      BLT	0x03CC
+(0193)         {
+(0194)             PORTC |= (1<<7)|(1<<6)|(1<<5)|(1<<4)|(1<<3)|(1<<2)|(1<<1);
+    003C1 B385      IN	R24,0x15
+    003C2 6F8E      ORI	R24,0xFE
+    003C3 BB85      OUT	0x15,R24
+(0195)             Delay_ms(150);
+    003C4 E906      LDI	R16,0x96
+    003C5 E010      LDI	R17,0
+    003C6 940E 068C CALL	_Delay_ms
+(0196)             PORTC &=~((1<<7)|(1<<6)|(1<<5)|(1<<4)|(1<<3)|(1<<2)|(1<<1));
+    003C8 B385      IN	R24,0x15
+    003C9 7081      ANDI	R24,1
+    003CA BB85      OUT	0x15,R24
+(0197)         }
+    003CB C00A      RJMP	0x03D6
+(0198)         else
+(0199)         {
+(0200)             PORTC |= (1<<7)|(1<<6)|(1<<5)|(1<<4)|(1<<3)|(1<<2)|(1<<1)|(1<<0);
+    003CC B385      IN	R24,0x15
+    003CD 6F8F      ORI	R24,0xFF
+    003CE BB85      OUT	0x15,R24
+(0201)             Delay_ms(150);
+    003CF E906      LDI	R16,0x96
+    003D0 E010      LDI	R17,0
+    003D1 940E 068C CALL	_Delay_ms
+(0202)             PORTC &=~((1<<7)|(1<<6)|(1<<5)|(1<<4)|(1<<3)|(1<<2)|(1<<1)|(1<<0));
+    003D3 B385      IN	R24,0x15
+    003D4 7080      ANDI	R24,0
+    003D5 BB85      OUT	0x15,R24
+(0203)         }
+(0204) 
+(0205)     }
+    003D6 90B9      LD	R11,Y+
+    003D7 90A9      LD	R10,Y+
+    003D8 9508      RET
+(0206) 
+(0207) }
+(0208) 
+(0209) //歌曲1 卖报歌
+(0210) void MaiBaoGe(void)
+(0211) {
+(0212)     SolH SolH  Sol SolH SolH Sol
+_MaiBaoGe:
+    003D9 E00B      LDI	R16,0xB
+    003DA E010      LDI	R17,0
+    003DB DF7B      RCALL	_MusicNoteHalf
+    003DC E00B      LDI	R16,0xB
+    003DD E010      LDI	R17,0
+    003DE DF78      RCALL	_MusicNoteHalf
+    003DF E00B      LDI	R16,0xB
+    003E0 E010      LDI	R17,0
+    003E1 DF02      RCALL	_MusicNote
+    003E2 E00B      LDI	R16,0xB
+    003E3 E010      LDI	R17,0
+    003E4 DF72      RCALL	_MusicNoteHalf
+    003E5 E00B      LDI	R16,0xB
+    003E6 E010      LDI	R17,0
+    003E7 DF6F      RCALL	_MusicNoteHalf
+    003E8 E00B      LDI	R16,0xB
+    003E9 E010      LDI	R17,0
+    003EA DEF9      RCALL	_MusicNote
+(0213)     MiH  SolH  LaH SolHH MiHH ReH MiH Sol
+    003EB E009      LDI	R16,0x9
+    003EC E010      LDI	R17,0
+    003ED DF69      RCALL	_MusicNoteHalf
+    003EE E00B      LDI	R16,0xB
+    003EF E010      LDI	R17,0
+    003F0 DF66      RCALL	_MusicNoteHalf
+    003F1 E00C      LDI	R16,0xC
+    003F2 E010      LDI	R17,0
+    003F3 DF63      RCALL	_MusicNoteHalf
+    003F4 E00B      LDI	R16,0xB
+    003F5 E010      LDI	R17,0
+    003F6 DFA1      RCALL	_MusicNoteHalfHalf
+    003F7 E009      LDI	R16,0x9
+    003F8 E010      LDI	R17,0
+    003F9 DF9E      RCALL	_MusicNoteHalfHalf
+    003FA E008      LDI	R16,0x8
+    003FB E010      LDI	R17,0
+    003FC DF5A      RCALL	_MusicNoteHalf
+    003FD E009      LDI	R16,0x9
+    003FE E010      LDI	R17,0
+    003FF DF57      RCALL	_MusicNoteHalf
+    00400 E00B      LDI	R16,0xB
+    00401 E010      LDI	R17,0
+    00402 DEE1      RCALL	_MusicNote
+(0214)     SolH MiH SolH MiHH ReHH DoH MiH Re
+    00403 E00B      LDI	R16,0xB
+    00404 E010      LDI	R17,0
+    00405 DF51      RCALL	_MusicNoteHalf
+    00406 E009      LDI	R16,0x9
+    00407 E010      LDI	R17,0
+    00408 DF4E      RCALL	_MusicNoteHalf
+    00409 E00B      LDI	R16,0xB
+    0040A E010      LDI	R17,0
+    0040B DF4B      RCALL	_MusicNoteHalf
+    0040C E009      LDI	R16,0x9
+    0040D E010      LDI	R17,0
+    0040E DF89      RCALL	_MusicNoteHalfHalf
+    0040F E008      LDI	R16,0x8
+    00410 E010      LDI	R17,0
+    00411 DF86      RCALL	_MusicNoteHalfHalf
+    00412 E007      LDI	R16,7
+    00413 E010      LDI	R17,0
+    00414 DF42      RCALL	_MusicNoteHalf
+    00415 E009      LDI	R16,0x9
+    00416 E010      LDI	R17,0
+    00417 DF3F      RCALL	_MusicNoteHalf
+    00418 E008      LDI	R16,0x8
+    00419 E010      LDI	R17,0
+    0041A DEC9      RCALL	_MusicNote
+(0215)     MiH MiH Re _LaH DoH Re
+    0041B E009      LDI	R16,0x9
+    0041C E010      LDI	R17,0
+    0041D DF39      RCALL	_MusicNoteHalf
+    0041E E009      LDI	R16,0x9
+    0041F E010      LDI	R17,0
+    00420 DF36      RCALL	_MusicNoteHalf
+    00421 E008      LDI	R16,0x8
+    00422 E010      LDI	R17,0
+    00423 DEC0      RCALL	_MusicNote
+    00424 E005      LDI	R16,5
+    00425 E010      LDI	R17,0
+    00426 DF30      RCALL	_MusicNoteHalf
+    00427 E007      LDI	R16,7
+    00428 E010      LDI	R17,0
+    00429 DF2D      RCALL	_MusicNoteHalf
+    0042A E008      LDI	R16,0x8
+    0042B E010      LDI	R17,0
+    0042C DEB7      RCALL	_MusicNote
+(0216)     La LaH SolH MiH LaH Sol SolH MiH ReH MiH Sol _O
+    0042D E00C      LDI	R16,0xC
+    0042E E010      LDI	R17,0
+    0042F DEB4      RCALL	_MusicNote
+    00430 E00C      LDI	R16,0xC
+    00431 E010      LDI	R17,0
+    00432 DF24      RCALL	_MusicNoteHalf
+    00433 E00B      LDI	R16,0xB
+    00434 E010      LDI	R17,0
+    00435 DF21      RCALL	_MusicNoteHalf
+    00436 E009      LDI	R16,0x9
+    00437 E010      LDI	R17,0
+    00438 DF1E      RCALL	_MusicNoteHalf
+    00439 E00C      LDI	R16,0xC
+    0043A E010      LDI	R17,0
+    0043B DF1B      RCALL	_MusicNoteHalf
+    0043C E00B      LDI	R16,0xB
+    0043D E010      LDI	R17,0
+    0043E DEA5      RCALL	_MusicNote
+    0043F E00B      LDI	R16,0xB
+    00440 E010      LDI	R17,0
+    00441 DF15      RCALL	_MusicNoteHalf
+    00442 E009      LDI	R16,0x9
+    00443 E010      LDI	R17,0
+    00444 DF12      RCALL	_MusicNoteHalf
+    00445 E008      LDI	R16,0x8
+    00446 E010      LDI	R17,0
+    00447 DF0F      RCALL	_MusicNoteHalf
+    00448 E009      LDI	R16,0x9
+    00449 E010      LDI	R17,0
+    0044A DF0C      RCALL	_MusicNoteHalf
+    0044B E00B      LDI	R16,0xB
+    0044C E010      LDI	R17,0
+    0044D DE96      RCALL	_MusicNote
+    0044E 2700      CLR	R16
+    0044F 2711      CLR	R17
+    00450 DE93      RCALL	_MusicNote
+(0217)     SolH MiH ReH MiH SolH MiH ReH MiH
+    00451 E00B      LDI	R16,0xB
+    00452 E010      LDI	R17,0
+    00453 DF03      RCALL	_MusicNoteHalf
+    00454 E009      LDI	R16,0x9
+    00455 E010      LDI	R17,0
+    00456 DF00      RCALL	_MusicNoteHalf
+    00457 E008      LDI	R16,0x8
+    00458 E010      LDI	R17,0
+    00459 DEFD      RCALL	_MusicNoteHalf
+    0045A E009      LDI	R16,0x9
+    0045B E010      LDI	R17,0
+    0045C DEFA      RCALL	_MusicNoteHalf
+    0045D E00B      LDI	R16,0xB
+    0045E E010      LDI	R17,0
+    0045F DEF7      RCALL	_MusicNoteHalf
+    00460 E009      LDI	R16,0x9
+    00461 E010      LDI	R17,0
+    00462 DEF4      RCALL	_MusicNoteHalf
+    00463 E008      LDI	R16,0x8
+    00464 E010      LDI	R17,0
+    00465 DEF1      RCALL	_MusicNoteHalf
+    00466 E009      LDI	R16,0x9
+    00467 E010      LDI	R17,0
+    00468 DEEE      RCALL	_MusicNoteHalf
+(0218)     _LaH DoH ReH MiH Do _O _O
+    00469 E005      LDI	R16,5
+    0046A E010      LDI	R17,0
+    0046B DEEB      RCALL	_MusicNoteHalf
+    0046C E007      LDI	R16,7
+    0046D E010      LDI	R17,0
+    0046E DEE8      RCALL	_MusicNoteHalf
+    0046F E008      LDI	R16,0x8
+    00470 E010      LDI	R17,0
+    00471 DEE5      RCALL	_MusicNoteHalf
+    00472 E009      LDI	R16,0x9
+    00473 E010      LDI	R17,0
+    00474 DEE2      RCALL	_MusicNoteHalf
+    00475 E007      LDI	R16,7
+    00476 E010      LDI	R17,0
+    00477 DE6C      RCALL	_MusicNote
+    00478 2700      CLR	R16
+    00479 2711      CLR	R17
+    0047A DE69      RCALL	_MusicNote
+    0047B 2700      CLR	R16
+    0047C 2711      CLR	R17
+    0047D CE66      RJMP	_MusicNote
+(0219) 
+(0220) }
+(0221) 
+(0222) 
+(0223) 
+(0224) //歌曲2 欢乐颂
+(0225)  void HuanLeSong(void)
+(0226)  {
+(0227)      Mi Mi Fa Sol Sol Fa Mi Re
+_HuanLeSong:
+    0047E E009      LDI	R16,0x9
+    0047F E010      LDI	R17,0
+    00480 DE63      RCALL	_MusicNote
+    00481 E009      LDI	R16,0x9
+    00482 E010      LDI	R17,0
+    00483 DE60      RCALL	_MusicNote
+    00484 E00A      LDI	R16,0xA
+    00485 E010      LDI	R17,0
+    00486 DE5D      RCALL	_MusicNote
+    00487 E00B      LDI	R16,0xB
+    00488 E010      LDI	R17,0
+    00489 DE5A      RCALL	_MusicNote
+    0048A E00B      LDI	R16,0xB
+    0048B E010      LDI	R17,0
+    0048C DE57      RCALL	_MusicNote
+    0048D E00A      LDI	R16,0xA
+    0048E E010      LDI	R17,0
+    0048F DE54      RCALL	_MusicNote
+    00490 E009      LDI	R16,0x9
+    00491 E010      LDI	R17,0
+    00492 DE51      RCALL	_MusicNote
+    00493 E008      LDI	R16,0x8
+    00494 E010      LDI	R17,0
+    00495 DE4E      RCALL	_MusicNote
+(0228)      Do Do Re Mi  Mi MiH ReH Re Re
+    00496 E007      LDI	R16,7
+    00497 E010      LDI	R17,0
+    00498 DE4B      RCALL	_MusicNote
+    00499 E007      LDI	R16,7
+    0049A E010      LDI	R17,0
+    0049B DE48      RCALL	_MusicNote
+    0049C E008      LDI	R16,0x8
+    0049D E010      LDI	R17,0
+    0049E DE45      RCALL	_MusicNote
+    0049F E009      LDI	R16,0x9
+    004A0 E010      LDI	R17,0
+    004A1 DE42      RCALL	_MusicNote
+    004A2 E009      LDI	R16,0x9
+    004A3 E010      LDI	R17,0
+    004A4 DE3F      RCALL	_MusicNote
+    004A5 E009      LDI	R16,0x9
+    004A6 E010      LDI	R17,0
+    004A7 DEAF      RCALL	_MusicNoteHalf
+    004A8 E008      LDI	R16,0x8
+    004A9 E010      LDI	R17,0
+    004AA DEAC      RCALL	_MusicNoteHalf
+    004AB E008      LDI	R16,0x8
+    004AC E010      LDI	R17,0
+    004AD DE36      RCALL	_MusicNote
+    004AE E008      LDI	R16,0x8
+    004AF E010      LDI	R17,0
+    004B0 DE33      RCALL	_MusicNote
+(0229)      Mi Mi Fa Sol Sol Fa Mi Re
+    004B1 E009      LDI	R16,0x9
+    004B2 E010      LDI	R17,0
+    004B3 DE30      RCALL	_MusicNote
+    004B4 E009      LDI	R16,0x9
+    004B5 E010      LDI	R17,0
+    004B6 DE2D      RCALL	_MusicNote
+    004B7 E00A      LDI	R16,0xA
+    004B8 E010      LDI	R17,0
+    004B9 DE2A      RCALL	_MusicNote
+    004BA E00B      LDI	R16,0xB
+    004BB E010      LDI	R17,0
+    004BC DE27      RCALL	_MusicNote
+    004BD E00B      LDI	R16,0xB
+    004BE E010      LDI	R17,0
+    004BF DE24      RCALL	_MusicNote
+    004C0 E00A      LDI	R16,0xA
+    004C1 E010      LDI	R17,0
+    004C2 DE21      RCALL	_MusicNote
+    004C3 E009      LDI	R16,0x9
+    004C4 E010      LDI	R17,0
+    004C5 DE1E      RCALL	_MusicNote
+    004C6 E008      LDI	R16,0x8
+    004C7 E010      LDI	R17,0
+    004C8 DE1B      RCALL	_MusicNote
+(0230)      Do Do Re Mi  Re ReH DoH Do Do
+    004C9 E007      LDI	R16,7
+    004CA E010      LDI	R17,0
+    004CB DE18      RCALL	_MusicNote
+    004CC E007      LDI	R16,7
+    004CD E010      LDI	R17,0
+    004CE DE15      RCALL	_MusicNote
+    004CF E008      LDI	R16,0x8
+    004D0 E010      LDI	R17,0
+    004D1 DE12      RCALL	_MusicNote
+    004D2 E009      LDI	R16,0x9
+    004D3 E010      LDI	R17,0
+    004D4 DE0F      RCALL	_MusicNote
+    004D5 E008      LDI	R16,0x8
+    004D6 E010      LDI	R17,0
+    004D7 DE0C      RCALL	_MusicNote
+    004D8 E008      LDI	R16,0x8
+    004D9 E010      LDI	R17,0
+    004DA DE7C      RCALL	_MusicNoteHalf
+    004DB E007      LDI	R16,7
+    004DC E010      LDI	R17,0
+    004DD DE79      RCALL	_MusicNoteHalf
+    004DE E007      LDI	R16,7
+    004DF E010      LDI	R17,0
+    004E0 DE03      RCALL	_MusicNote
+    004E1 E007      LDI	R16,7
+    004E2 E010      LDI	R17,0
+    004E3 DE00      RCALL	_MusicNote
+(0231)      Re Re Mi Do Re MiH FaH Mi Do
+    004E4 E008      LDI	R16,0x8
+    004E5 E010      LDI	R17,0
+    004E6 DDFD      RCALL	_MusicNote
+    004E7 E008      LDI	R16,0x8
+    004E8 E010      LDI	R17,0
+    004E9 DDFA      RCALL	_MusicNote
+    004EA E009      LDI	R16,0x9
+    004EB E010      LDI	R17,0
+    004EC DDF7      RCALL	_MusicNote
+    004ED E007      LDI	R16,7
+    004EE E010      LDI	R17,0
+    004EF DDF4      RCALL	_MusicNote
+    004F0 E008      LDI	R16,0x8
+    004F1 E010      LDI	R17,0
+    004F2 DDF1      RCALL	_MusicNote
+    004F3 E009      LDI	R16,0x9
+    004F4 E010      LDI	R17,0
+    004F5 DE61      RCALL	_MusicNoteHalf
+    004F6 E00A      LDI	R16,0xA
+    004F7 E010      LDI	R17,0
+    004F8 DE5E      RCALL	_MusicNoteHalf
+    004F9 E009      LDI	R16,0x9
+    004FA E010      LDI	R17,0
+    004FB DDE8      RCALL	_MusicNote
+    004FC E007      LDI	R16,7
+    004FD E010      LDI	R17,0
+    004FE DDE5      RCALL	_MusicNote
+(0232)      Re MiH FaH Mi Re Do Re Sol_ Sol
+    004FF E008      LDI	R16,0x8
+    00500 E010      LDI	R17,0
+    00501 DDE2      RCALL	_MusicNote
+    00502 E009      LDI	R16,0x9
+    00503 E010      LDI	R17,0
+    00504 DE52      RCALL	_MusicNoteHalf
+    00505 E00A      LDI	R16,0xA
+    00506 E010      LDI	R17,0
+    00507 DE4F      RCALL	_MusicNoteHalf
+    00508 E009      LDI	R16,0x9
+    00509 E010      LDI	R17,0
+    0050A DDD9      RCALL	_MusicNote
+    0050B E008      LDI	R16,0x8
+    0050C E010      LDI	R17,0
+    0050D DDD6      RCALL	_MusicNote
+    0050E E007      LDI	R16,7
+    0050F E010      LDI	R17,0
+    00510 DDD3      RCALL	_MusicNote
+    00511 E008      LDI	R16,0x8
+    00512 E010      LDI	R17,0
+    00513 DDD0      RCALL	_MusicNote
+    00514 E102      LDI	R16,0x12
+    00515 E010      LDI	R17,0
+    00516 DDCD      RCALL	_MusicNote
+    00517 E00B      LDI	R16,0xB
+    00518 E010      LDI	R17,0
+    00519 DDCA      RCALL	_MusicNote
+(0233)      Mi Mi Fa Sol Sol Fa Mi Re
+    0051A E009      LDI	R16,0x9
+    0051B E010      LDI	R17,0
+    0051C DDC7      RCALL	_MusicNote
+    0051D E009      LDI	R16,0x9
+    0051E E010      LDI	R17,0
+    0051F DDC4      RCALL	_MusicNote
+    00520 E00A      LDI	R16,0xA
+    00521 E010      LDI	R17,0
+    00522 DDC1      RCALL	_MusicNote
+    00523 E00B      LDI	R16,0xB
+    00524 E010      LDI	R17,0
+    00525 DDBE      RCALL	_MusicNote
+    00526 E00B      LDI	R16,0xB
+    00527 E010      LDI	R17,0
+    00528 DDBB      RCALL	_MusicNote
+    00529 E00A      LDI	R16,0xA
+    0052A E010      LDI	R17,0
+    0052B DDB8      RCALL	_MusicNote
+    0052C E009      LDI	R16,0x9
+    0052D E010      LDI	R17,0
+    0052E DDB5      RCALL	_MusicNote
+    0052F E008      LDI	R16,0x8
+    00530 E010      LDI	R17,0
+    00531 DDB2      RCALL	_MusicNote
+(0234)      Do Do Re Mi  Re ReH DoH Do Do
+    00532 E007      LDI	R16,7
+    00533 E010      LDI	R17,0
+    00534 DDAF      RCALL	_MusicNote
+    00535 E007      LDI	R16,7
+    00536 E010      LDI	R17,0
+    00537 DDAC      RCALL	_MusicNote
+    00538 E008      LDI	R16,0x8
+    00539 E010      LDI	R17,0
+    0053A DDA9      RCALL	_MusicNote
+    0053B E009      LDI	R16,0x9
+    0053C E010      LDI	R17,0
+    0053D DDA6      RCALL	_MusicNote
+    0053E E008      LDI	R16,0x8
+    0053F E010      LDI	R17,0
+    00540 DDA3      RCALL	_MusicNote
+    00541 E008      LDI	R16,0x8
+    00542 E010      LDI	R17,0
+    00543 DE13      RCALL	_MusicNoteHalf
+    00544 E007      LDI	R16,7
+    00545 E010      LDI	R17,0
+    00546 DE10      RCALL	_MusicNoteHalf
+    00547 E007      LDI	R16,7
+    00548 E010      LDI	R17,0
+    00549 DD9A      RCALL	_MusicNote
+    0054A E007      LDI	R16,7
+(0235)  }
+(0236) 
+(0237) 
+(0238) 
+(0239) 
+(0240) 
+(0241) 
+(0242) 
+(0243) 
+(0244) 
+(0245) 
+(0246) 
+(0247) 
+(0248) 
+(0249) 
+(0250) 
+(0251) 
+_main:
+    0054D 9721      SBIW	R28,1
+FILE: D:\ICCV8\16年例程 - 副本\main.c
+(0001) #include "./Headers/Global.h"  //包含所有头文件
+(0002) 
+(0003) void main(void)
+(0004) {
+(0005) 
+(0006)     CLI();
+    0054E 94F8      BCLR	7
+(0007)     MCUCSR = 0x80;
+    0054F E880      LDI	R24,0x80
+    00550 BF84      OUT	0x34,R24
+(0008)     MCUCSR = 0x80;       //取消复用
+    00551 BF84      OUT	0x34,R24
+(0009)     DDRC = 0xff;         //C端口输出-
+    00552 EF8F      LDI	R24,0xFF
+    00553 BB84      OUT	0x14,R24
+(0010)     PORTC = 0xff;        //LED共阳，高电平全灭
+    00554 BB85      OUT	0x15,R24
+(0011)     //LED_IO_Init();
+(0012)     ADC_Init();
+    00555 940E 01EA CALL	_ADC_Init
+(0013)     Interrupt_Init();
+    00557 940E 01B9 CALL	_Interrupt_Init
+(0014)     //Timer0_Init();
+(0015)     HC595_Init();
+    00559 940E 01B3 CALL	_HC595_Init
+(0016)     USART_Init(12);
+    0055B E00C      LDI	R16,0xC
+    0055C E010      LDI	R17,0
+    0055D 940E 0649 CALL	_USART_Init
+(0017) 
+(0018)     HC595_Display_Bit(0,1,0);
+    0055F 2422      CLR	R2
+    00560 8228      ST	Y,R2
+    00561 E021      LDI	R18,1
+    00562 2700      CLR	R16
+    00563 940E 0109 CALL	_HC595_Display_Bit
+(0019)     Delay_ms(100);
+    00565 E604      LDI	R16,0x64
+    00566 E010      LDI	R17,0
+    00567 940E 068C CALL	_Delay_ms
+(0020)     HC595_Display_Bit(1,2,0);
+    00569 2422      CLR	R2
+    0056A 8228      ST	Y,R2
+    0056B E022      LDI	R18,2
+    0056C E001      LDI	R16,1
+    0056D 940E 0109 CALL	_HC595_Display_Bit
+(0021)     Delay_ms(100);
+    0056F E604      LDI	R16,0x64
+    00570 E010      LDI	R17,0
+    00571 940E 068C CALL	_Delay_ms
+(0022)     HC595_Display_Bit(2,3,0);
+    00573 2422      CLR	R2
+    00574 8228      ST	Y,R2
+    00575 E023      LDI	R18,3
+    00576 E002      LDI	R16,2
+    00577 940E 0109 CALL	_HC595_Display_Bit
+(0023)     Delay_ms(100);
+    00579 E604      LDI	R16,0x64
+    0057A E010      LDI	R17,0
+    0057B 940E 068C CALL	_Delay_ms
+(0024)     HC595_Display_Bit(3,4,0);
+    0057D 2422      CLR	R2
+    0057E 8228      ST	Y,R2
+    0057F E024      LDI	R18,4
+    00580 E003      LDI	R16,3
+    00581 940E 0109 CALL	_HC595_Display_Bit
+(0025)     Delay_ms(100);
+    00583 E604      LDI	R16,0x64
+    00584 E010      LDI	R17,0
+    00585 940E 068C CALL	_Delay_ms
+(0026)     HC595_Display_Bit(4,5,0);
+    00587 2422      CLR	R2
+    00588 8228      ST	Y,R2
+    00589 E025      LDI	R18,5
+    0058A E004      LDI	R16,4
+    0058B 940E 0109 CALL	_HC595_Display_Bit
+(0027)     Delay_ms(100);
+    0058D E604      LDI	R16,0x64
+    0058E E010      LDI	R17,0
+    0058F 940E 068C CALL	_Delay_ms
+(0028)     HC595_Display_Bit(5,6,0);
+    00591 2422      CLR	R2
+    00592 8228      ST	Y,R2
+    00593 E026      LDI	R18,6
+    00594 E005      LDI	R16,5
+    00595 940E 0109 CALL	_HC595_Display_Bit
+(0029)     Delay_ms(100);
+    00597 E604      LDI	R16,0x64
+    00598 E010      LDI	R17,0
+    00599 940E 068C CALL	_Delay_ms
+(0030)     HC595_Display_Bit(6,7,0);
+    0059B 2422      CLR	R2
+    0059C 8228      ST	Y,R2
+    0059D E027      LDI	R18,7
+    0059E E006      LDI	R16,6
+    0059F 940E 0109 CALL	_HC595_Display_Bit
+(0031)     Delay_ms(100);
+    005A1 E604      LDI	R16,0x64
+    005A2 E010      LDI	R17,0
+    005A3 940E 068C CALL	_Delay_ms
+(0032)     HC595_Display_Bit(7,8,0);
+    005A5 2422      CLR	R2
+    005A6 8228      ST	Y,R2
+    005A7 E028      LDI	R18,0x8
+    005A8 E007      LDI	R16,7
+    005A9 940E 0109 CALL	_HC595_Display_Bit
+(0033)     Delay_ms(100);
+    005AB E604      LDI	R16,0x64
+    005AC E010      LDI	R17,0
+    005AD 940E 068C CALL	_Delay_ms
+(0034)     while(1)
+(0035)     {
+(0036)         ;
+(0037)     }
+    005AF CFFF      RJMP	0x05AF
+(0038)     HC595_Display_Bit(7,17,0);
+(0039) 
+(0040)     SEI();
+(0041) 
+(0042)     while(1)
+(0043)     {
+(0044)         start();
+    005B0 D003      RCALL	_start
+(0045)         //Display_ADC(4,7);
+(0046)     }
+    005B1 CFFE      RJMP	0x05B0
+    005B2 9621      ADIW	R28,1
+    005B3 9508      RET
+_start:
+  mode                 --> R20
+    005B4 934A      ST	-Y,R20
+(0047) 
+(0048) 
+(0049) }
+(0050) 
+(0051) void start(void)
+(0052) {
+(0053)     UINT8 mode=0;
+    005B5 2744      CLR	R20
+    005B6 C053      RJMP	0x060A
+(0054)     while(1)
+(0055)     {
+(0056)         if(receive_flag == 1)
+    005B7 9180 011B LDS	R24,receive_flag
+    005B9 3081      CPI	R24,1
+    005BA F009      BEQ	0x05BC
+    005BB C04E      RJMP	0x060A
+(0057)         {
+(0058)             if(buf[0] == 'A' && buf[1] == 'D')
+    005BC 9180 0131 LDS	R24,buf
+    005BE 3481      CPI	R24,0x41
+    005BF F431      BNE	0x05C6
+    005C0 9180 0132 LDS	R24,buf+1
+    005C2 3484      CPI	R24,0x44
+    005C3 F411      BNE	0x05C6
+(0059)                 mode = 1;
+    005C4 E041      LDI	R20,1
+    005C5 C015      RJMP	0x05DB
+(0060)             else if(buf[0] == 'S' && buf[1] == 'P')
+    005C6 9180 0131 LDS	R24,buf
+    005C8 3583      CPI	R24,0x53
+    005C9 F431      BNE	0x05D0
+    005CA 9180 0132 LDS	R24,buf+1
+    005CC 3580      CPI	R24,0x50
+    005CD F411      BNE	0x05D0
+(0061)                 mode = 2;
+    005CE E042      LDI	R20,2
+    005CF C00B      RJMP	0x05DB
+(0062)             else if(buf[0] == 'W' && buf[1] == 'A')
+    005D0 9180 0131 LDS	R24,buf
+    005D2 3587      CPI	R24,0x57
+    005D3 F431      BNE	0x05DA
+    005D4 9180 0132 LDS	R24,buf+1
+    005D6 3481      CPI	R24,0x41
+    005D7 F411      BNE	0x05DA
+(0063)                 mode = 3;
+    005D8 E043      LDI	R20,3
+    005D9 C001      RJMP	0x05DB
+(0064)             else
+(0065)                 mode = 50;
+    005DA E342      LDI	R20,0x32
+(0066) 
+(0067)             switch(mode)
+    005DB 3041      CPI	R20,1
+    005DC F049      BEQ	0x05E6
+    005DD 3042      CPI	R20,2
+    005DE F071      BEQ	0x05ED
+    005DF 3043      CPI	R20,3
+    005E0 F0B1      BEQ	0x05F7
+    005E1 3041      CPI	R20,1
+    005E2 F138      BCS	0x060A
+    005E3 3342      CPI	R20,0x32
+    005E4 F0D1      BEQ	0x05FF
+    005E5 C024      RJMP	0x060A
+(0068)             {
+(0069)             case 1 :
+(0070)                 {
+(0071)                     Display_ADC(4,7);
+    005E6 E027      LDI	R18,7
+    005E7 E030      LDI	R19,0
+    005E8 E004      LDI	R16,4
+    005E9 E010      LDI	R17,0
+    005EA 940E 01FF CALL	_Display_ADC
+(0072)                     break;
+    005EC C01D      RJMP	0x060A
+(0073)                 }
+(0074)             case 2 :
+(0075)                 {
+(0076)                     CLI();
+    005ED 94F8      BCLR	7
+(0077)                     InitTimer0();
+    005EE 940E 02BF CALL	_InitTimer0
+(0078)                     receive_flag =0;
+    005F0 2422      CLR	R2
+    005F1 9220 011B STS	receive_flag,R2
+(0079)                     SEI();
+    005F3 9478      BSET	7
+(0080)                     MaiBaoGe();
+    005F4 940E 03D9 CALL	_MaiBaoGe
+(0081)                     break;
+    005F6 C013      RJMP	0x060A
+(0082)                 }
+(0083)             case 3 :
+(0084)                 {
+(0085)                     CLI();
+    005F7 94F8      BCLR	7
+(0086)                     Timer0_Init();
+    005F8 940E 02A7 CALL	_Timer0_Init
+(0087)                     receive_flag =0;
+    005FA 2422      CLR	R2
+    005FB 9220 011B STS	receive_flag,R2
+(0088)                     SEI();
+    005FD 9478      BSET	7
+(0089)                     break;
+    005FE C00B      RJMP	0x060A
+(0090)                 }
+(0091)             case 50 :
+(0092)                 {
+(0093)                     USART_send("your char are   :");
+    005FF EF04      LDI	R16,0xF4
+    00600 E010      LDI	R17,0
+    00601 940E 0664 CALL	_USART_send
+(0094)                     USART_send(buf);
+    00603 E301      LDI	R16,0x31
+    00604 E011      LDI	R17,1
+    00605 940E 0664 CALL	_USART_send
+(0095)                     receive_flag =0;
+    00607 2422      CLR	R2
+    00608 9220 011B STS	receive_flag,R2
+(0096) 
+(0097)                     break;
+(0098)                 }
+(0099) 
+(0100)             default :
+(0101)                 {
+(0102)                     break;
+(0103)                 }
+(0104)             }
+(0105)         }
+(0106)     }
+    0060A CFAC      RJMP	0x05B7
+(0107) }
+(0108) 
+_uart0_rx_isr:
+    0060D 922A      ST	-Y,R2
+    0060E 938A      ST	-Y,R24
+    0060F 939A      ST	-Y,R25
+    00610 93EA      ST	-Y,R30
+    00611 93FA      ST	-Y,R31
+    00612 B62F      IN	R2,0x3F
+    00613 922A      ST	-Y,R2
+FILE: D:\ICCV8\16年例程 - 副本\Usart\usart.c
+(0001) /********************************************************************************************************
+(0002) 串口函数
+(0003) ********************************************************************************************************/
+(0004) #include "usart.h"
+(0005) 
+(0006) u8 receive_now;//表示是否处于一个正在接收数据包的状态
+(0007) u8 num_now;      //计数
+(0008) u8 receive_flag = 0;//是否接收到一个完整的数据包标志
+(0009) u8 rec;             //数据中间变量
+(0010) u8 buf[N];          //中断接收到的数据
+(0011) 
+(0012) #pragma interrupt_handler uart0_rx_isr:iv_USART0_RXC
+(0013) /********************************************************************************************************
+(0014) Description  : 串口接收中断
+(0015) Inputs       : 中断
+(0016) Outputs      : 改变buf
+(0017) ********************************************************************************************************/
+(0018) void uart0_rx_isr(void)
+(0019) {
+(0020) 
+(0021)     rec = UDR ;
+    00614 B02C      IN	R2,0x0C
+    00615 9220 0195 STS	rec,R2
+(0022)     if(rec == '*')                          //检测是否是包头
+    00617 2D82      MOV	R24,R2
+    00618 328A      CPI	R24,0x2A
+    00619 F449      BNE	0x0623
+(0023)     {
+(0024)         receive_now = 1;
+    0061A E081      LDI	R24,1
+    0061B 9380 0197 STS	receive_now,R24
+(0025)         num_now   = 0 ;
+    0061D 2422      CLR	R2
+    0061E 9220 0196 STS	num_now,R2
+(0026)         receive_flag = 0;
+    00620 9220 011B STS	receive_flag,R2
+(0027)         return ;
+    00622 C01E      RJMP	0x0641
+(0028)     }
+(0029)     if(rec == '\n')                          //检测是否是包尾
+    00623 9180 0195 LDS	R24,rec
+    00625 308A      CPI	R24,0xA
+    00626 F439      BNE	0x062E
+(0030)     {
+(0031)         receive_now = 0;
+    00627 2422      CLR	R2
+    00628 9220 0197 STS	receive_now,R2
+(0032)         receive_flag = 1;                      //用于告知系统已经接收到一个完整的数据包
+    0062A E081      LDI	R24,1
+    0062B 9380 011B STS	receive_flag,R24
+(0033)         return ;
+    0062D C013      RJMP	0x0641
+(0034)     }
+(0035)     if(receive_now ==1)                          //是否处于接收数据包状态
+    0062E 9180 0197 LDS	R24,receive_now
+    00630 3081      CPI	R24,1
+    00631 F479      BNE	0x0641
+(0036)     {
+(0037)         buf[num_now++] = rec;
+    00632 9020 0196 LDS	R2,num_now
+    00634 2D82      MOV	R24,R2
+    00635 5F8F      SUBI	R24,0xFF
+    00636 9380 0196 STS	num_now,R24
+    00638 E381      LDI	R24,0x31
+    00639 E091      LDI	R25,1
+    0063A 2DE2      MOV	R30,R2
+    0063B 27FF      CLR	R31
+    0063C 0FE8      ADD	R30,R24
+    0063D 1FF9      ADC	R31,R25
+    0063E 9020 0195 LDS	R2,rec
+    00640 8220      ST	Z,R2
+(0038)     }
+    00641 9029      LD	R2,Y+
+    00642 BE2F      OUT	0x3F,R2
+    00643 91F9      LD	R31,Y+
+    00644 91E9      LD	R30,Y+
+    00645 9199      LD	R25,Y+
+    00646 9189      LD	R24,Y+
+    00647 9029      LD	R2,Y+
+    00648 9518      RETI
+(0039) }
+(0040) /********************************************************************************************************
+(0041) Description  : 串口初始化
+(0042) Inputs       : baud：波特率   4800->25  9600->12(选择倍速模式)
+(0043) Outputs      : None
+(0044) ********************************************************************************************************/
+(0045) void USART_Init(u16 baud)
+(0046) {
+(0047)     //端口初始化 PD0->Rx  PD1->Tx
+(0048)     UCSRB &= ~ (USART_UCSZ2);
+_USART_Init:
+  baud                 --> R16
+    00649 9852      CBI	0x0A,2
+(0049)     UCSRC |= (UCSRC_URSEL | USART_UCSZ1 | USART_UCSZ0);        //8位字符长度
+    0064A B580      IN	R24,0x20
+    0064B 6886      ORI	R24,0x86
+    0064C BD80      OUT	0x20,R24
+(0050)     UCSRC &= ~(USART_UMSEL | USART_UPM | USART_USBS);          //异步工作模式,无奇偶校验位,1位停止位
+    0064D B580      IN	R24,0x20
+    0064E 7887      ANDI	R24,0x87
+    0064F BD80      OUT	0x20,R24
+(0051) 
+(0052) 
+(0053)     //波特率配置
+(0054)     UCSRA |= USART_U2X;                 //倍速发送
+    00650 9A59      SBI	0x0B,1
+(0055)     UBRRH &= ~ (UBRRH_URSEL);              //对UBRRH进行写操作
+    00651 B580      IN	R24,0x20
+    00652 7F8F      ANDI	R24,0xFF
+    00653 BD80      OUT	0x20,R24
+(0056)     UBRRH = (u8)(baud >> 8);
+    00654 0118      MOVW	R2,R16
+    00655 2C23      MOV	R2,R3
+    00656 2433      CLR	R3
+    00657 BC20      OUT	0x20,R2
+(0057)     UBRRL = (u8)baud;
+    00658 B909      OUT	0x09,R16
+(0058) 
+(0059)     UCSRB |= (USART_RXCIE | USART_RXEN | USART_TXEN);  //发送、接收 中断 使能
+    00659 B18A      IN	R24,0x0A
+    0065A 6988      ORI	R24,0x98
+    0065B B98A      OUT	0x0A,R24
+    0065C 9508      RET
+(0060) }
+(0061) /********************************************************************************************************
+(0062) Description  : 串口接收
+(0063) Inputs       : None
+(0064) Outputs      : 接收到的数
+(0065) ********************************************************************************************************/
+(0066) u8 USART_Rx(void)
+(0067) {
+(0068)     u8 buf;
+(0069)     while((UCSRA&USART_FLAG_RXC) == 0);           //等待接收结束       while((UCSRA&USART_FLAG_RXC) == 0)
+_USART_Rx:
+  buf                  --> R16
+    0065D 9B5F      SBIS	0x0B,7
+    0065E CFFE      RJMP	_USART_Rx
+(0070)     buf = UDR;                           //读取接收到的值
+    0065F B10C      IN	R16,0x0C
+(0071)     return buf;
+    00660 9508      RET
+(0072) }
+(0073) /********************************************************************************************************
+(0074) Description  : 串口发送
+(0075) Inputs       : 要发送的数据
+(0076) Outputs      : None
+(0077) ********************************************************************************************************/
+(0078) void USART_Tx(u8 buf)
+(0079) {
+(0080)     UCSRA |= USART_FLAG_UDRE;             //缓冲器为空，准备好发送数据
+_USART_Tx:
+  buf                  --> R16
+    00661 9A5D      SBI	0x0B,5
+(0081)     UDR = buf;                            //将数据写入发送寄存器
+    00662 B90C      OUT	0x0C,R16
+(0082)     while((USART_FLAG_TXC) == 0);          //等待发送完成       while((UCSRA&USART_FLAG_TXC) == 0)
+    00663 9508      RET
+_USART_send:
+  s                    --> R20
+    00664 934A      ST	-Y,R20
+    00665 935A      ST	-Y,R21
+    00666 01A8      MOVW	R20,R16
+(0083) }
+(0084) /********************************************************************************************************
+(0085) Description  :串口发送字符串
+(0086) Inputs       :字符串
+(0087) Outputs      : None
+(0088) ********************************************************************************************************/
+(0089) void USART_send(u8 *s)
+(0090) {
+    00667 C009      RJMP	0x0671
+(0091)     while(*s != '\0')
+(0092)     {
+(0093)         USART_Tx(*s);
+    00668 01FA      MOVW	R30,R20
+    00669 8100      LD	R16,Z
+    0066A DFF6      RCALL	_USART_Tx
+(0094)         s++;
+    0066B 5F4F      SUBI	R20,0xFF
+    0066C 4F5F      SBCI	R21,0xFF
+(0095)         Delay_us(200);
+    0066D EC08      LDI	R16,0xC8
+    0066E E010      LDI	R17,0
+    0066F 940E 067E CALL	_Delay_us
+(0096)     }
+    00671 01FA      MOVW	R30,R20
+    00672 8020      LD	R2,Z
+    00673 2022      TST	R2
+    00674 F799      BNE	0x0668
+(0097)     USART_Tx('\n');
+    00675 E00A      LDI	R16,0xA
+    00676 DFEA      RCALL	_USART_Tx
+(0098)     Delay_us(200);
+    00677 EC08      LDI	R16,0xC8
+(0099) 
+(0100) }
+_Delay_us:
+  i                    --> R20
+  m                    --> R16
+    0067E 934A      ST	-Y,R20
+    0067F 935A      ST	-Y,R21
+FILE: D:\ICCV8\16年例程 - 副本\Delay\Delay.c
+(0001) #include "Delay.h"
+(0002) /************************************************************
+(0003) Function Name: Delay_us
+(0004) Inputs: int m
+(0005) Outputs: none
+(0006) Description:    微秒级延时，数量为m
+(0007) Writer: WZY
+(0008) *************************************************************/
+(0009) void Delay_us(int m)
+(0010) {
+(0011)     int i;
+(0012)     for (i=0; i<m; i++)
+    00680 2744      CLR	R20
+    00681 2755      CLR	R21
+    00682 C003      RJMP	0x0686
+(0013)         {
+(0014)             NOP();      ///空指令，1MHz下为1us
+    00683 0000      NOP
+(0015)                         //NOP为机械周期
+(0016)         }
+    00684 5F4F      SUBI	R20,0xFF
+    00685 4F5F      SBCI	R21,0xFF
+    00686 1740      CP	R20,R16
+    00687 0751      CPC	R21,R17
+    00688 F3D4      BLT	0x0683
+    00689 9159      LD	R21,Y+
+    0068A 9149      LD	R20,Y+
+    0068B 9508      RET
+_Delay_ms:
+  i                    --> R20
+  j                    --> R22
+  n                    --> R16
+    0068C 940E 0775 CALL	push_xgsetF000
+(0017) }
+(0018) 
+(0019) /************************************************************
+(0020) Function Name: Delay_ms
+(0021) Inputs: int n
+(0022) Outputs: none
+(0023) Description:    毫秒级延时，数量为n
+(0024) Writer: WZY
+(0025) *************************************************************/
+(0026) void Delay_ms(int n)
+(0027) {
+(0028)     int i,j;
+(0029)     for(i=0; i<n; i++)
+    0068E 2744      CLR	R20
+    0068F 2755      CLR	R21
+    00690 C00C      RJMP	0x069D
+(0030)     {
+(0031)         for(j=0; j<125; j++)
+    00691 2766      CLR	R22
+    00692 2777      CLR	R23
+(0032)         {
+(0033)             NOP();
+    00693 0000      NOP
+(0034)         }
+    00694 5F6F      SUBI	R22,0xFF
+    00695 4F7F      SBCI	R23,0xFF
+    00696 E78D      LDI	R24,0x7D
+    00697 E090      LDI	R25,0
+    00698 1768      CP	R22,R24
+    00699 0779      CPC	R23,R25
+    0069A F3C4      BLT	0x0693
+(0035)     }
+    0069B 5F4F      SUBI	R20,0xFF
+    0069C 4F5F      SBCI	R21,0xFF
+    0069D 1740      CP	R20,R16
+(0036) }
+    0069E 0751      CPC	R21,R17
+    0069F F38C      BLT	0x0691
+    006A0 940C 077A JMP	pop_xgsetF000
+mod16s:
+    006A2 9468      BSET	6
+    006A3 92DA      ST	-Y,R13
+    006A4 2ED1      MOV	R13,R17
+    006A5 C004      RJMP	0x06AA
+div16s:
+    006A6 94E8      BCLR	6
+    006A7 92DA      ST	-Y,R13
+    006A8 2ED1      MOV	R13,R17
+    006A9 26D3      EOR	R13,R19
+    006AA FF17      SBRS	R17,7
+    006AB C004      RJMP	0x06B0
+    006AC 9510      COM	R17
+    006AD 9500      COM	R16
+    006AE 5F0F      SUBI	R16,0xFF
+    006AF 4F1F      SBCI	R17,0xFF
+    006B0 FF37      SBRS	R19,7
+    006B1 C004      RJMP	0x06B6
+    006B2 9530      COM	R19
+    006B3 9520      COM	R18
+    006B4 5F2F      SUBI	R18,0xFF
+    006B5 4F3F      SBCI	R19,0xFF
+    006B6 940E 06C3 CALL	xdiv16u
+    006B8 FED7      SBRS	R13,7
+    006B9 C004      RJMP	0x06BE
+    006BA 9510      COM	R17
+    006BB 9500      COM	R16
+    006BC 5F0F      SUBI	R16,0xFF
+    006BD 4F1F      SBCI	R17,0xFF
+    006BE 90D9      LD	R13,Y+
+    006BF 9508      RET
+mod16u:
+    006C0 9468      BSET	6
+    006C1 C001      RJMP	xdiv16u
+div16u:
+    006C2 94E8      BCLR	6
+xdiv16u:
+    006C3 92EA      ST	-Y,R14
+    006C4 92FA      ST	-Y,R15
+    006C5 938A      ST	-Y,R24
+    006C6 24EE      CLR	R14
+    006C7 24FF      CLR	R15
+    006C8 E180      LDI	R24,0x10
+    006C9 0F00      LSL	R16
+    006CA 1F11      ROL	R17
+    006CB 1CEE      ROL	R14
+    006CC 1CFF      ROL	R15
+    006CD 16E2      CP	R14,R18
+    006CE 06F3      CPC	R15,R19
+    006CF F018      BCS	0x06D3
+    006D0 1AE2      SUB	R14,R18
+    006D1 0AF3      SBC	R15,R19
+    006D2 9503      INC	R16
+    006D3 958A      DEC	R24
+    006D4 F7A1      BNE	0x06C9
+    006D5 F416      BRTC	0x06D8
+    006D6 2D0E      MOV	R16,R14
+    006D7 2D1F      MOV	R17,R15
+    006D8 9189      LD	R24,Y+
+    006D9 90F9      LD	R15,Y+
+    006DA 90E9      LD	R14,Y+
+    006DB 9508      RET
+div32u:
+    006DC 94E8      BCLR	6
+    006DD C001      RJMP	0x06DF
+mod32u:
+    006DE 9468      BSET	6
+    006DF D030      RCALL	long_div_prolog
+    006E0 24CC      CLR	R12
+    006E1 C009      RJMP	0x06EB
+div32s:
+    006E2 94E8      BCLR	6
+    006E3 C001      RJMP	0x06E5
+mod32s:
+    006E4 9468      BSET	6
+    006E5 D02A      RCALL	long_div_prolog
+    006E6 FD37      SBRC	R19,7
+    006E7 940E 0791 CALL	neg32
+    006E9 FDB7      SBRC	R27,7
+    006EA D052      RCALL	neg_R24_R27
+    006EB 2477      CLR	R7
+    006EC 2488      CLR	R8
+    006ED 2499      CLR	R9
+    006EE 24AA      CLR	R10
+    006EF 24BB      CLR	R11
+    006F0 D042      RCALL	tst_R16_R19
+    006F1 F0C1      BEQ	0x070A
+    006F2 D045      RCALL	tst_R24_R27
+    006F3 F0B1      BEQ	0x070A
+    006F4 E2E8      LDI	R30,0x28
+    006F5 0F00      LSL	R16
+    006F6 1F11      ROL	R17
+    006F7 1F22      ROL	R18
+    006F8 1F33      ROL	R19
+    006F9 1C77      ROL	R7
+    006FA 1C88      ROL	R8
+    006FB 1C99      ROL	R9
+    006FC 1CAA      ROL	R10
+    006FD 1CBB      ROL	R11
+    006FE 1688      CP	R8,R24
+    006FF 0699      CPC	R9,R25
+    00700 06AA      CPC	R10,R26
+    00701 06BB      CPC	R11,R27
+    00702 F028      BCS	0x0708
+    00703 1A88      SUB	R8,R24
+    00704 0A99      SBC	R9,R25
+    00705 0AAA      SBC	R10,R26
+    00706 0ABB      SBC	R11,R27
+    00707 9503      INC	R16
+    00708 95EA      DEC	R30
+    00709 F759      BNE	0x06F5
+    0070A F426      BRTC	0x070F
+    0070B 2D08      MOV	R16,R8
+    0070C 2D19      MOV	R17,R9
+    0070D 2D2A      MOV	R18,R10
+    0070E 2D3B      MOV	R19,R11
+    0070F C013      RJMP	long_div_epilog
+long_div_prolog:
+    00710 927A      ST	-Y,R7
+    00711 928A      ST	-Y,R8
+    00712 929A      ST	-Y,R9
+    00713 92AA      ST	-Y,R10
+    00714 92BA      ST	-Y,R11
+    00715 92CA      ST	-Y,R12
+    00716 93EA      ST	-Y,R30
+    00717 938A      ST	-Y,R24
+    00718 939A      ST	-Y,R25
+    00719 93AA      ST	-Y,R26
+    0071A 93BA      ST	-Y,R27
+    0071B 858B      LDD	R24,Y+11
+    0071C 859C      LDD	R25,Y+12
+    0071D 85AD      LDD	R26,Y+13
+    0071E 85BE      LDD	R27,Y+14
+    0071F 2EC3      MOV	R12,R19
+    00720 F00E      BRTS	0x0722
+    00721 26CB      EOR	R12,R27
+    00722 9508      RET
+long_div_epilog:
+    00723 FCC7      SBRC	R12,7
+    00724 940E 0791 CALL	neg32
+    00726 91B9      LD	R27,Y+
+    00727 91A9      LD	R26,Y+
+    00728 9199      LD	R25,Y+
+    00729 9189      LD	R24,Y+
+    0072A 91E9      LD	R30,Y+
+    0072B 90C9      LD	R12,Y+
+    0072C 90B9      LD	R11,Y+
+    0072D 90A9      LD	R10,Y+
+    0072E 9099      LD	R9,Y+
+    0072F 9089      LD	R8,Y+
+    00730 9079      LD	R7,Y+
+    00731 9624      ADIW	R28,4
+    00732 9508      RET
+tst_R16_R19:
+    00733 2FE0      MOV	R30,R16
+    00734 2BE1      OR	R30,R17
+    00735 2BE2      OR	R30,R18
+    00736 2BE3      OR	R30,R19
+    00737 9508      RET
+tst_R24_R27:
+    00738 2FE8      MOV	R30,R24
+    00739 2BE9      OR	R30,R25
+    0073A 2BEA      OR	R30,R26
+    0073B 2BEB      OR	R30,R27
+    0073C 9508      RET
+neg_R24_R27:
+    0073D 9580      COM	R24
+    0073E 9590      COM	R25
+    0073F 95A0      COM	R26
+    00740 95B0      COM	R27
+    00741 5F8F      SUBI	R24,0xFF
+    00742 4F9F      SBCI	R25,0xFF
+    00743 4FAF      SBCI	R26,0xFF
+    00744 4FBF      SBCI	R27,0xFF
+    00745 9508      RET
+empy16s:
+    00746 920A      ST	-Y,R0
+    00747 921A      ST	-Y,R1
+    00748 938A      ST	-Y,R24
+    00749 939A      ST	-Y,R25
+    0074A 9F02      MUL	R16,R18
+    0074B 01C0      MOVW	R24,R0
+    0074C 9F12      MUL	R17,R18
+    0074D 0D90      ADD	R25,R0
+    0074E 9F03      MUL	R16,R19
+    0074F 0D90      ADD	R25,R0
+    00750 018C      MOVW	R16,R24
+    00751 9199      LD	R25,Y+
+    00752 9189      LD	R24,Y+
+    00753 9019      LD	R1,Y+
+    00754 9009      LD	R0,Y+
+    00755 9508      RET
+pop_xgset30FC:
+    00756 90A9      LD	R10,Y+
+    00757 90B9      LD	R11,Y+
+    00758 90C9      LD	R12,Y+
+    00759 90D9      LD	R13,Y+
+    0075A 90E9      LD	R14,Y+
+    0075B 90F9      LD	R15,Y+
+    0075C 9149      LD	R20,Y+
+    0075D 9159      LD	R21,Y+
+    0075E 9508      RET
+pop_xgsetF0FC:
+    0075F 90A9      LD	R10,Y+
+    00760 90B9      LD	R11,Y+
+    00761 90C9      LD	R12,Y+
+    00762 90D9      LD	R13,Y+
+    00763 90E9      LD	R14,Y+
+    00764 90F9      LD	R15,Y+
+    00765 9149      LD	R20,Y+
+    00766 9159      LD	R21,Y+
+    00767 9169      LD	R22,Y+
+    00768 9179      LD	R23,Y+
+    00769 9508      RET
+push_xgsetF0FC:
+    0076A 937A      ST	-Y,R23
+    0076B 936A      ST	-Y,R22
+push_xgset30FC:
+    0076C 935A      ST	-Y,R21
+    0076D 934A      ST	-Y,R20
+push_xgset00FC:
+    0076E 92FA      ST	-Y,R15
+    0076F 92EA      ST	-Y,R14
+push_xgset003C:
+    00770 92DA      ST	-Y,R13
+    00771 92CA      ST	-Y,R12
+    00772 92BA      ST	-Y,R11
+    00773 92AA      ST	-Y,R10
+    00774 9508      RET
+push_xgsetF000:
+    00775 937A      ST	-Y,R23
+    00776 936A      ST	-Y,R22
+    00777 935A      ST	-Y,R21
+    00778 934A      ST	-Y,R20
+    00779 9508      RET
+pop_xgsetF000:
+    0077A 9149      LD	R20,Y+
+    0077B 9159      LD	R21,Y+
+    0077C 9169      LD	R22,Y+
+    0077D 9179      LD	R23,Y+
+    0077E 9508      RET
+push_xgsetF03C:
+    0077F 937A      ST	-Y,R23
+    00780 936A      ST	-Y,R22
+    00781 935A      ST	-Y,R21
+    00782 934A      ST	-Y,R20
+    00783 92DA      ST	-Y,R13
+    00784 92CA      ST	-Y,R12
+    00785 92BA      ST	-Y,R11
+    00786 92AA      ST	-Y,R10
+    00787 9508      RET
+pop_xgsetF03C:
+    00788 90A9      LD	R10,Y+
+    00789 90B9      LD	R11,Y+
+    0078A 90C9      LD	R12,Y+
+    0078B 90D9      LD	R13,Y+
+    0078C 9149      LD	R20,Y+
+    0078D 9159      LD	R21,Y+
+    0078E 9169      LD	R22,Y+
+    0078F 9179      LD	R23,Y+
+    00790 9508      RET
+neg32:
+    00791 9500      COM	R16
+    00792 9510      COM	R17
+    00793 9520      COM	R18
+    00794 9530      COM	R19
+    00795 5F0F      SUBI	R16,0xFF
+    00796 4F1F      SBCI	R17,0xFF
+    00797 4F2F      SBCI	R18,0xFF
+    00798 4F3F      SBCI	R19,0xFF
+    00799 9508      RET
+lsl8:
+    0079A 2311      TST	R17
+    0079B F019      BEQ	0x079F
+    0079C 0F00      LSL	R16
+    0079D 951A      DEC	R17
+    0079E CFFB      RJMP	lsl8
+    0079F 9508      RET

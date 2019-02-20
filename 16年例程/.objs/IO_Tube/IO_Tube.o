@@ -1,0 +1,129 @@
+XL
+H 3 areas 8 global symbols
+M IO_Tube.c
+S push_xgsetF00C Ref0000
+S lsl8 Ref0000
+S pop_xgsetF00C Ref0000
+S _Delay_ms#Fvi Ref0000
+A text size 94 flags 0
+dbfile D:\ICCV8\16年例程\IO_Tube\IO_Tube.c
+dbfunc e Tube_Init 0 fV
+dbline FFFFFFFF 0
+dbline C 0
+dbline D 0
+dbline E 4
+dbline F 6
+dbline FFFFFFFE 8
+dbline 0 8
+dbfunc e Tube_On A fV
+dbsym r t A I
+dbline FFFFFFFF 10
+dbline 19 10
+dbline 1A 10
+dbline 1B 12
+dbline 1C 16
+dbline 1D 2A
+dbline FFFFFFFE 32
+dbline 0 32
+dbfunc e Tube_Loop 38 fV
+dbsym r i 14 I
+dbsym r j 16 I
+dbsym r c A I
+dbline FFFFFFFF 3E
+dbline 27 3E
+dbline 29 3E
+dbline 2A 40
+dbline 2B 46
+dbline 2C 46
+dbline 2D 4A
+dbline 2E 4A
+dbline 2F 58
+dbline 30 6C
+dbline 31 74
+dbline 2C 74
+dbline 2C 78
+dbline 32 82
+dbline 2A 82
+dbline 2A 86
+dbline 33 8C
+dbline FFFFFFFE 90
+dbline 0 90
+S _Tube_Loop#Fvi Def0038
+S _Tube_Init#Fvv Def0000
+S _Tube_On#Fvi Def000A
+A data size 29 flags 20
+dbfile D:\ICCV8\16年例程\IO_Tube\IO_Tube.c
+dbfile D:\ICCV8\16年例程\Timer\Timer.h
+dbfile D:\ICCV8\16年例程\IO_Tube\IO_Tube.c
+dbfile D:\ICCV8\16年例程\Timer\Timer.h
+dbsym s NoteData 0 A[21:21]c
+dbfile D:\ICCV8\16年例程\IO_Tube\IO_Tube.c
+dbsym e tube 15 A[20:10]I
+S _tube#A10_i Def0015
+A idata size 29 flags 0
+T 00 00 00 FC
+R 00 00 02 00
+T 02 00 E1 D4
+R 00 00 02 00
+T 04 00 BC A8
+R 00 00 02 00
+T 06 00 96 8D
+R 00 00 02 00
+T 08 00 7E 70
+R 00 00 02 00
+T 0A 00 69 5E
+R 00 00 02 00
+T 0C 00 53 4A
+R 00 00 02 00
+T 0E 00 46 3E
+R 00 00 02 00
+T 10 00 37 34
+R 00 00 02 00
+T 12 00 2E 29
+R 00 00 02 00
+T 14 00 25
+R 00 00 02 00
+T 15 00 3F 00
+R 00 00 02 00
+T 17 00 06 00
+R 00 00 02 00
+T 19 00 5B 00
+R 00 00 02 00
+T 1B 00 4F 00
+R 00 00 02 00
+T 1D 00 66 00
+R 00 00 02 00
+T 1F 00 6D 00
+R 00 00 02 00
+T 21 00 7D 00
+R 00 00 02 00
+T 23 00 07 00
+R 00 00 02 00
+T 25 00 7F 00
+R 00 00 02 00
+T 27 00 6F 00
+R 00 00 02 00
+T 00 00 8F EF 87 BB 81 BB 88 BB 08 95
+R 00 00 00 00
+T 0A 00 AA 92 BA 92 58 01 F7 DF 22 24 28 BA 80 E0
+R 00 00 00 00 20 0E 01 00 15 00
+T 18 00 90 E0 15 01 22 0C 33 1C 28 0E 39 1E F1 01
+R 00 00 00 00 40 02 01 00 15 00
+T 26 00 20 80 22 BA 08 EE 13 E0 0E 94 00 00 B9 90
+R 00 00 00 00 12 0C 03 00
+T 34 00 A9 90 08 95
+R 00 00 00 00
+T 38 00 0E 94 00 00 58 01 E0 DF 44 27 55 27 20 C0
+R 00 00 00 00 12 04 00 00
+T 46 00 66 27 77 27 01 E0 16 2F 0E 94 00 00 20 2E
+R 00 00 00 00 12 0C 01 00
+T 54 00 20 94 28 BA 80 E0 90 E0 1B 01 22 0C 33 1C
+R 00 00 00 00 20 06 01 00 15 00 40 08 01 00 15 00
+T 62 00 28 0E 39 1E F1 01 20 80 22 BA 0C E2 11 E0
+R 00 00 00 00
+T 70 00 0E 94 00 00 6F 5F 7F 4F 88 E0 90 E0 68 17
+R 00 00 00 00 12 04 03 00
+T 7E 00 79 07 24 F3 4F 5F 5F 4F 4A 15 5B 05 EC F2
+R 00 00 00 00
+T 8C 00 8F EF 88 BB 0C 94 00 00
+R 00 00 00 00 12 08 02 00

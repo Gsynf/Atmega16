@@ -1,0 +1,166 @@
+XL
+H 5 areas C global symbols
+M usart.c
+S _uart0_rx_isr Ref0000
+S _Delay_us#Fvi Ref0000
+A text size E2 flags 0
+dbfile "D:\ICCV8\16年例程 - 副本\Usart\usart.c"
+dbfunc e uart0_rx_isr 0 fV
+dbline FFFFFFFF E
+dbline 13 E
+dbline 15 E
+dbline 16 14
+dbline 18 1A
+dbline 18 1A
+dbline 19 20
+dbline 1A 26
+dbline 1B 2A
+dbline 1D 2C
+dbline 1F 34
+dbline 1F 34
+dbline 20 3A
+dbline 21 40
+dbline 23 42
+dbline 25 4A
+dbline 25 4A
+dbline 26 68
+dbline FFFFFFFE 68
+dbline 0 68
+dbfunc e USART_Init 78 fV
+dbsym r baud 10 i
+dbline FFFFFFFF 78
+dbline 2E 78
+dbline 30 78
+dbline 31 7A
+dbline 32 80
+dbline 36 86
+dbline 37 88
+dbline 38 8E
+dbline 39 96
+dbline 3B 98
+dbline FFFFFFFE 9E
+dbline 0 9E
+dbfunc e USART_Rx A0 fc
+dbsym r buf 10 c
+dbline FFFFFFFF A0
+dbline 43 A0
+dbline 45 A0
+dbline 45 A0
+dbline 46 A4
+dbline 47 A6
+dbline FFFFFFFE A6
+dbline 0 A6
+dbfunc e USART_Tx A8 fV
+dbsym r buf 10 c
+dbline FFFFFFFF A8
+dbline 4F A8
+dbline 50 A8
+dbline 51 AA
+dbline 52 AC
+dbline 52 AC
+dbline FFFFFFFE AC
+dbline 0 AC
+dbfunc e USART_send AE fV
+dbsym r s 14 pc
+dbline FFFFFFFF B4
+dbline 5A B4
+dbline 5C B6
+dbline 5D B6
+dbline 5E BC
+dbline 5F C0
+dbline 60 C8
+dbline 5B C8
+dbline 61 D0
+dbline 62 D4
+dbline FFFFFFFE DC
+dbline 0 DC
+S _USART_Init#Fvj Def0078
+S _USART_Rx#Fhv Def00A0
+S _USART_Tx#Fvh Def00A8
+S _USART_send#FvPh Def00AE
+S _uart0_rx_isr#Fvv Def0000
+A data size 16 flags 20
+dbfile "D:\ICCV8\16年例程 - 副本\Usart\usart.c"
+dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+dbfile "D:\ICCV8\16年例程 - 副本\Usart\usart.c"
+dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+dbsym s NoteData 0 A[21:21]c
+dbfile "D:\ICCV8\16年例程 - 副本\Usart\usart.c"
+dbsym e receive_flag 15 c
+S _receive_flag#h Def0015
+A idata size 16 flags 0
+A vector size 30 flags C
+A bss size 67 flags 20
+dbfile "D:\ICCV8\16年例程 - 副本\Usart\usart.c"
+dbsym e buf 0 A[100:100]c
+dbsym e rec 64 c
+dbsym e num_now 65 c
+dbsym e receive_now 66 c
+S _rec#h Def0064
+S _buf#A100_h Def0000
+S _receive_now#h Def0066
+S _num_now#h Def0065
+T 00 00 00 FC
+R 00 00 02 00
+T 02 00 E1 D4
+R 00 00 02 00
+T 04 00 BC A8
+R 00 00 02 00
+T 06 00 96 8D
+R 00 00 02 00
+T 08 00 7E 70
+R 00 00 02 00
+T 0A 00 69 5E
+R 00 00 02 00
+T 0C 00 53 4A
+R 00 00 02 00
+T 0E 00 46 3E
+R 00 00 02 00
+T 10 00 37 34
+R 00 00 02 00
+T 12 00 2E 29
+R 00 00 02 00
+T 14 00 25
+R 00 00 02 00
+T 15 00 00
+R 00 00 02 00
+T 2C 00 0C 94 00 00
+R 00 00 03 00 12 04 00 00
+T 00 00 2A 92 8A 93 9A 93 EA 93 FA 93 2F B6 2A 92
+R 00 00 00 00
+T 0E 00 2C B0 20 92 64 00 82 2D 8A 32 49 F4 81 E0
+R 00 00 00 00 00 06 04 00
+T 1C 00 80 93 66 00 22 24 20 92 65 00 20 92 15 00
+R 00 00 00 00 00 04 04 00 00 0A 04 00 00 0E 01 00
+T 2A 00 1E C0 80 91 64 00 8A 30 39 F4 22 24 20 92
+R 00 00 00 00 00 06 04 00
+T 38 00 66 00 81 E0 80 93 15 00 13 C0 80 91 66 00
+R 00 00 00 00 00 02 04 00 00 08 01 00 00 0E 04 00
+T 46 00 81 30 79 F4 20 90 65 00 82 2D 8F 5F 80 93
+R 00 00 00 00 00 08 04 00
+T 54 00 65 00 80 E0
+R 00 00 00 00 00 02 04 00 20 04 04 00 00 00
+T 58 00 90 E0 E2 2D FF 27 E8 0F F9 1F 20 90 64 00
+R 00 00 00 00 40 02 04 00 00 00 00 0E 04 00
+T 66 00 20 82 29 90 2F BE F9 91 E9 91 99 91 89 91
+R 00 00 00 00
+T 74 00 29 90 18 95
+R 00 00 00 00
+T 78 00 52 98 80 B5 86 68 80 BD 80 B5 87 78 80 BD
+R 00 00 00 00
+T 86 00 59 9A 80 B5 8F 7F 80 BD 18 01 23 2C 33 24
+R 00 00 00 00
+T 94 00 20 BC 09 B9 8A B1 88 69 8A B9 08 95
+R 00 00 00 00
+T A0 00 5F 9B FE CF 0C B1 08 95
+R 00 00 00 00
+T A8 00 5D 9A 0C B9 08 95
+R 00 00 00 00
+T AE 00 4A 93 5A 93 A8 01 09 C0 FA 01 00 81 F6 DF
+R 00 00 00 00
+T BC 00 4F 5F 5F 4F 08 EC 10 E0 0E 94 00 00 FA 01
+R 00 00 00 00 12 0C 01 00
+T CA 00 20 80 22 20 99 F7 0A E0 EA DF 08 EC 10 E0
+R 00 00 00 00
+T D8 00 0E 94 00 00 59 91 49 91 08 95
+R 00 00 00 00 12 04 01 00

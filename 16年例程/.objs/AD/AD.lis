@@ -1,0 +1,93 @@
+                        .module AD.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile E:\单片机\例程\16年例程\AD\AD.c
+ 0000           ; #ifndef __MATH_H
+ 0000           ; #define __MATH_H
+ 0000           ; 
+ 0000           ; #define _PI   3.1415926535897932f
+ 0000           ; 
+ 0000           ; #if defined(_M8C) && defined(_LMM)
+ 0000           ; #define fabsf fabsfLMM
+ 0000           ; #endif
+ 0000           ; 
+ 0000           ; float acosf(float);
+ 0000           ; float asinf(float);
+ 0000           ; float atan2f(float, float);
+ 0000           ; float atanf(float);
+ 0000           ; float ceilf(float);
+ 0000           ; float cosf(float);
+ 0000           ; float coshf(float);
+ 0000           ; float exp10f(float);
+ 0000           ; float expf(float);
+ 0000           ; float fabsf(float);
+ 0000           ; float floorf(float);
+ 0000           ; float fmodf(float, float);
+ 0000           ; float frexpf(float, int *);
+ 0000           ; float froundf(float);
+ 0000           ; float ldexpf(float, int);
+ 0000           ; float log10f(float);
+ 0000           ; float logf(float);
+ 0000           ; float modff(float, float *);
+ 0000           ; float powf(float,float);
+ 0000           ; float sinf(float);
+ 0000           ; float sinhf(float);
+ 0000           ; float sqrtf(float);
+ 0000           ; float tanf(float);
+ 0000           ; float tanhf(float);
+ 0000           ; 
+ 0000           ; #if defined(_ARM)
+ 0000           ; /* double not yet supported
+ 0000           ; double acos(double);
+ 0000           ; double asin(double);
+ 0000           ; double atan2(double, double);
+ 0000           ; double atan(double);
+ 0000           ; double ceil(double);
+ 0000           ; double cos(double);
+ 0000           ; double cosh(double);
+ 0000           ; double exp10(double);
+ 0000           ; double exp(double);
+ 0000           ; double fabs(double);
+ 0000           ; double floor(double);
+ 0000           ; double fmod(double, double);
+ 0000           ; double frexp(double, int *);
+ 0000           ; double fround(double);
+ 0000           ; double ldexp(double, int);
+ 0000           ; double log10(double);
+ 0000           ; double log(double);
+ 0000           ; double modf(double, double *);
+ 0000           ; double pow(double,double);
+ 0000           ; double sin(double);
+ 0000           ; double sinh(double);
+ 0000           ; double sqrt(double);
+ 0000           ; double tan(double);
+ 0000           ; double tanh(double);
+ 0000           ; */
+ 0000           ; #else
+ 0000           ; 
+ 0000           ; #define acos   acosf
+ 0000           ; #define asin   asinf
+ 0000           ; #define atan2  atan2f
+ 0000           ; #define atan   atanf
+ 0000           ; #define ceil   ceilf
+ 0000           ; #define cos    cosf
+ 0000           ; #define cosh   coshf
+ 0000           ; #define exp10  exp10f
+ 0000           ; #define exp    expf
+ 0000           ; #define fabs   fabsf
+ 0000           ; #define floor  floorf
+ 0000           ; #define fmod   fmodf
+ 0000           ; #define frexp  frexpf
+ 0000           ; #define fround         froundf
+ 0000           ; #define ldexp  ldexpf
+ 0000           ; #define log10  log10f
+ 0000           ; #define log    logf
+ 0000           ; #define modf   modff
+ 0000           ; #define pow    powf
+ 0000           ; #define sin    sinf
+ 0000           ; #define sinh   sinhf
+ 0000           ; #define sqrt   sqrtf
+ 0000           ; #define tan    tanf
+ 0000           ; #define tanh   tanhf
+ 0000           ; #endif
+ 0000           ; 
+ 0000           ; #endif

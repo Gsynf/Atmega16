@@ -1,0 +1,217 @@
+# depslib dependency file v1.0
+1481098146 source:d:\iccv8\16年例程\74hc595\74hc595.c
+	"74HC595.h"
+
+1457164209 d:\iccv8\16年例程\74hc595\74hc595.h
+	"../Headers/Global.h"
+
+1481110691 d:\iccv8\16年例程\headers\global.h
+	<macros.h>
+	<iom16v.h>
+	<math.h>
+	"Config.h"
+	"../Delay/Delay.h"
+	"../LED/Led.h"
+	"../Key/Key.h"
+	"../Interrupt/Interrupt.h"
+	"../74HC595/74HC595.h"
+	"../ADC/ADC.h"
+	"../Timer/Timer.h"
+	"../PWM/PWM.h"
+	"../IO_Tube/IO_Tube.h"
+	"../Usart/usart.h"
+
+1457164244 d:\iccv8\16年例程\headers\config.h
+
+1454136266 d:\iccv8\16年例程\delay\delay.h
+	"../Headers/Global.h"
+
+1454593174 d:\iccv8\16年例程\led\led.h
+	"../Headers/Global.h"
+
+1454594498 d:\iccv8\16年例程\key\key.h
+	"../Headers/Global.h"
+
+1481098693 d:\iccv8\16年例程\interrupt\interrupt.h
+	"../Headers/Global.h"
+
+1457164221 d:\iccv8\16年例程\adc\adc.h
+	"../Headers/Global.h"
+
+1481108860 d:\iccv8\16年例程\timer\timer.h
+	"../Headers/Global.h"
+
+1454646187 d:\iccv8\16年例程\pwm\pwm.h
+	"../Headers/Global.h"
+
+1457164269 d:\iccv8\16年例程\io_tube\io_tube.h
+	"../Headers/Global.h"
+
+1481030915 d:\iccv8\16年例程\usart\usart.h
+	"../Headers/Global.h"
+
+1481098660 source:d:\iccv8\16年例程\interrupt\interrupt.c
+	"Interrupt.h"
+
+1481031504 source:d:\iccv8\16年例程\delay\delay.c
+	"Delay.h"
+
+1457163528 source:d:\iccv8\16年例程\io_tube\io_tube.c
+	"IO_Tube.h"
+
+1469333944 source:d:\iccv8\16年例程\pwm\pwm.c
+	"PWM.h"
+
+1481111006 source:d:\iccv8\16年例程\usart\usart.c
+	"usart.h"
+
+1457164475 source:d:\iccv8\16年例程\led\led.c
+	"LED.h"
+
+1457163817 source:d:\iccv8\16年例程\key\key.c
+	"Key.h"
+
+1481109693 source:d:\iccv8\16年例程\adc\adc.c
+	"ADC.h"
+
+1481111006 source:d:\iccv8\16年例程\timer\timer.c
+	"Timer.h"
+
+1481031504 source:d:\iccv8\16年例程 - 副本\delay\delay.c
+	"Delay.h"
+
+1454136266 d:\iccv8\16年例程 - 副本\delay\delay.h
+	"../Headers/Global.h"
+
+1484232159 d:\iccv8\16年例程 - 副本\headers\global.h
+	<macros.h>
+	<iom16v.h>
+	<math.h>
+	"Config.h"
+	"../Delay/Delay.h"
+	"../Interrupt/Interrupt.h"
+	"../74HC595/74HC595.h"
+	"../ADC/ADC.h"
+	"../Timer/Timer.h"
+	"../PWM/PWM.h"
+	"../Usart/usart.h"
+
+1457164244 d:\iccv8\16年例程 - 副本\headers\config.h
+
+1454593174 d:\iccv8\16年例程 - 副本\led\led.h
+	"../Headers/Global.h"
+
+1484232109 d:\iccv8\16年例程 - 副本\key\key.h
+	"../Headers/Global.h"
+
+1481098693 d:\iccv8\16年例程 - 副本\interrupt\interrupt.h
+	"../Headers/Global.h"
+
+1457164209 d:\iccv8\16年例程 - 副本\74hc595\74hc595.h
+	"../Headers/Global.h"
+
+1457164221 d:\iccv8\16年例程 - 副本\adc\adc.h
+	"../Headers/Global.h"
+
+1481108860 d:\iccv8\16年例程 - 副本\timer\timer.h
+	"../Headers/Global.h"
+
+1454646187 d:\iccv8\16年例程 - 副本\pwm\pwm.h
+	"../Headers/Global.h"
+
+1457164269 d:\iccv8\16年例程 - 副本\io_tube\io_tube.h
+	"../Headers/Global.h"
+
+1481030915 d:\iccv8\16年例程 - 副本\usart\usart.h
+	"../Headers/Global.h"
+
+1481111006 source:d:\iccv8\16年例程 - 副本\timer\timer.c
+	"Timer.h"
+
+1481098146 source:d:\iccv8\16年例程 - 副本\74hc595\74hc595.c
+	"74HC595.h"
+
+1481109693 source:d:\iccv8\16年例程 - 副本\adc\adc.c
+	"ADC.h"
+
+1481111006 source:d:\iccv8\16年例程 - 副本\usart\usart.c
+	"usart.h"
+
+1469333944 source:d:\iccv8\16年例程 - 副本\pwm\pwm.c
+	"PWM.h"
+
+1457164475 source:d:\iccv8\16年例程 - 副本\led\led.c
+	"LED.h"
+
+1457163817 source:d:\iccv8\16年例程 - 副本\key\key.c
+	"Key.h"
+
+1481098660 source:d:\iccv8\16年例程 - 副本\interrupt\interrupt.c
+	"Interrupt.h"
+
+1457163528 source:d:\iccv8\16年例程 - 副本\io_tube\io_tube.c
+	"IO_Tube.h"
+
+1484294026 source:d:\iccv8\16年例程 - 副本\main.c
+	"./Headers/Global.h"
+
+1481111006 source:d:\技术资料\单片机\2016级培训\16年例程\timer\timer.c
+	"Timer.h"
+
+1481108860 d:\技术资料\单片机\2016级培训\16年例程\timer\timer.h
+	"../Headers/Global.h"
+
+1484232159 d:\技术资料\单片机\2016级培训\16年例程\headers\global.h
+	<macros.h>
+	<iom16v.h>
+	<math.h>
+	"Config.h"
+	"../Delay/Delay.h"
+	"../Interrupt/Interrupt.h"
+	"../74HC595/74HC595.h"
+	"../ADC/ADC.h"
+	"../Timer/Timer.h"
+	"../PWM/PWM.h"
+	"../Usart/usart.h"
+
+1457164244 d:\技术资料\单片机\2016级培训\16年例程\headers\config.h
+
+1454136266 d:\技术资料\单片机\2016级培训\16年例程\delay\delay.h
+	"../Headers/Global.h"
+
+1481098693 d:\技术资料\单片机\2016级培训\16年例程\interrupt\interrupt.h
+	"../Headers/Global.h"
+
+1457164209 d:\技术资料\单片机\2016级培训\16年例程\74hc595\74hc595.h
+	"../Headers/Global.h"
+
+1457164221 d:\技术资料\单片机\2016级培训\16年例程\adc\adc.h
+	"../Headers/Global.h"
+
+1454646187 d:\技术资料\单片机\2016级培训\16年例程\pwm\pwm.h
+	"../Headers/Global.h"
+
+1481030915 d:\技术资料\单片机\2016级培训\16年例程\usart\usart.h
+	"../Headers/Global.h"
+
+1469333944 source:d:\技术资料\单片机\2016级培训\16年例程\pwm\pwm.c
+	"PWM.h"
+
+1481098660 source:d:\技术资料\单片机\2016级培训\16年例程\interrupt\interrupt.c
+	"Interrupt.h"
+
+1481031504 source:d:\技术资料\单片机\2016级培训\16年例程\delay\delay.c
+	"Delay.h"
+
+1481109693 source:d:\技术资料\单片机\2016级培训\16年例程\adc\adc.c
+	"ADC.h"
+
+1481098146 source:d:\技术资料\单片机\2016级培训\16年例程\74hc595\74hc595.c
+	"74HC595.h"
+
+1485313511 source:d:\技术资料\单片机\2016级培训\16年例程\main.c
+	"./Headers/Global.h"
+
+1481111006 source:d:\技术资料\单片机\2016级培训\16年例程\usart\usart.c
+	"usart.h"
+

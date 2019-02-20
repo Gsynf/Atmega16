@@ -1,0 +1,198 @@
+                        .module Interrupt.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile "D:\ICCV8\16年例程 - 副本\Interrupt\Interrupt.c"
+                        .area data(ram, con, rel)
+ 0000                   .dbfile "D:\ICCV8\16年例程 - 副本\Interrupt\Interrupt.c"
+ 0000           _NoteData#A_h:
+ 0000                   .blkb 2
+                        .area idata(rom)
+ 0000 00FC              .byte 0,252
+                        .area data(ram, con, rel)
+ 0002                   .dbfile "D:\ICCV8\16年例程 - 副本\Interrupt\Interrupt.c"
+ 0002                   .blkb 2
+                        .area idata(rom)
+ 0002 E1D4              .byte 225,212
+                        .area data(ram, con, rel)
+ 0004                   .dbfile "D:\ICCV8\16年例程 - 副本\Interrupt\Interrupt.c"
+ 0004                   .blkb 2
+                        .area idata(rom)
+ 0004 BCA8              .byte 188,168
+                        .area data(ram, con, rel)
+ 0006                   .dbfile "D:\ICCV8\16年例程 - 副本\Interrupt\Interrupt.c"
+ 0006                   .blkb 2
+                        .area idata(rom)
+ 0006 968D              .byte 150,141
+                        .area data(ram, con, rel)
+ 0008                   .dbfile "D:\ICCV8\16年例程 - 副本\Interrupt\Interrupt.c"
+ 0008                   .blkb 2
+                        .area idata(rom)
+ 0008 7E70              .byte 126,'p
+                        .area data(ram, con, rel)
+ 000A                   .dbfile "D:\ICCV8\16年例程 - 副本\Interrupt\Interrupt.c"
+ 000A                   .blkb 2
+                        .area idata(rom)
+ 000A 695E              .byte 'i,94
+                        .area data(ram, con, rel)
+ 000C                   .dbfile "D:\ICCV8\16年例程 - 副本\Interrupt\Interrupt.c"
+ 000C                   .blkb 2
+                        .area idata(rom)
+ 000C 534A              .byte 'S,'J
+                        .area data(ram, con, rel)
+ 000E                   .dbfile "D:\ICCV8\16年例程 - 副本\Interrupt\Interrupt.c"
+ 000E                   .blkb 2
+                        .area idata(rom)
+ 000E 463E              .byte 'F,62
+                        .area data(ram, con, rel)
+ 0010                   .dbfile "D:\ICCV8\16年例程 - 副本\Interrupt\Interrupt.c"
+ 0010                   .blkb 2
+                        .area idata(rom)
+ 0010 3734              .byte 55,52
+                        .area data(ram, con, rel)
+ 0012                   .dbfile "D:\ICCV8\16年例程 - 副本\Interrupt\Interrupt.c"
+ 0012                   .blkb 2
+                        .area idata(rom)
+ 0012 2E29              .byte 46,41
+                        .area data(ram, con, rel)
+ 0014                   .dbfile "D:\ICCV8\16年例程 - 副本\Interrupt\Interrupt.c"
+ 0014                   .blkb 1
+                        .area idata(rom)
+ 0014 25                .byte 37
+                        .area data(ram, con, rel)
+ 0015                   .dbfile "D:\ICCV8\16年例程 - 副本\Interrupt\Interrupt.c"
+ 0015                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+ 0015                   .dbsym s NoteData _NoteData#A_h A[21:21]c
+ 0015           _turn_flag#i::
+ 0015                   .blkb 2
+                        .area idata(rom)
+ 0015 0100              .word 1
+                        .area data(ram, con, rel)
+ 0017                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+ 0017                   .dbfile "D:\ICCV8\16年例程 - 副本\Interrupt\Interrupt.c"
+ 0017                   .dbsym e turn_flag _turn_flag#i I
+                        .area text(rom, con, rel)
+ 0000                   .dbfile "D:\ICCV8\16年例程 - 副本\Interrupt\Interrupt.c"
+ 0000                   .dbfunc e Interrupt_Init _Interrupt_Init#Fvv fV
+                        .even
+ 0000           _Interrupt_Init#Fvv::
+ 0000                   .dbline -1
+ 0000                   .dbline 12
+ 0000           ; #include "Interrupt.h"
+ 0000           ; 
+ 0000           ; int turn_flag = 1;
+ 0000           ; /************************************************************
+ 0000           ; Function Name: Interrupt_Init
+ 0000           ; Inputs: none
+ 0000           ; Outputs: none
+ 0000           ; Description:    初始化外部中断INT0
+ 0000           ; Writer: XZ，WZY
+ 0000           ; *************************************************************/
+ 0000           ; void Interrupt_Init(void)
+ 0000           ; {
+ 0000                   .dbline 15
+ 0000           ;    // CLI();                        ///关闭全局中断，避免在设置时受到其他干扰
+ 0000           ;     //将第0位置0，第1位置1，即选择了下降沿触发中断INT0
+ 0000           ;     MCUCR &= ~(1 << ISC00);      ///将寄存器MCUCR的第0位置0
+ 0000 85B7              in R24,0x35
+ 0002 8E7F              andi R24,254
+ 0004 85BF              out 0x35,R24
+ 0006                   .dbline 16
+ 0006           ;     MCUCR |=  (1 << ISC01);      ///将寄存器MCUCR的第1位置1
+ 0006 85B7              in R24,0x35
+ 0008 8260              ori R24,2
+ 000A 85BF              out 0x35,R24
+ 000C                   .dbline 17
+ 000C           ;     GICR  |= (1 << INT0);         ///将第6位INT0置1，使能INT0
+ 000C 8BB7              in R24,0x3b
+ 000E 8064              ori R24,64
+ 0010 8BBF              out 0x3b,R24
+ 0012                   .dbline 19
+ 0012           ;     //将第2位置0，第3位置1，即选择了下升沿触发中断INT1
+ 0012           ;     MCUCR &= ~(1 << ISC10);      ///将寄存器MCUCR的第2位置0
+ 0012 85B7              in R24,0x35
+ 0014 8B7F              andi R24,251
+ 0016 85BF              out 0x35,R24
+ 0018                   .dbline 20
+ 0018           ;     MCUCR |=  (1 << ISC11);      ///将寄存器MCUCR的第3位置1
+ 0018 85B7              in R24,0x35
+ 001A 8860              ori R24,8
+ 001C 85BF              out 0x35,R24
+ 001E                   .dbline 21
+ 001E           ;     GICR  |= (1 << INT1);         ///将第7位INT1置1，使能INT1
+ 001E 8BB7              in R24,0x3b
+ 0020 8068              ori R24,128
+ 0022 8BBF              out 0x3b,R24
+ 0024                   .dbline -2
+ 0024           L1:
+ 0024                   .dbline 0 ; func end
+ 0024 0895              ret
+ 0026                   .dbend
+                        .area vector(rom, abs)
+                        .org 4
+ 0004 0C940000          jmp _Int0_isr
+                        .area text(rom, con, rel)
+ 0026                   .dbfile "D:\ICCV8\16年例程 - 副本\Interrupt\Interrupt.c"
+ 0026                   .dbfunc e Int0_isr _Int0_isr#Fvv fV
+                        .even
+ 0026           _Int0_isr#Fvv::
+ 0026 8A93              st -y,R24
+ 0028 9A93              st -y,R25
+ 002A 8FB7              IN R24,63
+ 002C 8A93              st -y,R24
+ 002E                   .dbline -1
+ 002E                   .dbline 27
+ 002E           ;    // SEI();                        ///打开全局中断，就是中断的总开关
+ 002E           ; }
+ 002E           ; 
+ 002E           ; #pragma interrupt_handler Int0_isr:iv_INT0
+ 002E           ; void Int0_isr(void)
+ 002E           ; {
+ 002E                   .dbline 28
+ 002E           ;    turn_flag = -1; //LED_All_On();
+ 002E 8FEF              ldi R24,-1
+ 0030 9FEF              ldi R25,-1
+ 0032 90931600          sts _turn_flag#i+1,R25
+ 0036 80931500          sts _turn_flag#i,R24
+ 003A                   .dbline -2
+ 003A           L2:
+ 003A                   .dbline 0 ; func end
+ 003A 8991              ld R24,y+
+ 003C 8FBF              OUT 63,R24
+ 003E 9991              ld R25,y+
+ 0040 8991              ld R24,y+
+ 0042 1895              reti
+ 0044                   .dbend
+                        .area vector(rom, abs)
+                        .org 8
+ 0008 0C940000          jmp _Int1_isr
+                        .area text(rom, con, rel)
+ 0044                   .dbfile "D:\ICCV8\16年例程 - 副本\Interrupt\Interrupt.c"
+ 0044                   .dbfunc e Int1_isr _Int1_isr#Fvv fV
+                        .even
+ 0044           _Int1_isr#Fvv::
+ 0044 8A93              st -y,R24
+ 0046 9A93              st -y,R25
+ 0048 8FB7              IN R24,63
+ 004A 8A93              st -y,R24
+ 004C                   .dbline -1
+ 004C                   .dbline 33
+ 004C           ; }
+ 004C           ; 
+ 004C           ; #pragma interrupt_handler Int1_isr:iv_INT1
+ 004C           ; void Int1_isr(void)
+ 004C           ; {
+ 004C                   .dbline 34
+ 004C           ;    turn_flag = 1; //Flow_LED_Test();  //外部中断不能放死循环
+ 004C 81E0              ldi R24,1
+ 004E 90E0              ldi R25,0
+ 0050 90931600          sts _turn_flag#i+1,R25
+ 0054 80931500          sts _turn_flag#i,R24
+ 0058                   .dbline -2
+ 0058           L3:
+ 0058                   .dbline 0 ; func end
+ 0058 8991              ld R24,y+
+ 005A 8FBF              OUT 63,R24
+ 005C 9991              ld R25,y+
+ 005E 8991              ld R24,y+
+ 0060 1895              reti
+ 0062                   .dbend
+ 0062           ; }

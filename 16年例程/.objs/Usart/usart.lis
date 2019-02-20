@@ -1,0 +1,399 @@
+                        .module usart.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile "D:\ICCV8\16年例程 - 副本\Usart\usart.c"
+                        .area data(ram, con, rel)
+ 0000                   .dbfile "D:\ICCV8\16年例程 - 副本\Usart\usart.c"
+ 0000           _NoteData#A_h:
+ 0000                   .blkb 2
+                        .area idata(rom)
+ 0000 00FC              .byte 0,252
+                        .area data(ram, con, rel)
+ 0002                   .dbfile "D:\ICCV8\16年例程 - 副本\Usart\usart.c"
+ 0002                   .blkb 2
+                        .area idata(rom)
+ 0002 E1D4              .byte 225,212
+                        .area data(ram, con, rel)
+ 0004                   .dbfile "D:\ICCV8\16年例程 - 副本\Usart\usart.c"
+ 0004                   .blkb 2
+                        .area idata(rom)
+ 0004 BCA8              .byte 188,168
+                        .area data(ram, con, rel)
+ 0006                   .dbfile "D:\ICCV8\16年例程 - 副本\Usart\usart.c"
+ 0006                   .blkb 2
+                        .area idata(rom)
+ 0006 968D              .byte 150,141
+                        .area data(ram, con, rel)
+ 0008                   .dbfile "D:\ICCV8\16年例程 - 副本\Usart\usart.c"
+ 0008                   .blkb 2
+                        .area idata(rom)
+ 0008 7E70              .byte 126,'p
+                        .area data(ram, con, rel)
+ 000A                   .dbfile "D:\ICCV8\16年例程 - 副本\Usart\usart.c"
+ 000A                   .blkb 2
+                        .area idata(rom)
+ 000A 695E              .byte 'i,94
+                        .area data(ram, con, rel)
+ 000C                   .dbfile "D:\ICCV8\16年例程 - 副本\Usart\usart.c"
+ 000C                   .blkb 2
+                        .area idata(rom)
+ 000C 534A              .byte 'S,'J
+                        .area data(ram, con, rel)
+ 000E                   .dbfile "D:\ICCV8\16年例程 - 副本\Usart\usart.c"
+ 000E                   .blkb 2
+                        .area idata(rom)
+ 000E 463E              .byte 'F,62
+                        .area data(ram, con, rel)
+ 0010                   .dbfile "D:\ICCV8\16年例程 - 副本\Usart\usart.c"
+ 0010                   .blkb 2
+                        .area idata(rom)
+ 0010 3734              .byte 55,52
+                        .area data(ram, con, rel)
+ 0012                   .dbfile "D:\ICCV8\16年例程 - 副本\Usart\usart.c"
+ 0012                   .blkb 2
+                        .area idata(rom)
+ 0012 2E29              .byte 46,41
+                        .area data(ram, con, rel)
+ 0014                   .dbfile "D:\ICCV8\16年例程 - 副本\Usart\usart.c"
+ 0014                   .blkb 1
+                        .area idata(rom)
+ 0014 25                .byte 37
+                        .area data(ram, con, rel)
+ 0015                   .dbfile "D:\ICCV8\16年例程 - 副本\Usart\usart.c"
+ 0015                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+ 0015                   .dbsym s NoteData _NoteData#A_h A[21:21]c
+ 0015           _receive_flag#h::
+ 0015                   .blkb 1
+                        .area idata(rom)
+ 0015 00                .byte 0
+                        .area data(ram, con, rel)
+ 0016                   .dbfile "D:\ICCV8\16年例程 - 副本\Timer\Timer.h"
+ 0016                   .dbfile "D:\ICCV8\16年例程 - 副本\Usart\usart.c"
+ 0016                   .dbsym e receive_flag _receive_flag#h c
+                        .area vector(rom, abs)
+                        .org 44
+ 002C 0C940000          jmp _uart0_rx_isr
+                        .area data(ram, con, rel)
+ 0016                   .dbfile "D:\ICCV8\16年例程 - 副本\Usart\usart.c"
+                        .area text(rom, con, rel)
+ 0000                   .dbfile "D:\ICCV8\16年例程 - 副本\Usart\usart.c"
+ 0000                   .dbfunc e uart0_rx_isr _uart0_rx_isr#Fvv fV
+                        .even
+ 0000           _uart0_rx_isr#Fvv::
+ 0000 2A92              st -y,R2
+ 0002 8A93              st -y,R24
+ 0004 9A93              st -y,R25
+ 0006 EA93              st -y,R30
+ 0008 FA93              st -y,R31
+ 000A 2FB6              IN R2,63
+ 000C 2A92              st -y,R2
+ 000E                   .dbline -1
+ 000E                   .dbline 19
+ 000E           ; /********************************************************************************************************
+ 000E           ; 串口函数
+ 000E           ; ********************************************************************************************************/
+ 000E           ; #include "usart.h"
+ 000E           ; 
+ 000E           ; u8 receive_now;//表示是否处于一个正在接收数据包的状态
+ 000E           ; u8 num_now;      //计数
+ 000E           ; u8 receive_flag = 0;//是否接收到一个完整的数据包标志
+ 000E           ; u8 rec;             //数据中间变量
+ 000E           ; u8 buf[N];          //中断接收到的数据
+ 000E           ; 
+ 000E           ; #pragma interrupt_handler uart0_rx_isr:iv_USART0_RXC
+ 000E           ; /********************************************************************************************************
+ 000E           ; Description  : 串口接收中断
+ 000E           ; Inputs       : 中断
+ 000E           ; Outputs      : 改变buf
+ 000E           ; ********************************************************************************************************/
+ 000E           ; void uart0_rx_isr(void)
+ 000E           ; {
+ 000E                   .dbline 21
+ 000E           ; 
+ 000E           ;     rec = UDR ;
+ 000E 2CB0              in R2,0xc
+ 0010 20926400          sts _rec#h,R2
+ 0014                   .dbline 22
+ 0014           ;     if(rec == '*')                          //检测是否是包头
+ 0014 822D              mov R24,R2
+ 0016 8A32              cpi R24,42
+ 0018 49F4              brne L2
+ 001A           X0:
+ 001A                   .dbline 24
+ 001A           ;     {
+ 001A           ;         receive_now = 1;
+ 001A                   .dbline 24
+ 001A 81E0              ldi R24,1
+ 001C 80936600          sts _receive_now#h,R24
+ 0020                   .dbline 25
+ 0020           ;         num_now   = 0 ;
+ 0020 2224              clr R2
+ 0022 20926500          sts _num_now#h,R2
+ 0026                   .dbline 26
+ 0026           ;         receive_flag = 0;
+ 0026 20921500          sts _receive_flag#h,R2
+ 002A                   .dbline 27
+ 002A           ;         return ;
+ 002A 1EC0              xjmp L1
+ 002C           L2:
+ 002C                   .dbline 29
+ 002C           ;     }
+ 002C           ;     if(rec == '\n')                          //检测是否是包尾
+ 002C 80916400          lds R24,_rec#h
+ 0030 8A30              cpi R24,10
+ 0032 39F4              brne L4
+ 0034           X1:
+ 0034                   .dbline 31
+ 0034           ;     {
+ 0034           ;         receive_now = 0;
+ 0034                   .dbline 31
+ 0034 2224              clr R2
+ 0036 20926600          sts _receive_now#h,R2
+ 003A                   .dbline 32
+ 003A           ;         receive_flag = 1;                      //用于告知系统已经接收到一个完整的数据包
+ 003A 81E0              ldi R24,1
+ 003C 80931500          sts _receive_flag#h,R24
+ 0040                   .dbline 33
+ 0040           ;         return ;
+ 0040 13C0              xjmp L1
+ 0042           L4:
+ 0042                   .dbline 35
+ 0042           ;     }
+ 0042           ;     if(receive_now ==1)                          //是否处于接收数据包状态
+ 0042 80916600          lds R24,_receive_now#h
+ 0046 8130              cpi R24,1
+ 0048 79F4              brne L6
+ 004A           X2:
+ 004A                   .dbline 37
+ 004A           ;     {
+ 004A           ;         buf[num_now++] = rec;
+ 004A                   .dbline 37
+ 004A 20906500          lds R2,_num_now#h
+ 004E 822D              mov R24,R2
+ 0050 8F5F              subi R24,255    ; addi 1
+ 0052 80936500          sts _num_now#h,R24
+ 0056 80E0              ldi R24,<_buf#A100_h
+ 0058 90E0              ldi R25,>_buf#A100_h
+ 005A E22D              mov R30,R2
+ 005C FF27              clr R31
+ 005E E80F              add R30,R24
+ 0060 F91F              adc R31,R25
+ 0062 20906400          lds R2,_rec#h
+ 0066 2082              std z+0,R2
+ 0068                   .dbline 38
+ 0068           ;     }
+ 0068           L6:
+ 0068                   .dbline -2
+ 0068           L1:
+ 0068                   .dbline 0 ; func end
+ 0068 2990              ld R2,y+
+ 006A 2FBE              OUT 63,R2
+ 006C F991              ld R31,y+
+ 006E E991              ld R30,y+
+ 0070 9991              ld R25,y+
+ 0072 8991              ld R24,y+
+ 0074 2990              ld R2,y+
+ 0076 1895              reti
+ 0078                   .dbend
+ 0078                   .dbfunc e USART_Init _USART_Init#Fvj fV
+ 0078           ;           baud -> R16,R17
+                        .even
+ 0078           _USART_Init#Fvj::
+ 0078                   .dbline -1
+ 0078                   .dbline 46
+ 0078           ; }
+ 0078           ; /********************************************************************************************************
+ 0078           ; Description  : 串口初始化
+ 0078           ; Inputs       : baud：波特率   4800->25  9600->12(选择倍速模式)
+ 0078           ; Outputs      : None
+ 0078           ; ********************************************************************************************************/
+ 0078           ; void USART_Init(u16 baud)
+ 0078           ; {
+ 0078                   .dbline 48
+ 0078           ;     //端口初始化 PD0->Rx  PD1->Tx
+ 0078           ;     UCSRB &= ~ (USART_UCSZ2);
+ 0078 5298              cbi 0xa,2
+ 007A                   .dbline 49
+ 007A           ;     UCSRC |= (UCSRC_URSEL | USART_UCSZ1 | USART_UCSZ0);        //8位字符长度
+ 007A 80B5              in R24,0x20
+ 007C 8668              ori R24,134
+ 007E 80BD              out 0x20,R24
+ 0080                   .dbline 50
+ 0080           ;     UCSRC &= ~(USART_UMSEL | USART_UPM | USART_USBS);          //异步工作模式,无奇偶校验位,1位停止位
+ 0080 80B5              in R24,0x20
+ 0082 8778              andi R24,135
+ 0084 80BD              out 0x20,R24
+ 0086                   .dbline 54
+ 0086           ; 
+ 0086           ; 
+ 0086           ;     //波特率配置
+ 0086           ;     UCSRA |= USART_U2X;                 //倍速发送
+ 0086 599A              sbi 0xb,1
+ 0088                   .dbline 55
+ 0088           ;     UBRRH &= ~ (UBRRH_URSEL);              //对UBRRH进行写操作
+ 0088 80B5              in R24,0x20
+ 008A 8F7F              andi R24,255
+ 008C 80BD              out 0x20,R24
+ 008E                   .dbline 56
+ 008E           ;     UBRRH = (u8)(baud >> 8);
+ 008E 1801              movw R2,R16
+ 0090 232C              mov R2,R3
+ 0092 3324              clr R3
+ 0094 20BC              out 0x20,R2
+ 0096                   .dbline 57
+ 0096           ;     UBRRL = (u8)baud;
+ 0096 09B9              out 0x9,R16
+ 0098                   .dbline 59
+ 0098           ; 
+ 0098           ;     UCSRB |= (USART_RXCIE | USART_RXEN | USART_TXEN);  //发送、接收 中断 使能
+ 0098 8AB1              in R24,0xa
+ 009A 8869              ori R24,152
+ 009C 8AB9              out 0xa,R24
+ 009E                   .dbline -2
+ 009E           L8:
+ 009E                   .dbline 0 ; func end
+ 009E 0895              ret
+ 00A0                   .dbsym r baud 16 i
+ 00A0                   .dbend
+ 00A0                   .dbfunc e USART_Rx _USART_Rx#Fhv fc
+ 00A0           ;            buf -> R16
+                        .even
+ 00A0           _USART_Rx#Fhv::
+ 00A0                   .dbline -1
+ 00A0                   .dbline 67
+ 00A0           ; }
+ 00A0           ; /********************************************************************************************************
+ 00A0           ; Description  : 串口接收
+ 00A0           ; Inputs       : None
+ 00A0           ; Outputs      : 接收到的数
+ 00A0           ; ********************************************************************************************************/
+ 00A0           ; u8 USART_Rx(void)
+ 00A0           ; {
+ 00A0           L10:
+ 00A0                   .dbline 69
+ 00A0           ;     u8 buf;
+ 00A0           ;     while((UCSRA&USART_FLAG_RXC) == 0);           //等待接收结束       while((UCSRA&USART_FLAG_RXC) == 0)
+ 00A0           L11:
+ 00A0                   .dbline 69
+ 00A0 5F9B              sbis 0xb,7
+ 00A2 FECF              rjmp L10
+ 00A4           X3:
+ 00A4                   .dbline 70
+ 00A4           ;     buf = UDR;                           //读取接收到的值
+ 00A4 0CB1              in R16,0xc
+ 00A6                   .dbline 71
+ 00A6           ;     return buf;
+ 00A6                   .dbline -2
+ 00A6           L9:
+ 00A6                   .dbline 0 ; func end
+ 00A6 0895              ret
+ 00A8                   .dbsym r buf 16 c
+ 00A8                   .dbend
+ 00A8                   .dbfunc e USART_Tx _USART_Tx#Fvh fV
+ 00A8           ;            buf -> R16
+                        .even
+ 00A8           _USART_Tx#Fvh::
+ 00A8                   .dbline -1
+ 00A8                   .dbline 79
+ 00A8           ; }
+ 00A8           ; /********************************************************************************************************
+ 00A8           ; Description  : 串口发送
+ 00A8           ; Inputs       : 要发送的数据
+ 00A8           ; Outputs      : None
+ 00A8           ; ********************************************************************************************************/
+ 00A8           ; void USART_Tx(u8 buf)
+ 00A8           ; {
+ 00A8                   .dbline 80
+ 00A8           ;     UCSRA |= USART_FLAG_UDRE;             //缓冲器为空，准备好发送数据
+ 00A8 5D9A              sbi 0xb,5
+ 00AA                   .dbline 81
+ 00AA           ;     UDR = buf;                            //将数据写入发送寄存器
+ 00AA 0CB9              out 0xc,R16
+ 00AC           L14:
+ 00AC                   .dbline 82
+ 00AC           ;     while((USART_FLAG_TXC) == 0);          //等待发送完成       while((UCSRA&USART_FLAG_TXC) == 0)
+ 00AC           L15:
+ 00AC                   .dbline 82
+ 00AC                   .dbline -2
+ 00AC           L13:
+ 00AC                   .dbline 0 ; func end
+ 00AC 0895              ret
+ 00AE                   .dbsym r buf 16 c
+ 00AE                   .dbend
+ 00AE                   .dbfunc e USART_send _USART_send#FvPh fV
+ 00AE           ;              s -> R20,R21
+                        .even
+ 00AE           _USART_send#FvPh::
+ 00AE 4A93              st -y,R20
+ 00B0 5A93              st -y,R21
+ 00B2 A801              movw R20,R16
+ 00B4                   .dbline -1
+ 00B4                   .dbline 90
+ 00B4           ; }
+ 00B4           ; /********************************************************************************************************
+ 00B4           ; Description  :串口发送字符串
+ 00B4           ; Inputs       :字符串
+ 00B4           ; Outputs      : None
+ 00B4           ; ********************************************************************************************************/
+ 00B4           ; void USART_send(u8 *s)
+ 00B4           ; {
+ 00B4 09C0              xjmp L19
+ 00B6           L18:
+ 00B6                   .dbline 92
+ 00B6           ;     while(*s != '\0')
+ 00B6           ;     {
+ 00B6                   .dbline 93
+ 00B6           ;         USART_Tx(*s);
+ 00B6 FA01              movw R30,R20
+ 00B8 0081              ldd R16,z+0
+ 00BA F6DF              xcall _USART_Tx#Fvh
+ 00BC                   .dbline 94
+ 00BC           ;         s++;
+ 00BC 4F5F              subi R20,255  ; offset = 1
+ 00BE 5F4F              sbci R21,255
+ 00C0                   .dbline 95
+ 00C0           ;         Delay_us(200);
+ 00C0 08EC              ldi R16,200
+ 00C2 10E0              ldi R17,0
+ 00C4 0E940000          xcall _Delay_us#Fvi
+ 00C8                   .dbline 96
+ 00C8           ;     }
+ 00C8           L19:
+ 00C8                   .dbline 91
+ 00C8 FA01              movw R30,R20
+ 00CA 2080              ldd R2,z+0
+ 00CC 2220              tst R2
+ 00CE 99F7              brne L18
+ 00D0           X4:
+ 00D0                   .dbline 97
+ 00D0           ;     USART_Tx('\n');
+ 00D0 0AE0              ldi R16,10
+ 00D2 EADF              xcall _USART_Tx#Fvh
+ 00D4                   .dbline 98
+ 00D4           ;     Delay_us(200);
+ 00D4 08EC              ldi R16,200
+ 00D6 10E0              ldi R17,0
+ 00D8 0E940000          xcall _Delay_us#Fvi
+ 00DC                   .dbline -2
+ 00DC           L17:
+ 00DC                   .dbline 0 ; func end
+ 00DC 5991              ld R21,y+
+ 00DE 4991              ld R20,y+
+ 00E0 0895              ret
+ 00E2                   .dbsym r s 20 pc
+ 00E2                   .dbend
+                        .area bss(ram, con, rel)
+ 0000                   .dbfile "D:\ICCV8\16年例程 - 副本\Usart\usart.c"
+ 0000           _buf#A100_h::
+ 0000                   .blkb 100
+ 0064                   .dbsym e buf _buf#A100_h A[100:100]c
+ 0064           _rec#h::
+ 0064                   .blkb 1
+ 0065                   .dbsym e rec _rec#h c
+ 0065           _num_now#h::
+ 0065                   .blkb 1
+ 0066                   .dbsym e num_now _num_now#h c
+ 0066           _receive_now#h::
+ 0066                   .blkb 1
+ 0067                   .dbsym e receive_now _receive_now#h c
+ 0067           ; 
+ 0067           ; }
